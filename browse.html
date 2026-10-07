@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>التصفح - سنة الحياة</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+</head><body>
+<header><a class="brand" href="index.html">سنة الحياة</a>
+<div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn" href="profile.html" style="line-height:44px;min-height:44px;padding:0 18px">ملفي</a><button class="ghost" id="out" type="button">تسجيل الخروج</button></div></header>
+<div class="card wide">
+<h1>الأعضاء المقترحون</h1>
+<p class="sub">يظهر هنا الأعضاء الموافق عليهم من الجنس الآخر.</p>
+<div id="m" hidden></div>
+<div id="list"></div>
+</div>
+<script src="app.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const MARITAL = { never_married: 'لم يسبق الزواج', divorced: 'مطلق / مطلقة', widowed: 'أرمل / أرملة' };
+const EDU = { secondary: 'ثانوي', diploma: 'دبلوم', bachelor: 'بكالوريوس', postgraduate: 'دراسات عليا' };
+const GENDER = { male: 'ذكر', female: 'أنثى' };
+let me = null, sent = new Set();
+$('out').onclick = logout;
+
+function el(tag, text, style) {
+  const e = document.createElement(tag);
+  if (text) e.textContent = text;
+  if (style) e.style.cssText = style;
+  return e;
+}
+function age(d) {
+  const b = new Date(d), n = new Date();
+  let a = n.getFullYear() - b.getFullYear();
+  const m = n.getMonth() - b.getMonth();
+  if (m < 0 || (m === 0 && n.getDate() < b.getDate())) a--;
+  return a;
+}
+async function sendInterest(toId, btn) {
+  btn.disabled = true;
+  const { error } = await sb.from('interests').insert({ from_id: me.id, to_id: toId });
+  if (error) {
+    if (error.code === '23505') {
+      sent.add(toId);
+      btn.textContent = 'تم إرسال الاهتمام';
+      showMsg($('m'), 'سبق أن أبديت اهتمامك لهذا العضو.', false);
+    } else {
+      btn.disabled = false;
+      showMsg($('m'), 'تعذر إرسال الاهتمام: ' + error.message, false);
+    }
+  } else {
+    sent.add(toId);
+    btn.textContent = 'تم إرسال الاهتمام';
+    showMsg($('m'), 'أُرسل اهتمامك بنجاح. ستتلقى إشعاراً عند رد الطرف الآخر.', true);
+  }
+}
+function card(p) {
+  const c = el('div', '', 'border:2px solid #D5E3E1;border-radius:12px;padding:16px;margin-top:16px');
+  c.appendChild(el('div', p.first_name, 'font-size:20px;font-weight:800'));
+  const line = [age(p.birth_date) + ' سنة', p.country, p.city, MARITAL[p.marital_status], EDU[p.education]].filter(Boolean).join(' · ');
+  c.appendChild(el('div', line, 'color:#4A5F5E;margin:6px 0'));
+  if (p.bio) c.appendChild(el('p', 'نبذة: ' + p.bio, 'margin:8px 0;line-height:1.7'));
+  if (p.looking_for) c.appendChild(el('p', 'يبحث عن: ' + p.looking_for, 'margin:8px 0;line-height:1.7'));
+  const row = el('div', '', 'margin-top:12px');
+  const b = el('button', sent.has(p.id) ? 'تم إرسال الاهتمام' : 'إبداء اهتمام', 'min-height:44px;line-height:40px;padding:0 20px;font-size:16px');
+  b.type = 'button';
+  b.disabled = sent.has(p.id);
+  b.onclick = () => sendInterest(p.id, b);
+  row.appendChild(b);
+  c.appendChild(row);
+  return c;
+}
+(async () => {
+  const s = await getSession();
+  if (!s) { location.href = 'auth.html'; return; }
+  me = s.user;
+  const { data: mine } = await sb.from('profiles').select('gender,status').eq('id', me.id).maybeSingle();
+  if (!mine) { location.href = 'profile.html'; return; }
+  if (mine.status !== 'approved') {
+    showMsg($('m'), 'يظهر التصفح بعد الموافقة على حسابك.', false);
+    $('list').textContent = '';
+    return;
+  }
+  const opposite = mine.gender === 'male' ? 'female' : 'male';
+  const { data: list } = await sb.from('interests').select('to_id').eq('from_id', me.id);
+  (list || []).forEach(i => sent.add(i.to_id));
+  const { data, error } = await sb.from('profiles')
+    .select('id,first_name,birth_date,country,city,marital_status,education,bio,looking_for')
+    .eq('status', 'approved').eq('gender', opposite)
+    .order('created_at', { ascending: false });
+  const box = $('list');
+  if (error) { showMsg($('m'), 'تعذر التحميل: ' + error.message, false); return; }
+  if (!data.length) { box.appendChild(el('p', 'لا يوجد أعضاء معروضون حالياً.', 'color:#4A5F5E;margin-top:16px')); return; }
+  data.forEach(p => box.appendChild(card(p)));
+})();
+</script></body></html>
