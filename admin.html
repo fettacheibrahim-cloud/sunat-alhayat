@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>لوحة المشرف - سنة الحياة</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+</head><body>
+<header><a class="brand" href="index.html">سنة الحياة</a><button class="ghost" id="out" type="button">تسجيل الخروج</button></header>
+<div class="card wide">
+<h1>لوحة المشرف</h1>
+<p class="sub">مراجعة الحسابات الجديدة والموافقة عليها.</p>
+<div class="tabs" id="tabs">
+<button type="button" class="on" data-s="pending">قيد المراجعة</button>
+<button type="button" data-s="approved">موافق عليهم</button>
+<button type="button" data-s="suspended">موقوفون</button>
+</div>
+<div id="m" hidden></div>
+<div id="list"></div>
+</div>
+<script src="app.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const MARITAL = { never_married: 'لم يسبق الزواج', divorced: 'مطلق / مطلقة', widowed: 'أرمل / أرملة' };
+const EDU = { secondary: 'ثانوي', diploma: 'دبلوم', bachelor: 'بكالوريوس', postgraduate: 'دراسات عليا' };
+const GENDER = { male: 'ذكر', female: 'أنثى' };
+let current = 'pending', myId = null;
+$('out').onclick = logout;
+
+function el(tag, text, style) {
+  const e = document.createElement(tag);
+  if (text) e.textContent = text;
+  if (style) e.style.cssText = style;
+  return e;
+}
+function age(d) {
+  const b = new Date(d), n = new Date();
+  let a = n.getFullYear() - b.getFullYear();
+  const m = n.getMonth() - b.getMonth();
+  if (m < 0 || (m === 0 && n.getDate() < b.getDate())) a--;
+  return a;
+}
+async function setStatus(id, status) {
+  const { error } = await sb.from('profiles').update({ status }).eq('id', id);
+  if (error) showMsg($('m'), 'تعذر التحديث: ' + error.message, false);
+  else { $('m').hidden = true; load(); }
+}
+function actionBtn(label, id, status, ghost) {
+  const b = el('button', label, 'min-height:44px;line-height:40px;padding:0 20px;font-size:16px;margin-inline-end:8px');
+  b.type = 'button';
+  if (ghost) b.className = 'ghost';
+  b.onclick = () => setStatus(id, status);
+  return b;
+}
+function card(p) {
+  const c = el('div', '', 'border:2px solid #D5E3E1;border-radius:12px;padding:16px;margin-top:16px');
+  c.appendChild(el('div', p.first_name + ' (' + GENDER[p.gender] + ')', 'font-size:20px;font-weight:800'));
+  const line = [age(p.birth_date) + ' سنة', p.country, p.city, MARITAL[p.marital_status], EDU[p.education]].filter(Boolean).join(' · ');
+  c.appendChild(el('div', line, 'color:#4A5F5E;margin:6px 0'));
+  if (p.bio) c.appendChild(el('p', 'نبذة: ' + p.bio, 'margin:8px 0;line-height:1.7'));
+  if (p.looking_for) c.appendChild(el('p', 'يبحث عن: ' + p.looking_for, 'margin:8px 0;line-height:1.7'));
+  const row = el('div', '', 'margin-top:12px');
+  if (p.id !== myId) {
+    if (p.status !== 'approved') row.appendChild(actionBtn('موافقة', p.id, 'approved', false));
+    if (p.status !== 'suspended') row.appendChild(actionBtn(p.status === 'pending' ? 'رفض' : 'إيقاف', p.id, 'suspended', true));
+  } else row.appendChild(el('span', 'هذا حسابك', 'color:#4A5F5E'));
+  c.appendChild(row);
+  return c;
+}
+async function load() {
+  const list = $('list');
+  list.textContent = 'جارٍ التحميل...';
+  const { data, error } = await sb.from('profiles').select('*').eq('status', current).order('created_at', { ascending: false });
+  list.textContent = '';
+  if (error) { showMsg($('m'), 'تعذر التحميل: ' + error.message, false); return; }
+  if (!data.length) { list.appendChild(el('p', 'لا توجد حسابات في هذه القائمة.', 'color:#4A5F5E;margin-top:16px')); return; }
+  data.forEach(p => list.appendChild(card(p)));
+}
+document.querySelectorAll('#tabs button').forEach(b => {
+  b.onclick = () => {
+    current = b.dataset.s;
+    document.querySelectorAll('#tabs button').forEach(x => x.className = x === b ? 'on' : '');
+    load();
+  };
+});
+(async () => {
+  const s = await getSession();
+  if (!s) { location.href = 'auth.html'; return; }
+  myId = s.user.id;
+  const { data } = await sb.from('profiles').select('is_admin').eq('id', myId).maybeSingle();
+  if (!data || !data.is_admin) {
+    $('tabs').hidden = true;
+    showMsg($('m'), 'هذه الصفحة للمشرفين فقط.', false);
+    return;
+  }
+  load();
+})();
+</script></body></html>
