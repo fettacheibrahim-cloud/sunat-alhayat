@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ملفي - سنة الحياة</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+</head><body>
+<header><a class="brand" href="index.html">سنة الحياة</a><button class="ghost" id="out" type="button">تسجيل الخروج</button></header>
+<div class="card wide">
+<h1 id="title">أنشئ ملفك الشخصي</h1>
+<p class="sub">أجب بصدق، فالوضوح من البداية أساس التوافق.</p>
+<div id="status" hidden></div>
+<form id="f">
+<label for="first_name">الاسم الأول</label><input id="first_name" required maxlength="40">
+<label for="gender">الجنس</label>
+<select id="gender" required><option value="">اختر</option><option value="male">ذكر</option><option value="female">أنثى</option></select>
+<label for="birth_date">تاريخ الميلاد (18 سنة فما فوق)</label><input id="birth_date" type="date" required>
+<label for="country">الدولة</label><input id="country" maxlength="60">
+<label for="city">المدينة</label><input id="city" maxlength="60">
+<label for="marital_status">الحالة الاجتماعية</label>
+<select id="marital_status"><option value="never_married">لم يسبق الزواج</option><option value="divorced">مطلق / مطلقة</option><option value="widowed">أرمل / أرملة</option></select>
+<label for="education">المستوى التعليمي</label>
+<select id="education"><option value="secondary">ثانوي</option><option value="diploma">دبلوم</option><option value="bachelor">بكالوريوس</option><option value="postgraduate">دراسات عليا</option></select>
+<label for="bio">نبذة عنك</label><textarea id="bio" maxlength="1000"></textarea>
+<label for="looking_for">ما الذي تبحث عنه في شريك الحياة؟</label><textarea id="looking_for" maxlength="1000"></textarea>
+<div id="m" hidden></div>
+<button class="full" id="save" type="submit">حفظ الملف</button>
+</form></div>
+<script src="app.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const FIELDS = ['first_name','gender','birth_date','country','city','marital_status','education','bio','looking_for'];
+const STATUS = {
+  pending: ['info', 'ملفك قيد المراجعة. سيتم تفعيل حسابك بعد موافقة الإدارة.'],
+  approved: ['ok', 'تمت الموافقة على حسابك.'],
+  suspended: ['err', 'حسابك موقوف. تواصل مع الإدارة.']
+};
+let userId = null, exists = false;
+$('out').onclick = logout;
+(async () => {
+  const session = await getSession();
+  if (!session) { location.href = 'auth.html'; return; }
+  userId = session.user.id;
+  const { data } = await sb.from('profiles').select('*').eq('id', userId).maybeSingle();
+  if (data) {
+    exists = true;
+    $('title').textContent = 'ملفي الشخصي';
+    FIELDS.forEach(k => { if (data[k] != null) $(k).value = data[k]; });
+    $('gender').disabled = true;
+    const [cls, txt] = STATUS[data.status];
+    $('status').className = 'msg ' + cls; $('status').textContent = txt; $('status').hidden = false;
+  }
+})();
+$('f').onsubmit = async e => {
+  e.preventDefault();
+  $('save').disabled = true;
+  const row = {};
+  FIELDS.forEach(k => { if (k !== 'gender' || !exists) row[k] = $(k).value || null; });
+  const res = exists
+    ? await sb.from('profiles').update(row).eq('id', userId)
+    : await sb.from('profiles').insert({ ...row, id: userId });
+  if (res.error) showMsg($('m'), 'تعذر الحفظ: ' + res.error.message, false);
+  else { showMsg($('m'), 'تم حفظ ملفك بنجاح.', true); if (!exists) setTimeout(() => location.reload(), 1200); }
+  $('save').disabled = false;
+};
+</script></body></html>
