@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>الدخول - سنة الحياة</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+</head><body>
+<header><a class="brand" href="index.html">سنة الحياة</a></header>
+<div class="card">
+<div class="tabs"><button id="tabIn" class="on" type="button">تسجيل الدخول</button><button id="tabUp" type="button">حساب جديد</button></div>
+<h1 id="title">تسجيل الدخول</h1>
+<p class="sub" id="sub">أهلاً بعودتك.</p>
+<form id="f">
+<label for="email">البريد الإلكتروني</label><input id="email" type="email" required autocomplete="email">
+<label for="pw">كلمة المرور</label><input id="pw" type="password" required minlength="8" autocomplete="current-password">
+<div id="m" hidden></div>
+<button class="full" id="go" type="submit">دخول</button>
+</form></div>
+<script src="app.js"></script>
+<script>
+let mode = 'in';
+const $ = id => document.getElementById(id);
+function setMode(m) {
+  mode = m;
+  $('tabIn').className = m === 'in' ? 'on' : '';
+  $('tabUp').className = m === 'up' ? 'on' : '';
+  $('title').textContent = m === 'in' ? 'تسجيل الدخول' : 'إنشاء حساب جديد';
+  $('sub').textContent = m === 'in' ? 'أهلاً بعودتك.' : 'كلمة المرور 8 أحرف على الأقل. سنرسل لك رسالة لتأكيد بريدك.';
+  $('go').textContent = m === 'in' ? 'دخول' : 'إنشاء الحساب';
+  $('pw').autocomplete = m === 'in' ? 'current-password' : 'new-password';
+  $('m').hidden = true;
+}
+$('tabIn').onclick = () => setMode('in');
+$('tabUp').onclick = () => setMode('up');
+$('f').onsubmit = async e => {
+  e.preventDefault();
+  $('go').disabled = true;
+  const email = $('email').value.trim(), password = $('pw').value;
+  if (mode === 'up') {
+    const { error } = await sb.auth.signUp({ email, password,
+      options: { emailRedirectTo: new URL('profile.html', location.href).href } });
+    if (error) showMsg($('m'), 'تعذر إنشاء الحساب: ' + error.message, false);
+    else showMsg($('m'), 'تم إرسال رسالة تأكيد إلى بريدك. افتحها ثم اضغط الرابط لإكمال ملفك الشخصي.', true);
+  } else {
+    const { error } = await sb.auth.signInWithPassword({ email, password });
+    if (error) showMsg($('m'), 'البريد أو كلمة المرور غير صحيحة، أو لم يتم تأكيد البريد بعد.', false);
+    else location.href = 'profile.html';
+  }
+  $('go').disabled = false;
+};
+getSession().then(s => { if (s) location.href = 'profile.html'; });
+</script></body></html>
