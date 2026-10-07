@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>الاهتمامات - سنة الحياة</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+</head><body>
+<header><a class="brand" href="index.html">سنة الحياة</a>
+<div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn" href="browse.html" style="line-height:44px;min-height:44px;padding:0 18px">التصفح</a><button class="ghost" id="out" type="button">تسجيل الخروج</button></div></header>
+<div class="card wide">
+<h1>الاهتمامات</h1>
+<p class="sub">اهتمامات وصلتك من أعضاء آخرين، وأخرى أرسلتها أنت.</p>
+<div class="tabs">
+<button type="button" class="on" data-t="in">الواردة</button>
+<button type="button" data-t="out">المرسلة</button>
+</div>
+<div id="m" hidden></div>
+<div id="list"></div>
+</div>
+<script src="app.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const GENDER = { male: 'ذكر', female: 'أنثى' };
+const STATE = { sent: 'بانتظار الرد', accepted: 'مقبول', declined: 'مرفوض' };
+let me = null, tab = 'in';
+$('out').onclick = logout;
+
+function el(tag, text, style) {
+  const e = document.createElement(tag);
+  if (text) e.textContent = text;
+  if (style) e.style.cssText = style;
+  return e;
+}
+async function respond(id, status) {
+  const { error } = await sb.from('interests').update({ status }).eq('id', id);
+  if (error) showMsg($('m'), 'تعذر التحديث: ' + error.message, false);
+  else load();
+}
+function card(i, other) {
+  const c = el('div', '', 'border:2px solid #D5E3E1;border-radius:12px;padding:16px;margin-top:16px');
+  c.appendChild(el('div', other.first_name, 'font-size:20px;font-weight:800'));
+  c.appendChild(el('div', STATE[i.status], 'color:#4A5F5E;margin:6px 0'));
+  if (tab === 'in' && i.status === 'sent') {
+    const row = el('div', '', 'margin-top:12px');
+    const a = el('button', 'قبول', 'min-height:44px;line-height:40px;padding:0 20px;font-size:16px;margin-inline-end:8px');
+    a.type = 'button'; a.onclick = () => respond(i.id, 'accepted');
+    const r = el('button', 'رفض', 'min-height:44px;line-height:40px;padding:0 20px;font-size:16px');
+    r.type = 'button'; r.className = 'ghost'; r.onclick = () => respond(i.id, 'declined');
+    row.appendChild(a); row.appendChild(r); c.appendChild(row);
+  }
+  return c;
+}
+async function load() {
+  const box = $('list');
+  box.textContent = 'جارٍ التحميل...';
+  const col = tab === 'in' ? 'to_id' : 'from_id';
+  const otherCol = tab === 'in' ? 'from_id' : 'to_id';
+  const { data, error } = await sb.from('interests')
+    .select('id,status,created_at,from_id,to_id')
+    .eq(col, me.id).order('created_at', { ascending: false });
+  box.textContent = '';
+  if (error) { showMsg($('m'), 'تعذر التحميل: ' + error.message, false); return; }
+  if (!data.length) { box.appendChild(el('p', 'لا توجد اهتمامات في هذه القائمة.', 'color:#4A5F5E;margin-top:16px')); return; }
+  const ids = [...new Set(data.map(i => i[otherCol]))];
+  const { data: people } = await sb.from('profiles').select('id,first_name,gender,city').in('id', ids);
+  const map = Object.fromEntries((people || []).map(p => [p.id, p]));
+  data.forEach(i => {
+    const other = map[i[otherCol]] || { first_name: 'عضو' };
+    box.appendChild(card(i, other));
+  });
+}
+document.querySelectorAll('.tabs button').forEach(b => {
+  b.onclick = () => {
+    tab = b.dataset.t;
+    document.querySelectorAll('.tabs button').forEach(x => x.className = x === b ? 'on' : '');
+    load();
+  };
+});
+(async () => {
+  const s = await getSession();
+  if (!s) { location.href = 'auth.html'; return; }
+  me = s.user;
+  load();
+})();
+</script></body></html>
