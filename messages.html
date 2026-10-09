@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>المحادثات - سنة الحياة</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<style>
+.chat{display:flex;flex-direction:column}
+.log{height:50vh;min-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:12px;background:#F4F7F6;border-radius:12px;margin-top:16px}
+.bub{max-width:75%;padding:10px 14px;border-radius:14px;line-height:1.7;word-wrap:break-word}
+.mine{align-self:flex-start;background:#0F3D3E;color:#fff}
+.theirs{align-self:flex-end;background:#fff;border:1px solid #D5E3E1}
+.row{display:flex;gap:8px;margin-top:12px}
+.row input{flex:1;min-height:48px}
+.conv{display:block;width:100%;text-align:right;background:#fff;color:#17302F;border:2px solid #D5E3E1;margin-top:10px;padding:14px;font-size:18px;font-weight:700}
+.conv.on{border-color:#0F3D3E}
+</style>
+</head><body>
+<header><a class="brand" href="index.html">سنة الحياة</a>
+<div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn" href="interests.html" style="line-height:44px;min-height:44px;padding:0 18px">الاهتمامات</a><button class="ghost" id="out" type="button">تسجيل الخروج</button></div></header>
+<div class="card wide">
+<h1>المحادثات</h1>
+<p class="sub">تفتح المحادثة بعد قبول الاهتمام، وتقتصر على الطرفين.</p>
+<div id="m" hidden></div>
+<div id="convs"></div>
+<div id="chat" class="chat" hidden>
+<h2 id="name" style="margin:16px 0 0;font-size:24px"></h2>
+<div id="log" class="log"></div>
+<form id="f" class="row">
+<input id="body" type="text" maxlength="2000" placeholder="اكتب رسالتك" autocomplete="off" required>
+<button type="submit" id="send">إرسال</button>
+</form>
+</div>
+</div>
+<script src="app.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+let me = null, currentId = null, channel = null, shown = new Set(), names = {};
+$('out').onclick = logout;
+
+function el(tag, text, cls) {
+  const e = document.createElement(tag);
+  if (text != null) e.textContent = text;
+  if (cls) e.className = cls;
+  return e;
+}
+function otherId(c) { return c.user_a === me.id ? c.user_b : c.user_a; }
+function addMessage(m) {
+  if (shown.has(m.id)) return;
+  shown.add(m.id);
+  const log = $('log');
+  log.appendChild(el('div', m.body, 'bub ' + (m.sender_id === me.id ? 'mine' : 'theirs')));
+  log.scrollTop = log.scrollHeight;
+}
+async function loadMessages() {
+  const { data, error } = await sb.from('messages')
+    .select('id,sender_id,body,created_at')
+    .eq('conversation_id', currentId).order('created_at', { ascending: true });
+  if (error) { showMsg($('m'), 'تعذر تحميل الرسائل: ' + error.message, false); return; }
+  data.forEach(addMessage);
+}
+async function openConv(c) {
+  currentId = c.id;
+  shown = new Set();
+  $('log').textContent = '';
+  $('name').textContent = names[otherId(c)] || 'عضو';
+  $('chat').hidden = false;
+  document.querySelectorAll('.conv').forEach(b => b.classList.toggle('on', b.dataset.id === c.id));
+  await loadMessages();
+  if (channel) sb.removeChannel(channel);
+  channel = sb.channel('conv-' + c.id)
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: 'conversation_id=eq.' + c.id },
+      payload => addMessage(payload.new))
+    .subscribe();
+}
+$('f').onsubmit = async e => {
+  e.preventDefault();
+  const body = $('body').value.trim();
+  if (!body || !currentId) return;
+  $('send').disabled = true;
+  const { data, error } = await sb.from('messages')
+    .insert({ conversation_id: currentId, sender_id: me.id, body })
+    .select('id,sender_id,body,created_at').single();
+  $('send').disabled = false;
+  if (error) { showMsg($('m'), 'تعذر إرسال الرسالة: ' + error.message, false); return; }
+  $('body').value = '';
+  addMessage(data);
+};
+(async () => {
+  const s = await getSession();
+  if (!s) { location.href = 'auth.html'; return; }
+  me = s.user;
+  const { data: mine } = await sb.from('profiles').select('status').eq('id', me.id).maybeSingle();
+  if (!mine) { location.href = 'profile.html'; return; }
+  if (mine.status !== 'approved') { showMsg($('m'), 'تظهر المحادثات بعد الموافقة على حسابك.', false); return; }
+  const { data: convs, error } = await sb.from('conversations')
+    .select('id,user_a,user_b,created_at').order('created_at', { ascending: false });
+  if (error) { showMsg($('m'), 'تعذر التحميل: ' + error.message, false); return; }
+  if (!convs.length) { $('convs').appendChild(el('p', 'لا توجد محادثات بعد. تفتح المحادثة عند قبول اهتمام.', 'color:#4A5F5E;margin-top:16px')); return; }
+  const ids = [...new Set(convs.map(otherId))];
+  const { data: people } = await sb.from('profiles').select('id,first_name').in('id', ids);
+  (people || []).forEach(p => names[p.id] = p.first_name);
+  convs.forEach(c => {
+    const b = el('button', names[otherId(c)] || 'عضو', 'conv');
+    b.type = 'button';
+    b.dataset.id = c.id;
+    b.onclick = () => openConv(c);
+    $('convs').appendChild(b);
+  });
+  openConv(convs[0]);
+})();
+</script></body></html>
