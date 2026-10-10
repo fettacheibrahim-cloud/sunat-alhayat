@@ -1,66 +1,166 @@
-<!doctype html>
-<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ملفي - سنة الحياة</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-</head><body>
-<header><a class="brand" href="index.html">سنة الحياة</a><div style="display:flex;gap:10px"><a class="btn" href="browse.html" style="line-height:44px;min-height:44px;padding:0 18px">التصفح</a><button class="ghost" id="out" type="button">تسجيل الخروج</button></div></header>
-<div class="card wide">
-<h1 id="title">أنشئ ملفك الشخصي</h1>
-<p class="sub">أجب بصدق، فالوضوح من البداية أساس التوافق.</p>
-<div id="status" hidden></div>
-<form id="f">
-<label for="first_name">الاسم الأول</label><input id="first_name" required maxlength="40">
-<label for="gender">الجنس</label>
-<select id="gender" required><option value="">اختر</option><option value="male">ذكر</option><option value="female">أنثى</option></select>
-<label for="birth_date">تاريخ الميلاد (18 سنة فما فوق)</label><input id="birth_date" type="date" required>
-<label for="country">الدولة</label><input id="country" maxlength="60">
-<label for="city">المدينة</label><input id="city" maxlength="60">
-<label for="marital_status">الحالة الاجتماعية</label>
-<select id="marital_status"><option value="never_married">لم يسبق الزواج</option><option value="divorced">مطلق / مطلقة</option><option value="widowed">أرمل / أرملة</option></select>
-<label for="education">المستوى التعليمي</label>
-<select id="education"><option value="secondary">ثانوي</option><option value="diploma">دبلوم</option><option value="bachelor">بكالوريوس</option><option value="postgraduate">دراسات عليا</option></select>
-<label for="bio">نبذة عنك</label><textarea id="bio" maxlength="1000"></textarea>
-<label for="looking_for">ما الذي تبحث عنه في شريك الحياة؟</label><textarea id="looking_for" maxlength="1000"></textarea>
-<div id="m" hidden></div>
-<button class="full" id="save" type="submit">حفظ الملف</button>
-</form></div>
-<script src="app.js"></script>
-<script>
-const $ = id => document.getElementById(id);
-const FIELDS = ['first_name','gender','birth_date','country','city','marital_status','education','bio','looking_for'];
-const STATUS = {
-  pending: ['info', 'ملفك قيد المراجعة. سيتم تفعيل حسابك بعد موافقة الإدارة.'],
-  approved: ['ok', 'تمت الموافقة على حسابك.'],
-  suspended: ['err', 'حسابك موقوف. تواصل مع الإدارة.']
-};
-let userId = null, exists = false;
-$('out').onclick = logout;
-(async () => {
-  const session = await getSession();
-  if (!session) { location.href = 'auth.html'; return; }
-  userId = session.user.id;
-  const { data } = await sb.from('profiles').select('*').eq('id', userId).maybeSingle();
-  if (data) {
-    exists = true;
-    $('title').textContent = 'ملفي الشخصي';
-    FIELDS.forEach(k => { if (data[k] != null) $(k).value = data[k]; });
-    $('gender').disabled = true;
-    const [cls, txt] = STATUS[data.status];
-    $('status').className = 'msg ' + cls; $('status').textContent = txt; $('status').hidden = false;
-  }
-})();
-$('f').onsubmit = async e => {
-  e.preventDefault();
-  $('save').disabled = true;
-  const row = {};
-  FIELDS.forEach(k => { if (k !== 'gender' || !exists) row[k] = $(k).value || null; });
-  const res = exists
-    ? await sb.from('profiles').update(row).eq('id', userId)
-    : await sb.from('profiles').insert({ ...row, id: userId });
-  if (res.error) showMsg($('m'), 'تعذر الحفظ: ' + res.error.message, false);
-  else { showMsg($('m'), 'تم حفظ ملفك بنجاح.', true); if (!exists) setTimeout(() => location.reload(), 1200); }
-  $('save').disabled = false;
-};
-</script></body></html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الملف الشخصي - موقع سنة الحياة</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #fdfcf0; /* الخلفية الكريمية الهادئة */
+      font-family: 'Cairo', sans-serif;
+      color: #2c3e50;
+      margin: 0;
+      padding: 20px;
+    }
+
+    /* شريط التنقل العلوي الموحد */
+    .nav-pills {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 20px;
+    }
+
+    .nav-pills a {
+      text-decoration: none;
+      color: #004d40;
+      border: 1px solid #004d40;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+
+    .nav-pills a:hover, .nav-pills a.active {
+      background-color: #004d40;
+      color: #fff;
+    }
+
+    /* حاوية الملف الشخصي */
+    .profile-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    }
+
+    .profile-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .profile-avatar {
+      width: 90px;
+      height: 90px;
+      background-color: #e0f2f1;
+      color: #004d40;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: bold;
+      margin: 0 auto 15px auto;
+      border: 2px solid #004d40;
+    }
+
+    .profile-header h2 {
+      margin: 0 0 5px 0;
+      color: #004d40;
+      font-size: 1.6rem;
+    }
+
+    .profile-header p {
+      color: #666;
+      font-size: 0.95rem;
+      margin: 0;
+    }
+
+    /* معلومات الحساب */
+    .info-group {
+      margin-bottom: 15px;
+      padding: 12px 15px;
+      background: #f9f9f6;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .info-label {
+      font-weight: 600;
+      color: #555;
+    }
+
+    .info-value {
+      color: #2c3e50;
+    }
+
+    .btn-edit {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background-color: #004d40;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+      text-align: center;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+
+    .btn-edit:hover {
+      background-color: #00695c;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- شريط التنقل (الأزرار) -->
+  <nav class="nav-pills">
+    <a href="index.html">الرئيسية</a>
+    <a href="browse.html">التصفح</a>
+    <a href="interests.html">الاهتمامات</a>
+    <a href="messages.html">المحادثات</a>
+    <a href="profile.html" class="active">ملفي</a>
+    <a href="admin.html">الإدارة</a>
+  </nav>
+
+  <!-- محتوى الملف الشخصي -->
+  <div class="profile-container">
+    <div class="profile-header">
+      <div class="profile-avatar">إ</div>
+      <h2>إبراهيم</h2>
+      <p>حساب موثق - سنة الحياة</p>
+    </div>
+
+    <div class="info-group">
+      <span class="info-label">البريد الإلكتروني</span>
+      <span class="info-value">brahim@example.com</span>
+    </div>
+
+    <div class="info-group">
+      <span class="info-label">حالة الحساب</span>
+      <span class="info-value" style="color: #2e7d32; font-weight: bold;">نشط وموثق</span>
+    </div>
+
+    <div class="info-group">
+      <span class="info-label">الخصوصية</span>
+      <span class="info-value">تحكم كامل في عرض الصور والمعلومات</span>
+    </div>
+
+    <a href="#" class="btn-edit">تعديل الملف الشخصي</a>
+  </div>
+
+</body>
+</html>
