@@ -2,47 +2,57 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تسجيل الدخول - موقع سنة الحياة</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>سنة الحياة - الدخول</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <main class="card" style="max-width:420px;margin:40px auto;padding:24px">
+    <h1 id="title">تسجيل الدخول</h1>
+    <form id="form">
+      <label>البريد الإلكتروني</label>
+      <input id="email" type="email" required style="width:100%;padding:10px;margin:6px 0 14px">
+      <label>كلمة المرور</label>
+      <input id="password" type="password" minlength="6" required style="width:100%;padding:10px;margin:6px 0 14px">
+      <button id="btn" type="submit" class="btn" style="width:100%">دخول</button>
+    </form>
+    <p id="msg" style="display:none;margin-top:12px"></p>
+    <p style="text-align:center;margin-top:16px">
+      <a href="#" id="toggle">ليس لديك حساب؟ سجّل الآن</a>
+    </p>
+  </main>
 
-  <!-- شريط التنقل -->
-  <nav class="nav-pills">
-    <a href="index.html">الرئيسية</a>
-    <a href="browse.html">التصفح</a>
-    <a href="interests.html">الاهتمامات</a>
-    <a href="messages.html">المحادثات</a>
-    <a href="profile.html">ملفي</a>
-    <a href="admin.html">الإدارة</a>
-  </nav>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+  <script>
+    let isLogin = true;
+    const $ = id => document.getElementById(id);
 
-  <!-- صندوق الدخول -->
-  <div class="login-container">
-    <div class="login-header">
-      <h2>تسجيل الدخول</h2>
-      <p>أهلاً بعودتك إلى سنة الحياة.</p>
-    </div>
+    $('toggle').onclick = e => {
+      e.preventDefault();
+      isLogin = !isLogin;
+      $('title').textContent = isLogin ? 'تسجيل الدخول' : 'إنشاء حساب';
+      $('btn').textContent = isLogin ? 'دخول' : 'تسجيل';
+      $('toggle').textContent = isLogin ? 'ليس لديك حساب؟ سجّل الآن' : 'لديك حساب؟ ادخل';
+    };
 
-    <div class="form-group">
-      <label for="email">البريد الإلكتروني</label>
-      <input type="email" id="email" class="form-control" placeholder="أدخل بريدك الإلكتروني">
-    </div>
-
-    <div class="form-group">
-      <label for="password">كلمة المرور</label>
-      <input type="password" id="password" class="form-control" placeholder="أدخل كلمة المرور">
-    </div>
-
-    <!-- زر الدخول المباشر -->
-    <a href="profile.html" class="btn-login">دخول</a>
-
-    <div class="auth-links">
-      <a href="#">نسيت كلمة المرور؟</a> | <a href="auth.html">حساب جديد</a>
-    </div>
-  </div>
-
+    $('form').onsubmit = async e => {
+      e.preventDefault();
+      const btn = $('btn');
+      btn.disabled = true;
+      const email = $('email').value.trim();
+      const password = $('password').value;
+      try {
+        const res = isLogin
+          ? await sb.auth.signInWithPassword({ email, password })
+          : await sb.auth.signUp({ email, password });
+        if (res.error) throw res.error;
+        location.href = 'profile.html';
+      } catch (err) {
+        showMsg('msg', 'خطأ: ' + err.message, 'error');
+        btn.disabled = false;
+      }
+    };
+  </script>
 </body>
-        </html>
-        
+</html>
