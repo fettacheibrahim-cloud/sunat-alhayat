@@ -79,27 +79,32 @@
       const hidden = new Set();
       (bl || []).forEach(b => hidden.add(b.blocker_id === me ? b.blocked_id : b.blocker_id));
 
-      const visible = convs.filter(c => !hidden.has(c.user_a === me ? c.user_b : c.user_a));
+      const groups = {};
+      convs.forEach(c => {
+        const o = c.user_a === me ? c.user_b : c.user_a;
+        if (hidden.has(o)) return;
+        (groups[o] = groups[o] || []).push(c.id);
+      });
+
+      const others = Object.keys(groups);
       $('list').innerHTML = '';
-      if (!visible.length) {
+      if (!others.length) {
         $('info').textContent = 'لا توجد محادثات بعد. تُفتح المحادثة عندما يقبل أحد الطرفين اهتمام الآخر.';
         return;
       }
       $('info').textContent = '';
-      const ids = visible.map(c => c.user_a === me ? c.user_b : c.user_a);
-      const { data: ps } = await sb.from('profiles').select('id,first_name').in('id', ids);
+      const { data: ps } = await sb.from('profiles').select('id,first_name').in('id', others);
       const names = {};
       (ps || []).forEach(p => names[p.id] = p.first_name);
 
-      visible.forEach(c => {
-        const other = c.user_a === me ? c.user_b : c.user_a;
+      others.forEach(other => {
         const name = names[other] || 'عضو';
         const b = document.createElement('button');
         b.className = 'conv';
         const av = document.createElement('div'); av.className = 'av'; av.textContent = name.charAt(0).toUpperCase();
         const t = document.createElement('b'); t.textContent = name;
         b.append(av, t);
-        b.onclick = () => openChat(c.id, other, name);
+        b.onclick = () => openChat(groups[other], other, name);
         $('list').appendChild(b);
       });
     }
@@ -107,7 +112,7 @@
     async function loadMsgs() {
       if (!cur) return;
       const { data, error } = await sb.from('messages').select('*')
-        .eq('conversation_id', cur).order('created_at');
+        .in('conversation_id', cur).order('created_at');
       if (error || data.length === lastCount) return;
       lastCount = data.length;
       const box = $('box'); box.innerHTML = '';
@@ -120,8 +125,8 @@
       box.scrollTop = box.scrollHeight;
     }
 
-    function openChat(id, other, name) {
-      cur = id; curOther = other; lastCount = -1;
+    function openChat(ids, other, name) {
+      cur = ids; curOther = other; lastCount = -1;
       $('who').textContent = name;
       $('rep').style.display = 'none';
       $('listView').style.display = 'none';
@@ -165,7 +170,7 @@
       const body = $('text').value.trim();
       if (!body) return;
       $('text').value = '';
-      const { error } = await sb.from('messages').insert({ conversation_id: cur, sender_id: me, body });
+      const { error } = await sb.from('messages').insert({ conversation_id: cur[0], sender_id: me, body });
       if (error) { alert('تعذّر الإرسال: ' + error.message); $('text').value = body; return; }
       lastCount = -1; loadMsgs();
     };
