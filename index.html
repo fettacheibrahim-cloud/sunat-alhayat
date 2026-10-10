@@ -2,122 +2,93 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>الرئيسية - موقع سنة الحياة</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>سنة الحياة - موقع الزواج الجاد</title>
+  <meta name="description" content="موقع للتعارف بنيّة الزواج، بخصوصية وجدية واحترام.">
   <link rel="stylesheet" href="style.css">
   <style>
-    body {
-      background-color: #fdfcf0; /* الخلفية الكريمية الهادئة */
-      font-family: 'Cairo', sans-serif;
-      color: #2c3e50;
-      margin: 0;
-      padding: 20px;
-    }
-
-    /* شريط التنقل العلوي الموحد */
-    .nav-pills {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 30px;
-      border-bottom: 1px solid #e0e0e0;
-      padding-bottom: 20px;
-    }
-
-    .nav-pills a {
-      text-decoration: none;
-      color: #004d40;
-      border: 1px solid #004d40;
-      padding: 8px 20px;
-      border-radius: 30px;
-      font-size: 0.9rem;
-      transition: all 0.3s;
-    }
-
-    .nav-pills a:hover, .nav-pills a.active {
-      background-color: #004d40;
-      color: #fff;
-    }
-
-    /* محتوى الصفحة الرئيسية */
-    .main-container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-      text-align: center;
-    }
-
-    .main-container h1 {
-      font-size: 2rem;
-      color: #004d40;
-      margin-bottom: 15px;
-    }
-
-    .main-container p {
-      color: #666;
-      font-size: 1.1rem;
-      line-height: 1.8;
-      margin-bottom: 25px;
-    }
-
-    .feature-box {
-      background: #f9f9f6;
-      border-right: 4px solid #004d40;
-      padding: 15px;
-      margin-bottom: 15px;
-      text-align: right;
-      border-radius: 4px;
-    }
-
-    .feature-box h3 {
-      margin: 0 0 5px 0;
-      color: #004d40;
-      font-size: 1.1rem;
-    }
-
-    .feature-box p {
-      margin: 0;
-      font-size: 0.95rem;
-      color: #555;
-    }
+    .top{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;
+      background:rgba(250,247,240,.92);backdrop-filter:blur(8px);position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line)}
+    .brand{font:700 1.6rem 'Amiri',serif;color:var(--green);text-decoration:none}
+    .brand span{color:var(--gold)}
+    .top .btn{padding:8px 20px;min-height:40px;font-size:15px}
+    .hero{background:linear-gradient(160deg,var(--green) 0%,#0a2c2d 100%);color:#fff;text-align:center;
+      padding:56px 22px 64px;position:relative;overflow:hidden}
+    .hero::after{content:"";position:absolute;inset:0;opacity:.07;
+      background:repeating-linear-gradient(45deg,#fff 0 1px,transparent 1px 22px),repeating-linear-gradient(-45deg,#fff 0 1px,transparent 1px 22px)}
+    .hero>*{position:relative;z-index:1}
+    .hero h1{color:#fff;font-size:2.6rem;margin:0 0 6px}
+    .hero .sub{color:#e9dfc4;max-width:520px;margin:0 auto 26px}
+    .orn{color:var(--gold2);letter-spacing:8px;font-size:18px}
+    .verse{max-width:640px;margin:34px auto 0;padding:26px 22px;border:1px solid rgba(216,181,101,.5);
+      border-radius:20px;background:rgba(255,255,255,.06)}
+    .verse .ar{font:400 1.55rem/2.1 'Amiri',serif;color:#fff;margin:0}
+    .verse .en{font-size:15px;line-height:1.7;color:#e9dfc4;margin:14px 0 0;direction:ltr;font-style:italic}
+    .verse .ref{color:var(--gold2);font-size:14px;margin-top:10px}
+    section{max-width:720px;margin:0 auto;padding:44px 20px}
+    section h2{text-align:center}
+    .steps{display:grid;gap:14px;margin-top:22px}
+    .step{display:flex;gap:16px;align-items:flex-start;background:#fff;border:1px solid var(--line);
+      border-radius:18px;padding:18px;box-shadow:0 6px 18px rgba(14,59,60,.05)}
+    .num{flex:none;width:44px;height:44px;border-radius:50%;background:var(--gold);color:#fff;
+      display:flex;align-items:center;justify-content:center;font:700 20px 'Amiri',serif}
+    .step b{display:block;color:var(--green);font-size:18px}
+    .step p{margin:2px 0 0;color:var(--muted);font-size:15px;line-height:1.7}
+    .trust{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+    .trust div{background:var(--sand);border-radius:16px;padding:16px;text-align:center;font-weight:700;color:var(--green)}
+    .trust small{display:block;font-weight:400;color:var(--muted);margin-top:4px}
+    .cta{text-align:center}
+    footer{text-align:center;padding:26px 20px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
+    @media(max-width:600px){.hero h1{font-size:2.1rem}.verse .ar{font-size:1.3rem}.trust{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
+  <header class="top">
+    <a class="brand" href="index.html">سنة <span>الحياة</span></a>
+    <a class="btn" href="auth.html">دخول</a>
+  </header>
 
-  <!-- شريط التنقل (الأزرار) -->
-    <nav class="nav-pills">
-    <a href="#" onclick="location.href='index.html'; return false;">الرئيسية</a>
-    <a href="#" onclick="location.href='browse.html'; return false;">التصفح</a>
-    <a href="#" onclick="location.href='interests.html'; return false;">الاهتمامات</a>
-    <a href="#" onclick="location.href='messages.html'; return false;">المحادثات</a>
-    <a href="#" onclick="location.href='profile.html'; return false;">ملفي</a>
-    <a href="#" onclick="location.href='admin.html'; return false;">الإدارة</a>
-  </nav>
-  
+  <div class="hero">
+    <div class="orn">✦ ✦ ✦</div>
+    <h1>سنة الحياة</h1>
+    <p class="sub">موقع جاد للتعارف بنيّة الزواج، على أساس من الاحترام والخصوصية والمودّة.</p>
+    <a class="btn gold" href="auth.html">ابدأ رحلتك</a>
 
-  <!-- محتوى الصفحة الرئيسية -->
-  <div class="main-container">
-    <h1>مرحباً بك في موقع سنة الحياة</h1>
-    <p>منصتك الآمنة والموثوقة للتواصل، تنظيم الاهتمامات، ومتابعة كل ما يهمك بخصوصية كاملة.</p>
-
-    <div class="feature-box">
-      <h3>توثيق الحسابات</h3>
-      <p>مراجعة المستندات والملفات للحد من الحسابات الوهمية وضمان بيئة آمنة.</p>
-    </div>
-
-    <div class="feature-box">
-      <h3>التحكم في الصور والمعلومات</h3>
-      <p>أنت وحدك من يقرر من يرى صورك ومعلوماتك الشخصية بكل سهولة.</p>
-    </div>
-
-    <div style="margin-top: 25px;">
-      <a href="auth.html" style="display: inline-block; background-color: #004d40; color: #fff; padding: 10px 25px; border-radius: 6px; text-decoration: none; font-weight: bold;">تسجيل الدخول / الانضمام</a>
+    <div class="verse">
+      <p class="ar">﴿ وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَٰلِكَ لَآيَاتٍ لِّقَوْمٍ يَتَفَكَّرُونَ ﴾</p>
+      <p class="ref">سورة الروم — الآية 21</p>
+      <p class="en">"And of His signs is that He created for you from yourselves mates that you may find tranquility in them; and He placed between you affection and mercy. Indeed in that are signs for a people who give thought." (Quran 30:21)</p>
     </div>
   </div>
 
+  <section>
+    <h2>كيف يعمل الموقع؟</h2>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><div><b>أنشئ حسابك وملفك</b><p>سجّل بريدك وأكمل بياناتك الأساسية بصدق.</p></div></div>
+      <div class="step"><div class="num">2</div><div><b>مراجعة الإدارة</b><p>تتم مراجعة كل ملف قبل ظهوره، لضمان الجدية.</p></div></div>
+      <div class="step"><div class="num">3</div><div><b>تصفّح وأبدِ اهتمامك</b><p>تعرض الصفحة أعضاء مقبولين، وتُبدي اهتماماً بمن يناسبك.</p></div></div>
+      <div class="step"><div class="num">4</div><div><b>تحدّثا باحترام</b><p>عند قبول الاهتمام تُفتح محادثة بين الطرفين فقط.</p></div></div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <h2>خصوصيتك أولاً</h2>
+    <div class="trust">
+      <div>🔒 محادثات خاصة<small>بين الطرفين فقط</small></div>
+      <div>✅ ملفات مراجَعة<small>قبل أن تظهر</small></div>
+      <div>🚫 حظر وإبلاغ<small>لحمايتك دائماً</small></div>
+      <div>🤝 بنيّة الزواج<small>موقع جاد لا للتسلية</small></div>
+    </div>
+  </section>
+
+  <section class="cta" style="padding-top:0">
+    <div class="card">
+      <h2>ابدأ الآن</h2>
+      <p style="color:var(--muted)">التسجيل مجاني ولا يستغرق دقيقة.</p>
+      <a class="btn" href="auth.html">إنشاء حساب</a>
+    </div>
+  </section>
+
+  <footer>© سنة الحياة — جميع الحقوق محفوظة</footer>
 </body>
 </html>
