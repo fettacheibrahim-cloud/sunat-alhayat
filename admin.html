@@ -27,4 +27,92 @@
     <div class="stats">
       <div class="stat"><b id="s_pending">-</b><span>قيد المراجعة</span></div>
       <div class="stat"><b id="s_approved">-</b><span>أعضاء مقبولون</span></div>
-      <div class="stat"><b id="s_msgs">-</b><
+      <div class="stat"><b id="s_msgs">-</b><span>رسائل</span></div>
+    </div>
+    <div class="tabs" id="tabs">
+      <button data-s="pending" class="on">قيد المراجعة</button>
+      <button data-s="approved">مقبولون</button>
+      <button data-s="suspended">موقوفون</button>
+    </div>
+    <div id="list"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+  <script>
+    const $ = id => document.getElementById(id);
+    const mAr = { never_married:'أعزب/عزباء', divorced:'مطلّق/ة', widowed:'أرمل/ة' };
+    const gAr = { male:'ذكر', female:'أنثى' };
+    let cur = 'pending';
+
+    function age(d) {
+      if (!d) return '';
+      const b = new Date(d), t = new Date();
+      let a = t.getFullYear() - b.getFullYear();
+      if (t.getMonth() < b.getMonth() || (t.getMonth() === b.getMonth() && t.getDate() < b.getDate())) a--;
+      return a;
+    }
+
+    async function setStatus(id, status) {
+      const { error } = await sb.from('profiles').update({ status }).eq('id', id);
+      if (error) { alert('خطأ: ' + error.message); return; }
+      loadAll();
+    }
+
+    function btn(text, status, id, no) {
+      const b = document.createElement('button');
+      b.textContent = text;
+      if (no) b.className = 'no';
+      b.onclick = () => setStatus(id, status);
+      return b;
+    }
+
+    async function loadList() {
+      const { data, error } = await sb.from('profiles').select('*').eq('status', cur).order('created_at', { ascending: false });
+      const list = $('list');
+      list.innerHTML = '';
+      if (error) { list.textContent = 'خطأ: ' + error.message; return; }
+      if (!data.length) { list.innerHTML = '<p style="color:#666">لا توجد حسابات في هذه القائمة</p>'; return; }
+      data.forEach(p => {
+        const d = document.createElement('div'); d.className = 'm';
+        const n = document.createElement('b');
+        n.textContent = (p.first_name || 'بدون اسم') + ' — ' + (gAr[p.gender] || '') + '، ' + age(p.birth_date) + ' سنة';
+        const s = document.createElement('small');
+        s.textContent = [p.city, p.country, mAr[p.marital_status]].filter(Boolean).join(' · ');
+        d.append(n, s);
+        if (p.bio) { const b = document.createElement('small'); b.textContent = p.bio; d.appendChild(b); }
+        const a = document.createElement('div'); a.className = 'acts';
+        if (cur === 'pending') a.append(btn('قبول', 'approved', p.id), btn('رفض', 'suspended', p.id, true));
+        if (cur === 'approved') a.append(btn('إيقاف', 'suspended', p.id, true));
+        if (cur === 'suspended') a.append(btn('إعادة تفعيل', 'approved', p.id));
+        d.appendChild(a);
+        list.appendChild(d);
+      });
+    }
+
+    async function loadStats() {
+      const c = async f => (await f).count ?? 0;
+      $('s_pending').textContent = await c(sb.from('profiles').select('*', { count: 'exact', head: true }).eq('status', 'pending'));
+      $('s_approved').textContent = await c(sb.from('profiles').select('*', { count: 'exact', head: true }).eq('status', 'approved'));
+      $('s_msgs').textContent = await c(sb.from('messages').select('*', { count: 'exact', head: true }));
+    }
+
+    function loadAll() { loadStats(); loadList(); }
+
+    $('tabs').onclick = e => {
+      if (e.target.tagName !== 'BUTTON') return;
+      cur = e.target.dataset.s;
+      document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b === e.target));
+      loadList();
+    };
+
+    (async () => {
+      const s = await getSession();
+      if (!s) { location.href = 'auth.html'; return; }
+      const { data } = await sb.from('profiles').select('is_admin').eq('id', s.user.id).maybeSingle();
+      if (!data || !data.is_admin) { document.querySelector('main').innerHTML = '<h1>غير مصرّح</h1><p>هذه الصفحة للإدارة فقط.</p>'; return; }
+      loadAll();
+    })();
+  </script>
+</body>
+</html>
