@@ -3,57 +3,120 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>موقع سنة الحياة - الصفحة الرئيسية</title>
+  <title>الرئيسية - موقع سنة الحياة</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #fdfcf0; /* الخلفية الكريمية الهادئة */
+      font-family: 'Cairo', sans-serif;
+      color: #2c3e50;
+      margin: 0;
+      padding: 20px;
+    }
+
+    /* شريط التنقل العلوي الموحد */
+    .nav-pills {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 20px;
+    }
+
+    .nav-pills a {
+      text-decoration: none;
+      color: #004d40;
+      border: 1px solid #004d40;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+
+    .nav-pills a:hover, .nav-pills a.active {
+      background-color: #004d40;
+      color: #fff;
+    }
+
+    /* محتوى الصفحة الرئيسية */
+    .main-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+
+    .main-container h1 {
+      font-size: 2rem;
+      color: #004d40;
+      margin-bottom: 15px;
+    }
+
+    .main-container p {
+      color: #666;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 25px;
+    }
+
+    .feature-box {
+      background: #f9f9f6;
+      border-right: 4px solid #004d40;
+      padding: 15px;
+      margin-bottom: 15px;
+      text-align: right;
+      border-radius: 4px;
+    }
+
+    .feature-box h3 {
+      margin: 0 0 5px 0;
+      color: #004d40;
+      font-size: 1.1rem;
+    }
+
+    .feature-box p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #555;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- شريط التنقل -->
-  <header>
-    <div class="logo">سنة <span>الحياة</span></div>
-    <nav>
-      <ul>
-        <li><a href="index.html" class="active">الرئيسية</a></li>
-        <li><a href="browse.html">التصفح</a></li>
-        <li><a href="interests.html">الاهتمامات</a></li>
-        <li><a href="messages.html">الرسائل</a></li>
-        <li><a href="profile.html">حسابي</a></li>
-        <li><a href="auth.html">دخول / تسجيل</a></li>
-      </ul>
-    </nav>
-  </header>
+  <!-- شريط التنقل (الأزرار) -->
+  <nav class="nav-pills">
+    <a href="index.html" class="active">الرئيسية</a>
+    <a href="browse.html">التصفح</a>
+    <a href="interests.html">الاهتمامات</a>
+    <a href="messages.html">المحادثات</a>
+    <a href="profile.html">ملفي</a>
+    <a href="admin.html">الإدارة</a>
+  </nav>
 
-  <!-- القسم البارز -->
-  <section class="hero">
-    <h1>مرحباً بك في منصة سنة الحياة</h1>
-    <p>وجهتك المتكاملة لتنظيم وتطوير مجتمعك، التواصل بفعالية، ومتابعة الاهتمامات المشتركة بسهولة وسلاسة.</p>
-    <a href="auth.html" class="btn">ابدأ الان</a>
-  </section>
+  <!-- محتوى الصفحة الرئيسية -->
+  <div class="main-container">
+    <h1>مرحباً بك في موقع سنة الحياة</h1>
+    <p>منصتك الآمنة والموثوقة للتواصل، تنظيم الاهتمامات، ومتابعة كل ما يهمك بخصوصية كاملة.</p>
 
-  <!-- أقسام المزايا -->
-  <div class="container">
-    <h2 class="section-title">مميزات المنصة</h2>
-    <div class="features-grid">
-      <div class="feature-card">
-        <h3>تواصل فعال وسريع</h3>
-        <p>نظام رسائل متطور يتيح لك التواصل المباشر والآمن مع بقية أعضاء المنصة بكل سهولة.</p>
-      </div>
-      <div class="feature-card">
-        <h3>إدارة الاهتمامات</h3>
-        <p>استكشف التصنيفات والاهتمامات المتنوعة، وتابع كل جديد يهمك ضمن بيئة منظمة ومخصصة.</p>
-      </div>
-      <div class="feature-card">
-        <h3>لوحة تحكم مرنة</h3>
-        <p>تحكم كامل في إعدادات ملفك الشخصي وعرض البيانات والأنشطة بكل مهارة وسهولة.</p>
-      </div>
+    <div class="feature-box">
+      <h3>توثيق الحسابات</h3>
+      <p>مراجعة المستندات والملفات للحد من الحسابات الوهمية وضمان بيئة آمنة.</p>
+    </div>
+
+    <div class="feature-box">
+      <h3>التحكم في الصور والمعلومات</h3>
+      <p>أنت وحدك من يقرر من يرى صورك ومعلوماتك الشخصية بكل سهولة.</p>
+    </div>
+
+    <div style="margin-top: 25px;">
+      <a href="auth.html" style="display: inline-block; background-color: #004d40; color: #fff; padding: 10px 25px; border-radius: 6px; text-decoration: none; font-weight: bold;">تسجيل الدخول / الانضمام</a>
     </div>
   </div>
 
-  <!-- التذييل -->
-  <footer>
-    <p>جميع حقوق التطوير محفوظة © 2026 - موقع سنة الحياة</p>
-  </footer>
-
-  <script src="app.js"></script>
 </body>
 </html>
