@@ -2,124 +2,111 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>التصفح - موقع سنة الحياة</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>سنة الحياة - التصفح</title>
+  <link rel="stylesheet" href="style.css?v=8">
   <style>
-    body {
-      background-color: #fdfcf0;
-      font-family: 'Cairo', sans-serif;
-      color: #2c3e50;
-      margin: 0;
-      padding: 20px;
-    }
-
-    .nav-pills {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 30px;
-      border-bottom: 1px solid #e0e0e0;
-      padding-bottom: 20px;
-    }
-
-    .nav-pills a {
-      text-decoration: none;
-      color: #004d40;
-      border: 1px solid #004d40;
-      padding: 8px 20px;
-      border-radius: 30px;
-      font-size: 0.9rem;
-      transition: all 0.3s;
-    }
-
-    .nav-pills a:hover, .nav-pills a.active {
-      background-color: #004d40;
-      color: #fff;
-    }
-
-    .browse-container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    }
-
-    .browse-header {
-      font-size: 1.4rem;
-      color: #004d40;
-      margin-bottom: 20px;
-      text-align: center;
-      font-weight: bold;
-    }
-
-    .browse-card {
-      background: #f9f9f6;
-      border: 1px solid #eee;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-    }
-
-    .browse-card h3 {
-      color: #004d40;
-      margin: 0 0 8px 0;
-      font-size: 1.1rem;
-    }
-
-    .browse-card p {
-      margin: 0 0 10px 0;
-      color: #666;
-      font-size: 0.9rem;
-    }
-
-    .browse-btn {
-      display: inline-block;
-      background-color: #004d40;
-      color: #fff;
-      padding: 6px 15px;
-      border-radius: 4px;
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: bold;
-    }
-
-    .browse-btn:hover {
-      background-color: #00695c;
-    }
+    .grid{display:grid;gap:14px;margin-top:16px}
+    .p{position:relative;background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 6px 18px rgba(14,59,60,.06)}
+    .p::before{content:"";position:absolute;top:0;right:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));border-radius:20px 20px 0 0}
+    .top{display:flex;align-items:center;gap:14px}
+    .av{flex:none;width:58px;height:58px;border-radius:50%;background:var(--green);color:var(--gold2);display:flex;align-items:center;justify-content:center;font:700 26px 'Amiri',serif}
+    .nm{font:700 1.3rem 'Amiri',serif;color:var(--green)}
+    .meta{color:var(--muted);font-size:14px}
+    .tags{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+    .tg{background:var(--sand);color:var(--green);border-radius:999px;padding:3px 12px;font-size:13px}
+    .bio{font-size:15px;margin:6px 0;color:var(--ink)}
+    .lf{font-size:14px;color:var(--muted);margin:4px 0 12px}
+    .lf b{color:var(--green)}
+    .p .btn{width:100%}
   </style>
 </head>
 <body>
+  <main style="max-width:640px;margin:0 auto;padding:20px 16px">
+    <h1>تصفّح الأعضاء</h1>
+    <p id="msg" style="display:none"></p>
+    <div id="grid" class="grid"></div>
+  </main>
 
-  <!-- شريط التنقل (الأزرار) -->
-  <nav class="nav-pills">
-    <a href="index.html">الرئيسية</a>
-    <a href="browse.html" class="active">التصفح</a>
-    <a href="interests.html">الاهتمامات</a>
-    <a href="messages.html">المحادثات</a>
-    <a href="profile.html">ملفي</a>
-    <a href="admin.html">الإدارة</a>
-  </nav>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js?v=9"></script>
+  <script>
+    const $ = id => document.getElementById(id);
+    const mAr = { never_married:'أعزب/عزباء', divorced:'مطلّق/ة', widowed:'أرمل/ة' };
+    const eAr = { secondary:'ثانوي', diploma:'دبلوم', bachelor:'إجازة', postgraduate:'دراسات عليا' };
+    let me = null;
+    const sentTo = new Set();
 
-  <!-- محتوى التصفح -->
-  <div class="browse-container">
-    <div class="browse-header">تصفح المنشورات والخدمات</div>
+    function age(d) {
+      if (!d) return '';
+      const b = new Date(d), t = new Date();
+      let a = t.getFullYear() - b.getFullYear();
+      if (t.getMonth() < b.getMonth() || (t.getMonth() === b.getMonth() && t.getDate() < b.getDate())) a--;
+      return a;
+    }
 
-    <div class="browse-card">
-      <h3>خدمات توثيق الحسابات</h3>
-      <p>تعرف على الشروط والخطوات اللازمة لتوثيق ملفك الشخصي والحفاظ على أمان حسابك.</p>
-      <a href="#" class="browse-btn">عرض التفاصيل</a>
-    </div>
+    function el(tag, cls, text) {
+      const e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (text) e.textContent = text;
+      return e;
+    }
 
-    <div class="browse-card">
-      <h3>إرشادات الخصوصية وأمان الصور</h3>
-      <p>دليل كامل حول كيفية التحكم في صلاحيات رؤية صورك ومعلوماتك الشخصية.</p>
-      <a href="#" class="browse-btn">عرض التفاصيل</a>
-    </div>
-  </div>
+    function card(p) {
+      const c = el('div', 'p');
+      const top = el('div', 'top');
+      top.appendChild(el('div', 'av', (p.first_name || '؟').charAt(0).toUpperCase()));
+      const info = el('div');
+      info.appendChild(el('div', 'nm', p.first_name || 'عضو'));
+      info.appendChild(el('div', 'meta', age(p.birth_date) + ' سنة · ' + [p.city, p.country].filter(Boolean).join('، ')));
+      top.appendChild(info);
+      c.appendChild(top);
 
+      const tags = el('div', 'tags');
+      if (mAr[p.marital_status]) tags.appendChild(el('span', 'tg', mAr[p.marital_status]));
+      if (eAr[p.education]) tags.appendChild(el('span', 'tg', eAr[p.education]));
+      if (tags.children.length) c.appendChild(tags);
+
+      if (p.bio) c.appendChild(el('p', 'bio', p.bio));
+      if (p.looking_for) {
+        const lf = el('p', 'lf'); lf.appendChild(el('b', '', 'أبحث عن: ')); lf.append(p.looking_for);
+        c.appendChild(lf);
+      }
+
+      const b = el('button', 'btn');
+      if (sentTo.has(p.id)) { b.textContent = 'تم إرسال الاهتمام ✓'; b.disabled = true; }
+      else {
+        b.textContent = 'إبداء اهتمام 💌';
+        b.onclick = async () => {
+          b.disabled = true;
+          const { error } = await sb.from('interests').insert({ from_id: me, to_id: p.id, status: 'sent' });
+          if (error) { b.disabled = false; alert('خطأ: ' + error.message); return; }
+          b.textContent = 'تم إرسال الاهتمام ✓';
+        };
+      }
+      c.appendChild(b);
+      return c;
+    }
+
+    (async () => {
+      const s = await getSession();
+      if (!s) { location.href = 'auth.html'; return; }
+      me = s.user.id;
+
+      const { data: mine } = await sb.from('profiles').select('gender,status').eq('id', me).maybeSingle();
+      if (!mine) { showMsg('msg', 'أكمل ملفك الشخصي أولاً', 'error'); return; }
+      if (mine.status !== 'approved') { showMsg('msg', 'حسابك قيد المراجعة. سيظهر التصفح بعد قبوله.', 'error'); return; }
+
+      const { data: sent } = await sb.from('interests').select('to_id').eq('from_id', me);
+      (sent || []).forEach(i => sentTo.add(i.to_id));
+
+      const opposite = mine.gender === 'male' ? 'female' : 'male';
+      const { data, error } = await sb.from('profiles').select('*')
+        .eq('status', 'approved').eq('gender', opposite).neq('id', me);
+      if (error) { showMsg('msg', 'خطأ: ' + error.message, 'error'); return; }
+      if (!data.length) { $('grid').appendChild(el('p', 'meta', 'لا يوجد أعضاء متاحون حالياً.')); return; }
+      data.forEach(p => $('grid').appendChild(card(p)));
+    })();
+  </script>
 </body>
-</html>
+  </html>
