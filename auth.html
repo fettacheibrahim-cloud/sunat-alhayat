@@ -5,112 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>تسجيل الدخول - موقع سنة الحياة</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    body {
-      background-color: #fdfcf0;
-      font-family: 'Cairo', sans-serif;
-      color: #2c3e50;
-      margin: 0;
-      padding: 20px;
-    }
-
-    .nav-pills {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 30px;
-      border-bottom: 1px solid #e0e0e0;
-      padding-bottom: 20px;
-    }
-
-    .nav-pills a {
-      text-decoration: none;
-      color: #004d40;
-      border: 1px solid #004d40;
-      padding: 8px 20px;
-      border-radius: 30px;
-      font-size: 0.9rem;
-      transition: all 0.3s;
-    }
-
-    .nav-pills a:hover, .nav-pills a.active {
-      background-color: #004d40;
-      color: #fff;
-    }
-
-    .login-container {
-      max-width: 400px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    }
-
-    .login-header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .login-header h2 {
-      font-size: 1.8rem;
-      font-weight: bold;
-      color: #004d40;
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: 600;
-      color: #666;
-    }
-
-    .form-control {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-family: inherit;
-      box-sizing: border-box;
-    }
-
-    .btn-login {
-      width: 100%;
-      padding: 12px;
-      background-color: #004d40;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .btn-login:hover {
-      background-color: #00695c;
-    }
-
-    .auth-links {
-      text-align: center;
-      margin-top: 15px;
-      font-size: 0.9rem;
-    }
-
-    .auth-links a {
-      color: #004d40;
-      text-decoration: none;
-    }
-  </style>
 </head>
 <body>
 
-  <!-- شريط التنقل (الأزرار) -->
+  <!-- شريط التنقل -->
   <nav class="nav-pills">
     <a href="index.html">الرئيسية</a>
     <a href="browse.html">التصفح</a>
@@ -120,38 +18,31 @@
     <a href="admin.html">الإدارة</a>
   </nav>
 
-  <!-- نموذج تسجيل الدخول بدون أخطاء الخادم -->
+  <!-- صندوق الدخول -->
   <div class="login-container">
     <div class="login-header">
       <h2>تسجيل الدخول</h2>
       <p>أهلاً بعودتك إلى سنة الحياة.</p>
     </div>
 
-    <div>
-      <div class="form-group">
-        <label for="email">البريد الإلكتروني</label>
-        <input type="email" id="email" class="form-control" placeholder="أدخل بريدك الإلكتروني">
-      </div>
-
-      <div class="form-group">
-        <label for="password">كلمة المرور</label>
-        <input type="password" id="password" class="form-control" placeholder="أدخل كلمة المرور">
-      </div>
-
-      <button type="button" id="loginBtn" class="btn-login">دخول</button>
+    <div class="form-group">
+      <label for="email">البريد الإلكتروني</label>
+      <input type="email" id="email" class="form-control" placeholder="أدخل بريدك الإلكتروني">
     </div>
+
+    <div class="form-group">
+      <label for="password">كلمة المرور</label>
+      <input type="password" id="password" class="form-control" placeholder="أدخل كلمة المرور">
+    </div>
+
+    <!-- زر الدخول المباشر -->
+    <a href="profile.html" class="btn-login">دخول</a>
 
     <div class="auth-links">
       <a href="#">نسيت كلمة المرور؟</a> | <a href="auth.html">حساب جديد</a>
     </div>
   </div>
 
-  <script>
-    // عند الضغط على زر الدخول، يتم الانتقال لصفحة الملف الشخصي مباشرة دون أي طلبات خادم
-    document.getElementById('loginBtn').addEventListener('click', function() {
-      window.location.href = 'profile.html';
-    });
-  </script>
-
 </body>
-</html>
+        </html>
+        
