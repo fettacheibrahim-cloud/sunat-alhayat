@@ -2,144 +2,118 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>المحادثات - موقع سنة الحياة</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>سنة الحياة - المحادثات</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    body {
-      background-color: #fdfcf0;
-      font-family: 'Cairo', sans-serif;
-      color: #2c3e50;
-      margin: 0;
-      padding: 20px;
-    }
-
-    .nav-pills {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 30px;
-      border-bottom: 1px solid #e0e0e0;
-      padding-bottom: 20px;
-    }
-
-    .nav-pills a {
-      text-decoration: none;
-      color: #004d40;
-      border: 1px solid #004d40;
-      padding: 8px 20px;
-      border-radius: 30px;
-      font-size: 0.9rem;
-      transition: all 0.3s;
-    }
-
-    .nav-pills a:hover, .nav-pills a.active {
-      background-color: #004d40;
-      color: #fff;
-    }
-
-    .messages-container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    }
-
-    .messages-header {
-      font-size: 1.4rem;
-      color: #004d40;
-      margin-bottom: 20px;
-      text-align: center;
-      font-weight: bold;
-    }
-
-    .message-item {
-      display: flex;
-      align-items: center;
-      padding: 12px;
-      border-bottom: 1px solid #f0f0f0;
-      gap: 15px;
-      text-decoration: none;
-      color: inherit;
-      transition: background 0.2s;
-      border-radius: 8px;
-    }
-
-    .message-item:hover {
-      background-color: #f9f9f6;
-    }
-
-    .msg-avatar {
-      width: 50px;
-      height: 50px;
-      background-color: #e0f2f1;
-      color: #004d40;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      font-size: 1.1rem;
-    }
-
-    .msg-info {
-      flex-grow: 1;
-    }
-
-    .msg-name {
-      font-weight: bold;
-      color: #004d40;
-      margin-bottom: 3px;
-    }
-
-    .msg-text {
-      font-size: 0.85rem;
-      color: #666;
-    }
-
-    .msg-time {
-      font-size: 0.75rem;
-      color: #999;
-    }
+    .conv{display:block;width:100%;text-align:start;padding:14px;margin:8px 0;background:#f7f5ee;border:1px solid #e5dcc5;border-radius:14px;font:inherit;cursor:pointer}
+    #box{height:55vh;overflow:auto;display:flex;flex-direction:column;gap:6px;padding:10px;background:#f7f5ee;border-radius:14px;margin:10px 0}
+    .b{max-width:80%;padding:8px 12px;border-radius:14px;word-wrap:break-word;white-space:pre-wrap}
+    .b.me{align-self:flex-start;background:#0E3B3C;color:#fff}
+    .b.other{align-self:flex-end;background:#fff;border:1px solid #e5dcc5}
+    #send{display:flex;gap:8px}
+    #text{flex:1;padding:10px;border:1px solid #cfc7b0;border-radius:10px;font:inherit}
   </style>
 </head>
 <body>
-
-  <!-- شريط التنقل (الأزرار) -->
-  <nav class="nav-pills">
-    <a href="index.html">الرئيسية</a>
-    <a href="browse.html">التصفح</a>
-    <a href="interests.html">الاهتمامات</a>
-    <a href="messages.html" class="active">المحادثات</a>
-    <a href="profile.html">ملفي</a>
-    <a href="admin.html">الإدارة</a>
-  </nav>
-
-  <!-- محتوى المحادثات -->
-  <div class="messages-container">
-    <div class="messages-header">المحادثات والرسائل</div>
-
-    <div class="message-item">
-      <div class="msg-avatar">أ</div>
-      <div class="msg-info">
-        <div class="msg-name">أحمد</div>
-        <div class="msg-text">أهلاً بك، هل تم التحقق من البيانات المطلوبة؟</div>
-      </div>
-      <div class="msg-time">منذ 5 د</div>
+  <main class="card" style="max-width:600px;margin:30px auto;padding:20px">
+    <div id="listView">
+      <h1>المحادثات</h1>
+      <p id="info" style="color:#666"></p>
+      <div id="list"></div>
     </div>
 
-    <div class="message-item">
-      <div class="msg-avatar">م</div>
-      <div class="msg-info">
-        <div class="msg-name">محمد</div>
-        <div class="msg-text">شكراً لتواصلك، تم تحديث الملف الشخصي بنجاح.</div>
-      </div>
-      <div class="msg-time">منذ ساعة</div>
+    <div id="chatView" style="display:none">
+      <button id="back" class="btn" style="background:#fff;color:#0E3B3C;border:1px solid #0E3B3C">→ رجوع</button>
+      <h2 id="who" style="margin:12px 0 0"></h2>
+      <div id="box"></div>
+      <form id="send">
+        <input id="text" placeholder="اكتب رسالة..." autocomplete="off" required>
+        <button class="btn" type="submit">إرسال</button>
+      </form>
     </div>
-  </div>
+  </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+  <script>
+    const $ = id => document.getElementById(id);
+    let me = null, cur = null, timer = null, lastCount = -1;
+
+    async function loadList() {
+      const { data: convs, error } = await sb.from('conversations')
+        .select('id,user_a,user_b')
+        .or('user_a.eq.' + me + ',user_b.eq.' + me);
+      if (error) { $('info').textContent = 'خطأ: ' + error.message; return; }
+      if (!convs.length) {
+        $('info').textContent = 'لا توجد محادثات بعد. تُفتح المحادثة عندما يقبل أحد الطرفين اهتمام الآخر.';
+        return;
+      }
+      const ids = convs.map(c => c.user_a === me ? c.user_b : c.user_a);
+      const { data: ps } = await sb.from('profiles').select('id,first_name').in('id', ids);
+      const names = {};
+      (ps || []).forEach(p => names[p.id] = p.first_name);
+      $('list').innerHTML = '';
+      convs.forEach(c => {
+        const other = c.user_a === me ? c.user_b : c.user_a;
+        const b = document.createElement('button');
+        b.className = 'conv';
+        b.textContent = '💬 ' + (names[other] || 'عضو');
+        b.onclick = () => openChat(c.id, names[other] || 'عضو');
+        $('list').appendChild(b);
+      });
+    }
+
+    async function loadMsgs() {
+      if (!cur) return;
+      const { data, error } = await sb.from('messages').select('*')
+        .eq('conversation_id', cur).order('created_at');
+      if (error || data.length === lastCount) return;
+      lastCount = data.length;
+      const box = $('box');
+      box.innerHTML = '';
+      data.forEach(m => {
+        const d = document.createElement('div');
+        d.className = 'b ' + (m.sender_id === me ? 'me' : 'other');
+        d.textContent = m.body;
+        box.appendChild(d);
+      });
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function openChat(id, name) {
+      cur = id; lastCount = -1;
+      $('who').textContent = name;
+      $('listView').style.display = 'none';
+      $('chatView').style.display = 'block';
+      loadMsgs();
+      timer = setInterval(loadMsgs, 4000);
+    }
+
+    $('back').onclick = () => {
+      clearInterval(timer); cur = null;
+      $('chatView').style.display = 'none';
+      $('listView').style.display = 'block';
+    };
+
+    $('send').onsubmit = async e => {
+      e.preventDefault();
+      const body = $('text').value.trim();
+      if (!body) return;
+      $('text').value = '';
+      const { error } = await sb.from('messages')
+        .insert({ conversation_id: cur, sender_id: me, body });
+      if (error) { alert('تعذّر الإرسال: ' + error.message); $('text').value = body; return; }
+      lastCount = -1;
+      loadMsgs();
+    };
+
+    (async () => {
+      const session = await getSession();
+      if (!session) { location.href = 'auth.html'; return; }
+      me = session.user.id;
+      loadList();
+    })();
+  </script>
 </body>
 </html>
