@@ -1,122 +1,54 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap');
 
-:root {
-  --bg-color: #fdfcf0;
-  --primary-color: #004d40;
-  --primary-hover: #00695c;
-  --text-color: #2c3e50;
-  --card-bg: #ffffff;
-  --border-color: #e0e0e0;
+:root{
+  --green:#0E3B3C; --green2:#14595A; --gold:#B8903F; --gold2:#D8B565;
+  --cream:#FAF7F0; --sand:#F1EADA; --line:#E5DCC5; --ink:#1F2D2D; --muted:#6B6B63;
+  --ok:#1f6b33; --err:#9b1c1c;
 }
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Cairo', sans-serif;
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;font-family:'Tajawal',sans-serif;font-size:17px;line-height:1.8;color:var(--ink);
+  background-color:var(--cream);
+  background-image:radial-gradient(rgba(184,144,63,.13) 1px,transparent 1px);
+  background-size:22px 22px;
 }
+h1,h2,h3{font-family:'Amiri',serif;color:var(--green);line-height:1.4;margin:.4em 0}
+h1{font-size:2rem} h2{font-size:1.5rem}
+a{color:var(--green2)}
 
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  direction: rtl;
-  text-align: right;
-  padding: 20px;
+.card{
+  position:relative;background:#fff;border:1px solid var(--line);border-radius:22px;
+  box-shadow:0 10px 30px rgba(14,59,60,.08);padding:24px;overflow:hidden;
 }
+.card::before{content:"";position:absolute;top:0;right:0;left:0;height:4px;
+  background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold))}
 
-/* شريط التنقل العلوي */
-.nav-pills {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 30px;
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: 20px;
+.btn{
+  display:inline-block;text-align:center;text-decoration:none;cursor:pointer;
+  background:var(--green);color:#fff;border:1px solid var(--green);
+  padding:12px 26px;border-radius:999px;font:700 16px 'Tajawal',sans-serif;
+  transition:.2s;min-height:46px;
 }
+.btn:hover{background:var(--green2);transform:translateY(-1px);box-shadow:0 6px 16px rgba(14,59,60,.2)}
+.btn:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#fff}
+.btn.gold:hover{background:#a37d33}
+.btn.ghost{background:transparent;color:var(--green);border-color:var(--green)}
+.btn.ghost:hover{background:var(--green);color:#fff}
 
-.nav-pills a {
-  text-decoration: none;
-  color: var(--primary-color);
-  border: 1px solid var(--primary-color);
-  padding: 8px 20px;
-  border-radius: 30px;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
+label{display:block;margin:12px 0 4px;font-weight:700;font-size:15px}
+input,select,textarea{
+  width:100%;padding:12px 14px;border:1px solid #cfc7b0;border-radius:12px;
+  font:inherit;background:#fff;color:var(--ink);transition:.2s;
 }
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,144,63,.2)}
 
-.nav-pills a:hover, 
-.nav-pills a.active {
-  background-color: var(--primary-color);
-  color: #ffffff;
-}
+.msg{padding:10px 14px;border-radius:12px;margin:10px 0}
+.msg.ok{background:#dff3e3;color:var(--ok)}
+.msg.error{background:#fbdcdc;color:var(--err)}
 
-/* النماذج والحاويات */
-.login-container, .profile-container, .main-container {
-  max-width: 500px;
-  margin: 0 auto;
-  background: var(--card-bg);
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-}
-
-.login-header {
-  text-align: center;
-  margin-bottom: 25px;
-}
-
-.login-header h2 {
-  font-size: 1.8rem;
-  color: var(--primary-color);
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: 600;
-  color: #555;
-}
-
-.form-control {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 0.95rem;
-}
-
-.btn-login {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  background-color: var(--primary-color);
-  color: #ffffff;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  transition: background 0.3s;
-}
-
-.btn-login:hover {
-  background-color: var(--primary-hover);
-}
-
-.auth-links {
-  text-align: center;
-  margin-top: 15px;
-  font-size: 0.9rem;
-}
-
-.auth-links a {
-  color: var(--primary-color);
-  text-decoration: none;
+@media(max-width:600px){
+  body{font-size:16px} h1{font-size:1.65rem}
+  .card{padding:18px;border-radius:18px}
 }
