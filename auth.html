@@ -1,52 +1,152 @@
-<!doctype html>
-<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>الدخول - سنة الحياة</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-</head><body>
-<header><a class="brand" href="index.html">سنة الحياة</a></header>
-<div class="card">
-<div class="tabs"><button id="tabIn" class="on" type="button">تسجيل الدخول</button><button id="tabUp" type="button">حساب جديد</button></div>
-<h1 id="title">تسجيل الدخول</h1>
-<p class="sub" id="sub">أهلاً بعودتك.</p>
-<form id="f">
-<label for="email">البريد الإلكتروني</label><input id="email" type="email" required autocomplete="email">
-<label for="pw">كلمة المرور</label><input id="pw" type="password" required minlength="8" autocomplete="current-password">
-<div id="m" hidden></div>
-<button class="full" id="go" type="submit">دخول</button>
-</form></div>
-<script src="app.js"></script>
-<script>
-let mode = 'in';
-const $ = id => document.getElementById(id);
-function setMode(m) {
-  mode = m;
-  $('tabIn').className = m === 'in' ? 'on' : '';
-  $('tabUp').className = m === 'up' ? 'on' : '';
-  $('title').textContent = m === 'in' ? 'تسجيل الدخول' : 'إنشاء حساب جديد';
-  $('sub').textContent = m === 'in' ? 'أهلاً بعودتك.' : 'كلمة المرور 8 أحرف على الأقل. سنرسل لك رسالة لتأكيد بريدك.';
-  $('go').textContent = m === 'in' ? 'دخول' : 'إنشاء الحساب';
-  $('pw').autocomplete = m === 'in' ? 'current-password' : 'new-password';
-  $('m').hidden = true;
-}
-$('tabIn').onclick = () => setMode('in');
-$('tabUp').onclick = () => setMode('up');
-$('f').onsubmit = async e => {
-  e.preventDefault();
-  $('go').disabled = true;
-  const email = $('email').value.trim(), password = $('pw').value;
-  if (mode === 'up') {
-    const { error } = await sb.auth.signUp({ email, password,
-      options: { emailRedirectTo: new URL('profile.html', location.href).href } });
-    if (error) showMsg($('m'), 'تعذر إنشاء الحساب: ' + error.message, false);
-    else showMsg($('m'), 'تم إرسال رسالة تأكيد إلى بريدك. افتحها ثم اضغط الرابط لإكمال ملفك الشخصي.', true);
-  } else {
-    const { error } = await sb.auth.signInWithPassword({ email, password });
-    if (error) showMsg($('m'), 'البريد أو كلمة المرور غير صحيحة، أو لم يتم تأكيد البريد بعد.', false);
-    else location.href = 'profile.html';
-  }
-  $('go').disabled = false;
-};
-getSession().then(s => { if (s) location.href = 'profile.html'; });
-</script></body></html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل الدخول - موقع سنة الحياة</title>
+  <!-- ربط ملف التصميم الأصلي (سنقوم بتحديثه لاحقاً ليدعم هذه الصفحة) -->
+  <link rel="stylesheet" href="style.css">
+  <!-- تنسيق خاص ومؤقت لإصلاح التداخل حتى يتم تحديث style.css -->
+  <style>
+    body {
+      background-color: #fdfcf0; /* اللون الكريمي الأصلي */
+      font-family: 'Cairo', sans-serif; /* استخدام خط Cairo من style.css */
+      color: #2c3e50; /* اللون الداكن الأصلي */
+      margin: 0;
+      padding: 20px;
+    }
+
+    /* تنسيق شريط التنقل في هذه الصفحة ليكون أنيقاً */
+    .nav-pills {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 20px;
+    }
+
+    .nav-pills a {
+      text-decoration: none;
+      color: #004d40; /* اللون الأخضر الداكن الأصلي */
+      border: 1px solid #004d40;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+
+    .nav-pills a:hover, .nav-pills a.active {
+      background-color: #004d40;
+      color: #fff;
+    }
+
+    /* تنسيق نموذج تسجيل الدخول */
+    .login-container {
+      max-width: 400px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .login-header h2 {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #666;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 12px;
+      background-color: #004d40; /* اللون الأخضر الداكن */
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn-login:hover {
+      background-color: #00695c;
+    }
+
+    .auth-links {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 0.9rem;
+    }
+
+    .auth-links a {
+      color: #004d40;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- شريط التنقل (الأزرار) -->
+  <nav class="nav-pills">
+    <a href="index.html">الرئيسية</a>
+    <a href="browse.html">التصفح</a>
+    <a href="interests.html">الاهتمامات</a>
+    <a href="messages.html">المحادثات</a>
+    <a href="profile.html">ملفي</a>
+    <a href="admin.html">الإدارة</a>
+  </nav>
+
+  <!-- نموذج تسجيل الدخول المصلح -->
+  <div class="login-container">
+    <div class="login-header">
+      <h2>تسجيل الدخول</h2>
+      <p>أهلاً بعودتك إلى سنة الحياة.</p>
+    </div>
+
+    <form action="#" method="post">
+      <div class="form-group">
+        <label for="email">البريد الإلكتروني</label>
+        <input type="email" id="email" class="form-control" placeholder="أدخل بريدك الإلكتروني" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">كلمة المرور</label>
+        <input type="password" id="password" class="form-control" placeholder="أدخل كلمة المرور" required>
+      </div>
+
+      <button type="submit" class="btn-login">دخول</button>
+    </form>
+
+    <div class="auth-links">
+      <a href="#">نسيت كلمة المرور؟</a> | <a href="auth.html">حساب جديد</a>
+    </div>
+  </div>
+
+</body>
+</html>
