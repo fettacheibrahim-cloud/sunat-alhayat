@@ -4,28 +4,57 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>سنة الحياة - المحادثات</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=8">
   <style>
-    .conv{display:block;width:100%;text-align:start;padding:14px;margin:8px 0;background:#f7f5ee;border:1px solid #e5dcc5;border-radius:14px;font:inherit;cursor:pointer}
-    #box{height:55vh;overflow:auto;display:flex;flex-direction:column;gap:6px;padding:10px;background:#f7f5ee;border-radius:14px;margin:10px 0}
-    .b{max-width:80%;padding:8px 12px;border-radius:14px;word-wrap:break-word;white-space:pre-wrap}
-    .b.me{align-self:flex-start;background:#0E3B3C;color:#fff}
-    .b.other{align-self:flex-end;background:#fff;border:1px solid #e5dcc5}
+    .conv{display:flex;align-items:center;gap:12px;width:100%;text-align:start;padding:14px;margin:8px 0;background:#fff;border:1px solid var(--line);border-radius:16px;font:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(14,59,60,.05)}
+    .av{flex:none;width:44px;height:44px;border-radius:50%;background:var(--green);color:var(--gold2);display:flex;align-items:center;justify-content:center;font:700 20px 'Amiri',serif}
+    .hd{display:flex;align-items:center;gap:10px;margin:8px 0}
+    .hd h2{margin:0;flex:1}
+    .sm{padding:6px 14px;min-height:36px;font-size:14px}
+    .danger{background:#fff;color:var(--err);border-color:var(--err)}
+    .danger:hover{background:var(--err);color:#fff}
+    #box{height:50vh;overflow:auto;display:flex;flex-direction:column;gap:6px;padding:12px;background:var(--sand);border-radius:16px;margin:10px 0}
+    .b{max-width:80%;padding:8px 14px;border-radius:16px;word-wrap:break-word;white-space:pre-wrap}
+    .b.me{align-self:flex-start;background:var(--green);color:#fff}
+    .b.other{align-self:flex-end;background:#fff;border:1px solid var(--line)}
     #send{display:flex;gap:8px}
-    #text{flex:1;padding:10px;border:1px solid #cfc7b0;border-radius:10px;font:inherit}
+    #text{flex:1}
+    #rep{display:none;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0}
   </style>
 </head>
 <body>
-  <main class="card" style="max-width:600px;margin:30px auto;padding:20px">
+  <main style="max-width:640px;margin:0 auto;padding:20px 16px">
     <div id="listView">
       <h1>المحادثات</h1>
-      <p id="info" style="color:#666"></p>
+      <p id="info" style="color:var(--muted)"></p>
       <div id="list"></div>
     </div>
 
     <div id="chatView" style="display:none">
-      <button id="back" class="btn" style="background:#fff;color:#0E3B3C;border:1px solid #0E3B3C">→ رجوع</button>
-      <h2 id="who" style="margin:12px 0 0"></h2>
+      <div class="hd">
+        <button id="back" class="btn ghost sm">→ رجوع</button>
+        <h2 id="who"></h2>
+        <button id="repBtn" class="btn ghost sm">إبلاغ</button>
+        <button id="blkBtn" class="btn danger sm">حظر</button>
+      </div>
+
+      <div id="rep">
+        <label>سبب الإبلاغ</label>
+        <select id="reason">
+          <option value="إساءة أو ألفاظ غير لائقة">إساءة أو ألفاظ غير لائقة</option>
+          <option value="انتحال شخصية أو معلومات كاذبة">انتحال شخصية أو معلومات كاذبة</option>
+          <option value="طلب مال أو احتيال">طلب مال أو احتيال</option>
+          <option value="تحرّش أو إزعاج">تحرّش أو إزعاج</option>
+          <option value="سبب آخر">سبب آخر</option>
+        </select>
+        <label>تفاصيل (اختياري)</label>
+        <textarea id="details" rows="3"></textarea>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button id="repSend" class="btn sm">إرسال البلاغ</button>
+          <button id="repCancel" class="btn ghost sm">إلغاء</button>
+        </div>
+      </div>
+
       <div id="box"></div>
       <form id="send">
         <input id="text" placeholder="اكتب رسالة..." autocomplete="off" required>
@@ -35,31 +64,42 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v=9"></script>
   <script>
     const $ = id => document.getElementById(id);
-    let me = null, cur = null, timer = null, lastCount = -1;
+    let me = null, cur = null, curOther = null, timer = null, lastCount = -1;
 
     async function loadList() {
       const { data: convs, error } = await sb.from('conversations')
-        .select('id,user_a,user_b')
-        .or('user_a.eq.' + me + ',user_b.eq.' + me);
+        .select('id,user_a,user_b').or('user_a.eq.' + me + ',user_b.eq.' + me);
       if (error) { $('info').textContent = 'خطأ: ' + error.message; return; }
-      if (!convs.length) {
+
+      const { data: bl } = await sb.from('blocks').select('blocker_id,blocked_id')
+        .or('blocker_id.eq.' + me + ',blocked_id.eq.' + me);
+      const hidden = new Set();
+      (bl || []).forEach(b => hidden.add(b.blocker_id === me ? b.blocked_id : b.blocker_id));
+
+      const visible = convs.filter(c => !hidden.has(c.user_a === me ? c.user_b : c.user_a));
+      $('list').innerHTML = '';
+      if (!visible.length) {
         $('info').textContent = 'لا توجد محادثات بعد. تُفتح المحادثة عندما يقبل أحد الطرفين اهتمام الآخر.';
         return;
       }
-      const ids = convs.map(c => c.user_a === me ? c.user_b : c.user_a);
+      $('info').textContent = '';
+      const ids = visible.map(c => c.user_a === me ? c.user_b : c.user_a);
       const { data: ps } = await sb.from('profiles').select('id,first_name').in('id', ids);
       const names = {};
       (ps || []).forEach(p => names[p.id] = p.first_name);
-      $('list').innerHTML = '';
-      convs.forEach(c => {
+
+      visible.forEach(c => {
         const other = c.user_a === me ? c.user_b : c.user_a;
+        const name = names[other] || 'عضو';
         const b = document.createElement('button');
         b.className = 'conv';
-        b.textContent = '💬 ' + (names[other] || 'عضو');
-        b.onclick = () => openChat(c.id, names[other] || 'عضو');
+        const av = document.createElement('div'); av.className = 'av'; av.textContent = name.charAt(0).toUpperCase();
+        const t = document.createElement('b'); t.textContent = name;
+        b.append(av, t);
+        b.onclick = () => openChat(c.id, other, name);
         $('list').appendChild(b);
       });
     }
@@ -70,8 +110,7 @@
         .eq('conversation_id', cur).order('created_at');
       if (error || data.length === lastCount) return;
       lastCount = data.length;
-      const box = $('box');
-      box.innerHTML = '';
+      const box = $('box'); box.innerHTML = '';
       data.forEach(m => {
         const d = document.createElement('div');
         d.className = 'b ' + (m.sender_id === me ? 'me' : 'other');
@@ -81,19 +120,44 @@
       box.scrollTop = box.scrollHeight;
     }
 
-    function openChat(id, name) {
-      cur = id; lastCount = -1;
+    function openChat(id, other, name) {
+      cur = id; curOther = other; lastCount = -1;
       $('who').textContent = name;
+      $('rep').style.display = 'none';
       $('listView').style.display = 'none';
       $('chatView').style.display = 'block';
       loadMsgs();
       timer = setInterval(loadMsgs, 4000);
     }
 
-    $('back').onclick = () => {
-      clearInterval(timer); cur = null;
+    function closeChat() {
+      clearInterval(timer); cur = null; curOther = null;
       $('chatView').style.display = 'none';
       $('listView').style.display = 'block';
+      loadList();
+    }
+
+    $('back').onclick = closeChat;
+
+    $('blkBtn').onclick = async () => {
+      if (!confirm('هل تريد حظر ' + $('who').textContent + '؟ لن تظهر لك المحادثة بعد الآن.')) return;
+      const { error } = await sb.from('blocks').insert({ blocker_id: me, blocked_id: curOther });
+      if (error) { alert('تعذّر الحظر: ' + error.message); return; }
+      closeChat();
+    };
+
+    $('repBtn').onclick = () => { $('rep').style.display = 'block'; };
+    $('repCancel').onclick = () => { $('rep').style.display = 'none'; };
+
+    $('repSend').onclick = async () => {
+      const { error } = await sb.from('reports').insert({
+        reporter_id: me, reported_id: curOther,
+        reason: $('reason').value, details: $('details').value.trim() || null
+      });
+      if (error) { alert('تعذّر إرسال البلاغ: ' + error.message); return; }
+      $('details').value = '';
+      $('rep').style.display = 'none';
+      alert('تم إرسال البلاغ للإدارة. شكراً لك.');
     };
 
     $('send').onsubmit = async e => {
@@ -101,11 +165,9 @@
       const body = $('text').value.trim();
       if (!body) return;
       $('text').value = '';
-      const { error } = await sb.from('messages')
-        .insert({ conversation_id: cur, sender_id: me, body });
+      const { error } = await sb.from('messages').insert({ conversation_id: cur, sender_id: me, body });
       if (error) { alert('تعذّر الإرسال: ' + error.message); $('text').value = body; return; }
-      lastCount = -1;
-      loadMsgs();
+      lastCount = -1; loadMsgs();
     };
 
     (async () => {
