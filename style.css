@@ -1,15 +1,12 @@
-/* استيراد خط عربي عصري واحترافي */
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
 
 :root {
-  --primary-color: #2c3e50;
-  --accent-color: #d4af37; /* لون ذهبي راقي يناسب اسم سنة الحياة */
-  --bg-color: #f8f9fa;
+  --bg-color: #fdfcf0;
+  --primary-color: #004d40;
+  --primary-hover: #00695c;
+  --text-color: #2c3e50;
   --card-bg: #ffffff;
-  --text-color: #333333;
-  --text-light: #777777;
-  --border-radius: 12px;
-  --transition: all 0.3s ease;
+  --border-color: #e0e0e0;
 }
 
 * {
@@ -24,148 +21,102 @@ body {
   color: var(--text-color);
   direction: rtl;
   text-align: right;
-  line-height: 1.6;
+  padding: 20px;
 }
 
 /* شريط التنقل العلوي */
-header {
-  background-color: var(--card-bg);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+.nav-pills {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 5%;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 20px;
 }
 
-.logo {
-  font-size: 1.5rem;
-  font-weight: 900;
-  color: var(--primary-color);
-}
-
-.logo span {
-  color: var(--accent-color);
-}
-
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 20px;
-}
-
-nav ul li a {
+.nav-pills a {
   text-decoration: none;
-  color: var(--text-color);
-  font-weight: 600;
-  transition: var(--transition);
-}
-
-nav ul li a:hover,
-nav ul li a.active {
-  color: var(--accent-color);
-}
-
-/* القسم الرئيسي (Hero Section) */
-.hero {
-  background: linear-gradient(135deg, var(--primary-color), #1a252f);
-  color: #fff;
-  padding: 5rem 5%;
-  text-align: center;
-}
-
-.hero h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  font-weight: 900;
-}
-
-.hero p {
-  font-size: 1.1rem;
-  color: #d1d8e0;
-  max-width: 600px;
-  margin: 0 auto 2rem auto;
-}
-
-.btn {
-  display: inline-block;
-  background-color: var(--accent-color);
-  color: #fff;
-  padding: 0.8rem 2rem;
-  border-radius: var(--border-radius);
-  text-decoration: none;
-  font-weight: bold;
-  transition: var(--transition);
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-  opacity: 0.9;
-}
-
-/* أقسام المحتوى */
-.container {
-  max-width: 1200px;
-  margin: 3rem auto;
-  padding: 0 20px;
-}
-
-.section-title {
-  text-align: center;
-  margin-bottom: 2.5rem;
-  font-size: 2rem;
   color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  padding: 8px 20px;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
 }
 
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-}
-
-.feature-card {
-  background: var(--card-bg);
-  padding: 2rem;
-  border-radius: var(--border-radius);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-  transition: var(--transition);
-  border-top: 4px solid var(--accent-color);
-}
-
-.feature-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-}
-
-.feature-card h3 {
-  margin-bottom: 1rem;
-  color: var(--primary-color);
-}
-
-/* تذييل الصفحة (Footer) */
-footer {
+.nav-pills a:hover, 
+.nav-pills a.active {
   background-color: var(--primary-color);
-  color: #fff;
-  text-align: center;
-  padding: 2rem;
-  margin-top: 4rem;
+  color: #ffffff;
 }
 
-/* التجاوب مع الهواتف */
-@media (max-width: 768px) {
-  header {
-    flex-direction: column;
-    gap: 15px;
-  }
-  nav ul {
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .hero h1 {
-    font-size: 2rem;
-  }
+/* النماذج والحاويات */
+.login-container, .profile-container, .main-container {
+  max-width: 500px;
+  margin: 0 auto;
+  background: var(--card-bg);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.login-header h2 {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #555;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.btn-login {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.btn-login:hover {
+  background-color: var(--primary-hover);
+}
+
+.auth-links {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+.auth-links a {
+  color: var(--primary-color);
+  text-decoration: none;
 }
