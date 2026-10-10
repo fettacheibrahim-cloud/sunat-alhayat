@@ -5,52 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>سنة الحياة - ملفي</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .f label{display:block;margin:12px 0 4px;font-weight:700}
+    .f input,.f select,.f textarea{width:100%;padding:10px;border:1px solid #cfc7b0;border-radius:10px;font:inherit;background:#fff;box-sizing:border-box}
+    .st{display:inline-block;padding:4px 14px;border-radius:999px;font-size:14px;background:#eee}
+    .st.approved{background:#dff3e3;color:#1f6b33}
+    .st.pending{background:#fff1cc;color:#8a6200}
+    .st.suspended{background:#fbdcdc;color:#9b1c1c}
+  </style>
 </head>
 <body>
   <main class="card" style="max-width:600px;margin:30px auto;padding:24px">
     <h1>ملفي الشخصي</h1>
-    <p id="msg" style="display:none"></p>
-    <div id="info"></div>
-    <button id="out" class="btn" style="width:100%;margin-top:20px">تسجيل الخروج</button>
-  </main>
+    <p id="email" style="color:#666"></p>
+    <p>حالة الحساب: <span id="st" class="st">...</span></p>
+    <p id="msg" style="display:none;margin:10px 0"></p>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js"></script>
-  <script>
-    const labels = {
-      full_name: 'الاسم', username: 'الاسم', display_name: 'الاسم',
-      gender: 'الجنس', birth_date: 'تاريخ الميلاد', city: 'المدينة',
-      status: 'حالة الحساب'
-    };
-    const statusAr = { pending: 'قيد المراجعة', approved: 'مقبول', suspended: 'موقوف' };
-    const info = document.getElementById('info');
-
-    function row(k, v) {
-      const d = document.createElement('div');
-      d.style.cssText = 'display:flex;justify-content:space-between;gap:12px;padding:12px;margin:8px 0;background:#f7f5ee;border-radius:12px';
-      const a = document.createElement('b'); a.textContent = k;
-      const b = document.createElement('span'); b.textContent = v;
-      d.append(a, b);
-      info.appendChild(d);
-    }
-
-    (async () => {
-      const session = await getSession();
-      if (!session) { location.href = 'auth.html'; return; }
-      row('البريد الإلكتروني', session.user.email);
-
-      const { data, error } = await sb.from('profiles')
-        .select('*').eq('id', session.user.id).maybeSingle();
-      if (error) { showMsg('msg', 'خطأ: ' + error.message, 'error'); return; }
-      if (!data) { showMsg('msg', 'لا يوجد ملف شخصي بعد لهذا الحساب', 'error'); return; }
-
-      Object.entries(data).forEach(([k, v]) => {
-        if (['id', 'is_admin', 'created_at', 'updated_at'].includes(k) || v === null || v === '') return;
-        row(labels[k] || k, k === 'status' ? (statusAr[v] || v) : v);
-      });
-    })();
-
-    document.getElementById('out').onclick = logout;
-  </script>
-</body>
-</html>
+    <form id="form" class="f">
+      <label>الاسم الأول</label>
+      <input id="first_name" required>
+      <label>الجنس</label>
+      <select id="gender" required>
+        <option value="">اختر</option>
+        <option value="male">ذكر</option>
+        <option value="female">أنثى</option>
+      </select>
+      <label>تاريخ الميلاد</label>
+      <input id="birth_date" type="date" required>
+      <label>البلد</label>
+      <input id="country">
+      <label>المدينة</label>
+      <input id="city">
+      <label>الحالة الاجتماعية</label>
+      <select id="marital_status">
+        <option value="">اختر</option>
+        <option value="single">أعزب / عزباء</o
