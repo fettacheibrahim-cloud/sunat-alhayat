@@ -4,41 +4,43 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>سنة الحياة - الإدارة</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=8">
   <style>
-    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
-    .stat{background:#f7f5ee;border:1px solid #e5dcc5;border-radius:14px;padding:12px;text-align:center}
-    .stat b{display:block;font-size:24px;color:#0E3B3C}
-    .stat span{font-size:12px;color:#666}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}
+    .stat{background:var(--sand);border:1px solid var(--line);border-radius:14px;padding:10px 4px;text-align:center}
+    .stat b{display:block;font-size:22px;color:var(--green)}
+    .stat span{font-size:11px;color:var(--muted)}
     .tabs{display:flex;gap:6px;margin:12px 0;flex-wrap:wrap}
-    .tabs button{padding:8px 16px;border-radius:999px;border:1px solid #0E3B3C;background:#fff;color:#0E3B3C;font:inherit;cursor:pointer}
-    .tabs button.on{background:#0E3B3C;color:#fff}
-    .m{padding:14px;margin:8px 0;background:#f7f5ee;border:1px solid #e5dcc5;border-radius:14px}
+    .tabs button{padding:8px 16px;border-radius:999px;border:1px solid var(--green);background:#fff;color:var(--green);font:inherit;cursor:pointer}
+    .tabs button.on{background:var(--green);color:#fff}
+    .m{padding:14px;margin:8px 0;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 12px rgba(14,59,60,.05)}
     .m .acts{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
-    .m .acts button{padding:6px 14px;border-radius:999px;border:1px solid #0E3B3C;background:#0E3B3C;color:#fff;font:inherit;cursor:pointer}
-    .m .acts button.no{background:#fff;color:#9b1c1c;border-color:#9b1c1c}
-    .m small{color:#666;display:block;margin-top:4px}
+    .m .acts button{padding:6px 14px;border-radius:999px;border:1px solid var(--green);background:var(--green);color:#fff;font:inherit;cursor:pointer}
+    .m .acts button.no{background:#fff;color:var(--err);border-color:var(--err)}
+    .m small{color:var(--muted);display:block;margin-top:4px}
   </style>
 </head>
 <body>
-  <main class="card" style="max-width:640px;margin:30px auto;padding:20px">
+  <main style="max-width:640px;margin:0 auto;padding:20px 16px">
     <h1>لوحة الإدارة</h1>
     <p id="msg" style="display:none"></p>
     <div class="stats">
       <div class="stat"><b id="s_pending">-</b><span>قيد المراجعة</span></div>
-      <div class="stat"><b id="s_approved">-</b><span>أعضاء مقبولون</span></div>
+      <div class="stat"><b id="s_approved">-</b><span>أعضاء</span></div>
       <div class="stat"><b id="s_msgs">-</b><span>رسائل</span></div>
+      <div class="stat"><b id="s_reports">-</b><span>بلاغات</span></div>
     </div>
     <div class="tabs" id="tabs">
       <button data-s="pending" class="on">قيد المراجعة</button>
       <button data-s="approved">مقبولون</button>
       <button data-s="suspended">موقوفون</button>
+      <button data-s="reports">البلاغات</button>
     </div>
     <div id="list"></div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v=9"></script>
   <script>
     const $ = id => document.getElementById(id);
     const mAr = { never_married:'أعزب/عزباء', divorced:'مطلّق/ة', widowed:'أرمل/ة' };
@@ -53,24 +55,29 @@
       return a;
     }
 
+    function btn(text, fn, no) {
+      const b = document.createElement('button');
+      b.textContent = text;
+      if (no) b.className = 'no';
+      b.onclick = fn;
+      return b;
+    }
+
     async function setStatus(id, status) {
       const { error } = await sb.from('profiles').update({ status }).eq('id', id);
+      if (error) { alert('خطأ: ' + error.message); return false; }
+      loadAll(); return true;
+    }
+
+    async function closeReport(id) {
+      const { error } = await sb.from('reports').update({ status: 'reviewed' }).eq('id', id);
       if (error) { alert('خطأ: ' + error.message); return; }
       loadAll();
     }
 
-    function btn(text, status, id, no) {
-      const b = document.createElement('button');
-      b.textContent = text;
-      if (no) b.className = 'no';
-      b.onclick = () => setStatus(id, status);
-      return b;
-    }
-
-    async function loadList() {
+    async function loadMembers() {
+      const list = $('list'); list.innerHTML = '';
       const { data, error } = await sb.from('profiles').select('*').eq('status', cur).order('created_at', { ascending: false });
-      const list = $('list');
-      list.innerHTML = '';
       if (error) { list.textContent = 'خطأ: ' + error.message; return; }
       if (!data.length) { list.innerHTML = '<p style="color:#666">لا توجد حسابات في هذه القائمة</p>'; return; }
       data.forEach(p => {
@@ -82,9 +89,38 @@
         d.append(n, s);
         if (p.bio) { const b = document.createElement('small'); b.textContent = p.bio; d.appendChild(b); }
         const a = document.createElement('div'); a.className = 'acts';
-        if (cur === 'pending') a.append(btn('قبول', 'approved', p.id), btn('رفض', 'suspended', p.id, true));
-        if (cur === 'approved') a.append(btn('إيقاف', 'suspended', p.id, true));
-        if (cur === 'suspended') a.append(btn('إعادة تفعيل', 'approved', p.id));
+        if (cur === 'pending') a.append(btn('قبول', () => setStatus(p.id, 'approved')), btn('رفض', () => setStatus(p.id, 'suspended'), true));
+        if (cur === 'approved') a.append(btn('إيقاف', () => setStatus(p.id, 'suspended'), true));
+        if (cur === 'suspended') a.append(btn('إعادة تفعيل', () => setStatus(p.id, 'approved')));
+        d.appendChild(a);
+        list.appendChild(d);
+      });
+    }
+
+    async function loadReports() {
+      const list = $('list'); list.innerHTML = '';
+      const { data, error } = await sb.from('reports').select('*').eq('status', 'open').order('created_at', { ascending: false });
+      if (error) { list.textContent = 'خطأ: ' + error.message; return; }
+      if (!data.length) { list.innerHTML = '<p style="color:#666">لا توجد بلاغات مفتوحة</p>'; return; }
+      const ids = [...new Set(data.flatMap(r => [r.reporter_id, r.reported_id]))];
+      const { data: ps } = await sb.from('profiles').select('id,first_name').in('id', ids);
+      const names = {}; (ps || []).forEach(p => names[p.id] = p.first_name);
+
+      data.forEach(r => {
+        const d = document.createElement('div'); d.className = 'm';
+        const n = document.createElement('b');
+        n.textContent = '🚩 ' + (names[r.reported_id] || 'عضو') + ' ← بلاغ من ' + (names[r.reporter_id] || 'عضو');
+        const s = document.createElement('small'); s.textContent = 'السبب: ' + r.reason;
+        d.append(n, s);
+        if (r.details) { const t = document.createElement('small'); t.textContent = 'التفاصيل: ' + r.details; d.appendChild(t); }
+        const a = document.createElement('div'); a.className = 'acts';
+        a.append(
+          btn('إيقاف الحساب', async () => {
+            if (!confirm('إيقاف حساب ' + (names[r.reported_id] || '') + '؟')) return;
+            if (await setStatus(r.reported_id, 'suspended')) closeReport(r.id);
+          }, true),
+          btn('إغلاق البلاغ', () => closeReport(r.id))
+        );
         d.appendChild(a);
         list.appendChild(d);
       });
@@ -95,8 +131,10 @@
       $('s_pending').textContent = await c(sb.from('profiles').select('*', { count: 'exact', head: true }).eq('status', 'pending'));
       $('s_approved').textContent = await c(sb.from('profiles').select('*', { count: 'exact', head: true }).eq('status', 'approved'));
       $('s_msgs').textContent = await c(sb.from('messages').select('*', { count: 'exact', head: true }));
+      $('s_reports').textContent = await c(sb.from('reports').select('*', { count: 'exact', head: true }).eq('status', 'open'));
     }
 
+    function loadList() { return cur === 'reports' ? loadReports() : loadMembers(); }
     function loadAll() { loadStats(); loadList(); }
 
     $('tabs').onclick = e => {
