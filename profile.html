@@ -2,165 +2,55 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>الملف الشخصي - موقع سنة الحياة</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>سنة الحياة - ملفي</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    body {
-      background-color: #fdfcf0; /* الخلفية الكريمية الهادئة */
-      font-family: 'Cairo', sans-serif;
-      color: #2c3e50;
-      margin: 0;
-      padding: 20px;
-    }
-
-    /* شريط التنقل العلوي الموحد */
-    .nav-pills {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 30px;
-      border-bottom: 1px solid #e0e0e0;
-      padding-bottom: 20px;
-    }
-
-    .nav-pills a {
-      text-decoration: none;
-      color: #004d40;
-      border: 1px solid #004d40;
-      padding: 8px 20px;
-      border-radius: 30px;
-      font-size: 0.9rem;
-      transition: all 0.3s;
-    }
-
-    .nav-pills a:hover, .nav-pills a.active {
-      background-color: #004d40;
-      color: #fff;
-    }
-
-    /* حاوية الملف الشخصي */
-    .profile-container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    }
-
-    .profile-header {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-
-    .profile-avatar {
-      width: 90px;
-      height: 90px;
-      background-color: #e0f2f1;
-      color: #004d40;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      font-weight: bold;
-      margin: 0 auto 15px auto;
-      border: 2px solid #004d40;
-    }
-
-    .profile-header h2 {
-      margin: 0 0 5px 0;
-      color: #004d40;
-      font-size: 1.6rem;
-    }
-
-    .profile-header p {
-      color: #666;
-      font-size: 0.95rem;
-      margin: 0;
-    }
-
-    /* معلومات الحساب */
-    .info-group {
-      margin-bottom: 15px;
-      padding: 12px 15px;
-      background: #f9f9f6;
-      border-radius: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .info-label {
-      font-weight: 600;
-      color: #555;
-    }
-
-    .info-value {
-      color: #2c3e50;
-    }
-
-    .btn-edit {
-      display: block;
-      width: 100%;
-      padding: 12px;
-      background-color: #004d40;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 20px;
-      text-align: center;
-      text-decoration: none;
-      transition: background 0.3s;
-    }
-
-    .btn-edit:hover {
-      background-color: #00695c;
-    }
-  </style>
 </head>
 <body>
+  <main class="card" style="max-width:600px;margin:30px auto;padding:24px">
+    <h1>ملفي الشخصي</h1>
+    <p id="msg" style="display:none"></p>
+    <div id="info"></div>
+    <button id="out" class="btn" style="width:100%;margin-top:20px">تسجيل الخروج</button>
+  </main>
 
-  <!-- شريط التنقل (الأزرار) -->
-  <nav class="nav-pills">
-    <a href="index.html">الرئيسية</a>
-    <a href="browse.html">التصفح</a>
-    <a href="interests.html">الاهتمامات</a>
-    <a href="messages.html">المحادثات</a>
-    <a href="profile.html" class="active">ملفي</a>
-    <a href="admin.html">الإدارة</a>
-  </nav>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+  <script>
+    const labels = {
+      full_name: 'الاسم', username: 'الاسم', display_name: 'الاسم',
+      gender: 'الجنس', birth_date: 'تاريخ الميلاد', city: 'المدينة',
+      status: 'حالة الحساب'
+    };
+    const statusAr = { pending: 'قيد المراجعة', approved: 'مقبول', suspended: 'موقوف' };
+    const info = document.getElementById('info');
 
-  <!-- محتوى الملف الشخصي -->
-  <div class="profile-container">
-    <div class="profile-header">
-      <div class="profile-avatar">إ</div>
-      <h2>إبراهيم</h2>
-      <p>حساب موثق - سنة الحياة</p>
-    </div>
+    function row(k, v) {
+      const d = document.createElement('div');
+      d.style.cssText = 'display:flex;justify-content:space-between;gap:12px;padding:12px;margin:8px 0;background:#f7f5ee;border-radius:12px';
+      const a = document.createElement('b'); a.textContent = k;
+      const b = document.createElement('span'); b.textContent = v;
+      d.append(a, b);
+      info.appendChild(d);
+    }
 
-    <div class="info-group">
-      <span class="info-label">البريد الإلكتروني</span>
-      <span class="info-value">brahim@example.com</span>
-    </div>
+    (async () => {
+      const session = await getSession();
+      if (!session) { location.href = 'auth.html'; return; }
+      row('البريد الإلكتروني', session.user.email);
 
-    <div class="info-group">
-      <span class="info-label">حالة الحساب</span>
-      <span class="info-value" style="color: #2e7d32; font-weight: bold;">نشط وموثق</span>
-    </div>
+      const { data, error } = await sb.from('profiles')
+        .select('*').eq('id', session.user.id).maybeSingle();
+      if (error) { showMsg('msg', 'خطأ: ' + error.message, 'error'); return; }
+      if (!data) { showMsg('msg', 'لا يوجد ملف شخصي بعد لهذا الحساب', 'error'); return; }
 
-    <div class="info-group">
-      <span class="info-label">الخصوصية</span>
-      <span class="info-value">تحكم كامل في عرض الصور والمعلومات</span>
-    </div>
+      Object.entries(data).forEach(([k, v]) => {
+        if (['id', 'is_admin', 'created_at', 'updated_at'].includes(k) || v === null || v === '') return;
+        row(labels[k] || k, k === 'status' ? (statusAr[v] || v) : v);
+      });
+    })();
 
-    <a href="#" class="btn-edit">تعديل الملف الشخصي</a>
-  </div>
-
+    document.getElementById('out').onclick = logout;
+  </script>
 </body>
 </html>
