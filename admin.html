@@ -2,117 +2,29 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لوحة الإدارة - موقع سنة الحياة</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>سنة الحياة - الإدارة</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    body {
-      background-color: #fdfcf0;
-      font-family: 'Cairo', sans-serif;
-      color: #2c3e50;
-      margin: 0;
-      padding: 20px;
-    }
-
-    .nav-pills {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 30px;
-      border-bottom: 1px solid #e0e0e0;
-      padding-bottom: 20px;
-    }
-
-    .nav-pills a {
-      text-decoration: none;
-      color: #004d40;
-      border: 1px solid #004d40;
-      padding: 8px 20px;
-      border-radius: 30px;
-      font-size: 0.9rem;
-      transition: all 0.3s;
-    }
-
-    .nav-pills a:hover, .nav-pills a.active {
-      background-color: #004d40;
-      color: #fff;
-    }
-
-    .admin-container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    }
-
-    .admin-header {
-      font-size: 1.4rem;
-      color: #004d40;
-      margin-bottom: 20px;
-      text-align: center;
-      font-weight: bold;
-    }
-
-    .stat-card {
-      background: #f9f9f6;
-      border-right: 4px solid #004d40;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 6px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .stat-title {
-      font-weight: bold;
-      color: #333;
-    }
-
-    .stat-value {
-      background: #004d40;
-      color: #fff;
-      padding: 4px 12px;
-      border-radius: 15px;
-      font-size: 0.85rem;
-    }
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+    .stat{background:#f7f5ee;border:1px solid #e5dcc5;border-radius:14px;padding:12px;text-align:center}
+    .stat b{display:block;font-size:24px;color:#0E3B3C}
+    .stat span{font-size:12px;color:#666}
+    .tabs{display:flex;gap:6px;margin:12px 0;flex-wrap:wrap}
+    .tabs button{padding:8px 16px;border-radius:999px;border:1px solid #0E3B3C;background:#fff;color:#0E3B3C;font:inherit;cursor:pointer}
+    .tabs button.on{background:#0E3B3C;color:#fff}
+    .m{padding:14px;margin:8px 0;background:#f7f5ee;border:1px solid #e5dcc5;border-radius:14px}
+    .m .acts{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+    .m .acts button{padding:6px 14px;border-radius:999px;border:1px solid #0E3B3C;background:#0E3B3C;color:#fff;font:inherit;cursor:pointer}
+    .m .acts button.no{background:#fff;color:#9b1c1c;border-color:#9b1c1c}
+    .m small{color:#666;display:block;margin-top:4px}
   </style>
 </head>
 <body>
-
-  <!-- شريط التنقل (الأزرار) -->
-  <nav class="nav-pills">
-    <a href="index.html">الرئيسية</a>
-    <a href="browse.html">التصفح</a>
-    <a href="interests.html">الاهتمامات</a>
-    <a href="messages.html">المحادثات</a>
-    <a href="profile.html">ملفي</a>
-    <a href="admin.html" class="active">الإدارة</a>
-  </nav>
-
-  <!-- محتوى لوحة الإدارة -->
-  <div class="admin-container">
-    <div class="admin-header">لوحة التحكم والإدارة</div>
-    <p style="text-align: center; color: #666; margin-bottom: 20px; font-size: 0.95rem;">مرحباً بك في لوحة الإدارة لمراجعة وإدارة محتوى المنصة.</p>
-
-    <div class="stat-card">
-      <span class="stat-title">الحسابات قيد المراجعة والتوثيق</span>
-      <span class="stat-value">3 طلبات</span>
-    </div>
-
-    <div class="stat-card">
-      <span class="stat-title">إجمالي الأعضاء النشطين</span>
-      <span class="stat-value">128 عضواً</span>
-    </div>
-
-    <div class="stat-card">
-      <span class="stat-title">الرسائل والمحادثات اليومية</span>
-      <span class="stat-value">45 رسالة</span>
-    </div>
-  </div>
-
-</body>
-</html>
+  <main class="card" style="max-width:640px;margin:30px auto;padding:20px">
+    <h1>لوحة الإدارة</h1>
+    <p id="msg" style="display:none"></p>
+    <div class="stats">
+      <div class="stat"><b id="s_pending">-</b><span>قيد المراجعة</span></div>
+      <div class="stat"><b id="s_approved">-</b><span>أعضاء مقبولون</span></div>
+      <div class="stat"><b id="s_msgs">-</b><
