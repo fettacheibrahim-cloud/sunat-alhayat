@@ -2,110 +2,83 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>الاهتمامات - موقع سنة الحياة</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>سنة الحياة - الاهتمامات</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    body {
-      background-color: #fdfcf0;
-      font-family: 'Cairo', sans-serif;
-      color: #2c3e50;
-      margin: 0;
-      padding: 20px;
-    }
-
-    .nav-pills {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 30px;
-      border-bottom: 1px solid #e0e0e0;
-      padding-bottom: 20px;
-    }
-
-    .nav-pills a {
-      text-decoration: none;
-      color: #004d40;
-      border: 1px solid #004d40;
-      padding: 8px 20px;
-      border-radius: 30px;
-      font-size: 0.9rem;
-      transition: all 0.3s;
-    }
-
-    .nav-pills a:hover, .nav-pills a.active {
-      background-color: #004d40;
-      color: #fff;
-    }
-
-    .interests-container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    }
-
-    .interests-header {
-      font-size: 1.4rem;
-      color: #004d40;
-      margin-bottom: 20px;
-      text-align: center;
-      font-weight: bold;
-    }
-
-    .interest-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-    }
-
-    .tag {
-      background: #f9f9f6;
-      border: 1px solid #004d40;
-      color: #004d40;
-      padding: 8px 18px;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .tag:hover, .tag.selected {
-      background-color: #004d40;
-      color: #fff;
-    }
+    .it{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px;margin:8px 0;background:#f7f5ee;border:1px solid #e5dcc5;border-radius:14px}
+    .it .acts{display:flex;gap:6px}
+    .tag{font-size:13px;padding:3px 10px;border-radius:999px;background:#eee}
+    .tag.accepted{background:#dff3e3;color:#1f6b33}
+    .tag.declined{background:#fbdcdc;color:#9b1c1c}
   </style>
 </head>
 <body>
+  <main class="card" style="max-width:600px;margin:30px auto;padding:20px">
+    <h1>الاهتمامات</h1>
+    <p id="msg" style="display:none"></p>
+    <h2>الواردة</h2>
+    <div id="inbox"></div>
+    <h2>المرسلة</h2>
+    <div id="sent"></div>
+  </main>
 
-  <!-- شريط التنقل (الأزرار) -->
-  <nav class="nav-pills">
-    <a href="index.html">الرئيسية</a>
-    <a href="browse.html">التصفح</a>
-    <a href="interests.html" class="active">الاهتمامات</a>
-    <a href="messages.html">المحادثات</a>
-    <a href="profile.html">ملفي</a>
-    <a href="admin.html">الإدارة</a>
-  </nav>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+  <script>
+    const $ = id => document.getElementById(id);
+    const stAr = { sent:'بانتظار الرد', pending:'بانتظار الرد', accepted:'مقبول', declined:'مرفوض' };
+    let me = null, names = {};
 
-  <!-- محتوى الاهتمامات -->
-  <div class="interests-container">
-    <div class="interests-header">تحديد الاهتمامات والأنشطة</div>
-    <p style="text-align: center; color: #666; margin-bottom: 20px; font-size: 0.95rem;">اختر اهتماماتك لتخصيص محتوى المنصة بما يناسبك:</p>
+    function empty(el, t) { el.innerHTML = ''; const p = document.createElement('p'); p.style.color = '#666'; p.textContent = t; el.appendChild(p); }
 
-    <div class="interest-tags">
-      <span class="tag selected">توثيق الحسابات</span>
-      <span class="tag">حماية الخصوصية</span>
-      <span class="tag selected">التواصل الاجتماعي</span>
-      <span class="tag">إدارة الملفات</span>
-      <span class="tag">الأمان الرقمي</span>
-      <span class="tag">الإشعارات والتنبيهات</span>
-    </div>
-  </div>
+    async function setStatus(id, status) {
+      const { error } = await sb.from('interests').update({ status }).eq('id', id);
+      if (error) { alert('خطأ: ' + error.message); return; }
+      load();
+    }
 
+    function item(i, incoming) {
+      const d = document.createElement('div'); d.className = 'it';
+      const n = document.createElement('b');
+      n.textContent = names[incoming ? i.from_id : i.to_id] || 'عضو';
+      d.appendChild(n);
+      const open = i.status === 'sent' || i.status === 'pending';
+      if (incoming && open) {
+        const a = document.createElement('div'); a.className = 'acts';
+        const ok = document.createElement('button'); ok.className = 'btn'; ok.textContent = 'قبول';
+        ok.onclick = () => setStatus(i.id, 'accepted');
+        const no = document.createElement('button'); no.className = 'btn';
+        no.style.cssText = 'background:#fff;color:#9b1c1c;border:1px solid #9b1c1c';
+        no.textContent = 'رفض'; no.onclick = () => setStatus(i.id, 'declined');
+        a.append(ok, no); d.appendChild(a);
+      } else {
+        const t = document.createElement('span'); t.className = 'tag ' + i.status;
+        t.textContent = stAr[i.status] || i.status; d.appendChild(t);
+      }
+      return d;
+    }
+
+    async function load() {
+      const { data, error } = await sb.from('interests').select('*')
+        .or('from_id.eq.' + me + ',to_id.eq.' + me).order('created_at', { ascending: false });
+      if (error) { $('msg').style.display = 'block'; $('msg').textContent = 'خطأ: ' + error.message; return; }
+      const ids = [...new Set(data.flatMap(i => [i.from_id, i.to_id]))];
+      if (ids.length) {
+        const { data: ps } = await sb.from('profiles').select('id,first_name').in('id', ids);
+        (ps || []).forEach(p => names[p.id] = p.first_name);
+      }
+      const inbox = data.filter(i => i.to_id === me), sent = data.filter(i => i.from_id === me);
+      $('inbox').innerHTML = ''; $('sent').innerHTML = '';
+      if (!inbox.length) empty($('inbox'), 'لا توجد اهتمامات واردة'); else inbox.forEach(i => $('inbox').appendChild(item(i, true)));
+      if (!sent.length) empty($('sent'), 'لم ترسل أي اهتمام بعد'); else sent.forEach(i => $('sent').appendChild(item(i, false)));
+    }
+
+    (async () => {
+      const s = await getSession();
+      if (!s) { location.href = 'auth.html'; return; }
+      me = s.user.id; load();
+    })();
+  </script>
 </body>
 </html>
