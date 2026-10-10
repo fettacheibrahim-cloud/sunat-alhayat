@@ -1,85 +1,111 @@
-<!doctype html>
-<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>الاهتمامات - سنة الحياة</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-</head><body>
-<header><a class="brand" href="index.html">سنة الحياة</a>
-<div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn" href="browse.html" style="line-height:44px;min-height:44px;padding:0 18px">التصفح</a><button class="ghost" id="out" type="button">تسجيل الخروج</button></div></header>
-<div class="card wide">
-<h1>الاهتمامات</h1>
-<p class="sub">اهتمامات وصلتك من أعضاء آخرين، وأخرى أرسلتها أنت.</p>
-<div class="tabs">
-<button type="button" class="on" data-t="in">الواردة</button>
-<button type="button" data-t="out">المرسلة</button>
-</div>
-<div id="m" hidden></div>
-<div id="list"></div>
-</div>
-<script src="app.js"></script>
-<script>
-const $ = id => document.getElementById(id);
-const GENDER = { male: 'ذكر', female: 'أنثى' };
-const STATE = { sent: 'بانتظار الرد', accepted: 'مقبول', declined: 'مرفوض' };
-let me = null, tab = 'in';
-$('out').onclick = logout;
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الاهتمامات - موقع سنة الحياة</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #fdfcf0;
+      font-family: 'Cairo', sans-serif;
+      color: #2c3e50;
+      margin: 0;
+      padding: 20px;
+    }
 
-function el(tag, text, style) {
-  const e = document.createElement(tag);
-  if (text) e.textContent = text;
-  if (style) e.style.cssText = style;
-  return e;
-}
-async function respond(id, status) {
-  const { error } = await sb.from('interests').update({ status }).eq('id', id);
-  if (error) showMsg($('m'), 'تعذر التحديث: ' + error.message, false);
-  else load();
-}
-function card(i, other) {
-  const c = el('div', '', 'border:2px solid #D5E3E1;border-radius:12px;padding:16px;margin-top:16px');
-  c.appendChild(el('div', other.first_name, 'font-size:20px;font-weight:800'));
-  c.appendChild(el('div', STATE[i.status], 'color:#4A5F5E;margin:6px 0'));
-  if (tab === 'in' && i.status === 'sent') {
-    const row = el('div', '', 'margin-top:12px');
-    const a = el('button', 'قبول', 'min-height:44px;line-height:40px;padding:0 20px;font-size:16px;margin-inline-end:8px');
-    a.type = 'button'; a.onclick = () => respond(i.id, 'accepted');
-    const r = el('button', 'رفض', 'min-height:44px;line-height:40px;padding:0 20px;font-size:16px');
-    r.type = 'button'; r.className = 'ghost'; r.onclick = () => respond(i.id, 'declined');
-    row.appendChild(a); row.appendChild(r); c.appendChild(row);
-  }
-  return c;
-}
-async function load() {
-  const box = $('list');
-  box.textContent = 'جارٍ التحميل...';
-  const col = tab === 'in' ? 'to_id' : 'from_id';
-  const otherCol = tab === 'in' ? 'from_id' : 'to_id';
-  const { data, error } = await sb.from('interests')
-    .select('id,status,created_at,from_id,to_id')
-    .eq(col, me.id).order('created_at', { ascending: false });
-  box.textContent = '';
-  if (error) { showMsg($('m'), 'تعذر التحميل: ' + error.message, false); return; }
-  if (!data.length) { box.appendChild(el('p', 'لا توجد اهتمامات في هذه القائمة.', 'color:#4A5F5E;margin-top:16px')); return; }
-  const ids = [...new Set(data.map(i => i[otherCol]))];
-  const { data: people } = await sb.from('profiles').select('id,first_name,gender,city').in('id', ids);
-  const map = Object.fromEntries((people || []).map(p => [p.id, p]));
-  data.forEach(i => {
-    const other = map[i[otherCol]] || { first_name: 'عضو' };
-    box.appendChild(card(i, other));
-  });
-}
-document.querySelectorAll('.tabs button').forEach(b => {
-  b.onclick = () => {
-    tab = b.dataset.t;
-    document.querySelectorAll('.tabs button').forEach(x => x.className = x === b ? 'on' : '');
-    load();
-  };
-});
-(async () => {
-  const s = await getSession();
-  if (!s) { location.href = 'auth.html'; return; }
-  me = s.user;
-  load();
-})();
-</script></body></html>
+    .nav-pills {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 20px;
+    }
+
+    .nav-pills a {
+      text-decoration: none;
+      color: #004d40;
+      border: 1px solid #004d40;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+
+    .nav-pills a:hover, .nav-pills a.active {
+      background-color: #004d40;
+      color: #fff;
+    }
+
+    .interests-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    }
+
+    .interests-header {
+      font-size: 1.4rem;
+      color: #004d40;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .interest-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .tag {
+      background: #f9f9f6;
+      border: 1px solid #004d40;
+      color: #004d40;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .tag:hover, .tag.selected {
+      background-color: #004d40;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- شريط التنقل (الأزرار) -->
+  <nav class="nav-pills">
+    <a href="index.html">الرئيسية</a>
+    <a href="browse.html">التصفح</a>
+    <a href="interests.html" class="active">الاهتمامات</a>
+    <a href="messages.html">المحادثات</a>
+    <a href="profile.html">ملفي</a>
+    <a href="admin.html">الإدارة</a>
+  </nav>
+
+  <!-- محتوى الاهتمامات -->
+  <div class="interests-container">
+    <div class="interests-header">تحديد الاهتمامات والأنشطة</div>
+    <p style="text-align: center; color: #666; margin-bottom: 20px; font-size: 0.95rem;">اختر اهتماماتك لتخصيص محتوى المنصة بما يناسبك:</p>
+
+    <div class="interest-tags">
+      <span class="tag selected">توثيق الحسابات</span>
+      <span class="tag">حماية الخصوصية</span>
+      <span class="tag selected">التواصل الاجتماعي</span>
+      <span class="tag">إدارة الملفات</span>
+      <span class="tag">الأمان الرقمي</span>
+      <span class="tag">الإشعارات والتنبيهات</span>
+    </div>
+  </div>
+
+</body>
+</html>
