@@ -4,26 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>سنة الحياة - الدخول</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
   <main class="card" style="max-width:420px;margin:40px auto;padding:24px">
     <h1 id="title">تسجيل الدخول</h1>
     <form id="form">
       <label>البريد الإلكتروني</label>
-      <input id="email" type="email" required style="width:100%;padding:10px;margin:6px 0 14px">
+      <input id="email" type="email" required>
       <label>كلمة المرور</label>
-      <input id="password" type="password" minlength="6" required style="width:100%;padding:10px;margin:6px 0 14px">
-      <button id="btn" type="submit" class="btn" style="width:100%">دخول</button>
+      <input id="password" type="password" minlength="6" required>
+      <button id="btn" type="submit" class="btn" style="width:100%;margin-top:16px">دخول</button>
     </form>
     <p id="msg" style="display:none;margin-top:12px"></p>
     <p style="text-align:center;margin-top:16px">
       <a href="#" id="toggle">ليس لديك حساب؟ سجّل الآن</a>
     </p>
+    <p style="text-align:center;font-size:13px;color:var(--muted)">
+      <a href="legal.html#privacy">الخصوصية</a> · <a href="legal.html#terms">الشروط</a>
+    </p>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v=9"></script>
   <script>
     let isLogin = true;
     const $ = id => document.getElementById(id);
@@ -34,22 +37,35 @@
       $('title').textContent = isLogin ? 'تسجيل الدخول' : 'إنشاء حساب';
       $('btn').textContent = isLogin ? 'دخول' : 'تسجيل';
       $('toggle').textContent = isLogin ? 'ليس لديك حساب؟ سجّل الآن' : 'لديك حساب؟ ادخل';
+      $('msg').style.display = 'none';
     };
 
     $('form').onsubmit = async e => {
       e.preventDefault();
-      const btn = $('btn');
-      btn.disabled = true;
+      const btn = $('btn'); btn.disabled = true;
       const email = $('email').value.trim();
       const password = $('password').value;
       try {
-        const res = isLogin
-          ? await sb.auth.signInWithPassword({ email, password })
-          : await sb.auth.signUp({ email, password });
-        if (res.error) throw res.error;
-        location.href = 'profile.html';
+        if (isLogin) {
+          const { error } = await sb.auth.signInWithPassword({ email, password });
+          if (error) {
+            if (/not confirmed/i.test(error.message)) throw new Error('لم يتم تأكيد بريدك بعد. افتح رسالة التأكيد في بريدك.');
+            if (/invalid login/i.test(error.message)) throw new Error('البريد أو كلمة المرور غير صحيحة.');
+            throw error;
+          }
+          location.href = 'profile.html';
+        } else {
+          const { data, error } = await sb.auth.signUp({
+            email, password,
+            options: { emailRedirectTo: location.origin + location.pathname.replace('auth.html', '') + 'profile.html' }
+          });
+          if (error) throw error;
+          if (data.session) { location.href = 'profile.html'; return; }
+          showMsg('msg', 'تم إنشاء حسابك. أرسلنا رسالة تأكيد إلى بريدك، افتحها واضغط الرابط ثم ادخل. (انظر في المزعج إن لم تجدها)', 'ok');
+          btn.disabled = false;
+        }
       } catch (err) {
-        showMsg('msg', 'خطأ: ' + err.message, 'error');
+        showMsg('msg', err.message, 'error');
         btn.disabled = false;
       }
     };
