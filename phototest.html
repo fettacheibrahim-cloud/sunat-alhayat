@@ -4,25 +4,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>اختبار الصورة</title>
-  <style>body{font-family:Tahoma,Arial;padding:16px}pre{background:#f4f4f4;padding:12px;border-radius:10px;white-space:pre-wrap;direction:ltr;text-align:left;font-size:13px}button{padding:12px 20px;font-size:16px}</style>
+  <style>body{font-family:Tahoma,Arial;padding:16px}pre{background:#f4f4f4;padding:12px;border-radius:10px;white-space:pre-wrap;direction:ltr;text-align:left;font-size:13px}label{display:block;margin:14px 0 4px;font-weight:bold}</style>
 </head>
 <body>
   <h2>اختبار رفع الصورة</h2>
-  <input id="file" type="file" accept="image/*">
-  <pre id="log">جاهز. اختر صورة.</pre>
+  <label>الطريقة 1: معرض الصور</label>
+  <input id="f1" type="file" accept="image/*">
+  <label>الطريقة 2: الكاميرا مباشرة</label>
+  <input id="f2" type="file" accept="image/*" capture="environment">
+  <label>الطريقة 3: أي ملف</label>
+  <input id="f3" type="file">
+  <pre id="log">جاري التحميل...</pre>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const sb = window.supabase.createClient('https://yepoakpeqonheksryalx.supabase.co', 'sb_publishable_kPVlHG491QyXLsYhvM7GOw_gJyVphsX');
     const log = t => { document.getElementById('log').textContent += '\n' + t; };
+    document.getElementById('log').textContent = 'JS يعمل ✓';
+    log('مكتبة Supabase: ' + (window.supabase ? 'محمّلة ✓' : 'لم تُحمَّل X'));
 
-    document.getElementById('file').addEventListener('change', async e => {
-      const f = e.target.files[0];
-      if (!f) { log('لم يتم اختيار ملف'); return; }
-      log('1) اختيار: ' + f.name + ' | ' + f.size + ' bytes | ' + (f.type || 'نوع غير معروف'));
+    async function handle(e) {
+      const f = e.target.files && e.target.files[0];
+      if (!f) { log('لم يصل أي ملف'); return; }
+      log('1) وصل الملف: ' + f.name + ' | ' + f.size + ' bytes | ' + (f.type || 'نوع غير معروف'));
       try {
+        const sb = window.supabase.createClient('https://yepoakpeqonheksryalx.supabase.co', 'sb_publishable_kPVlHG491QyXLsYhvM7GOw_gJyVphsX');
         const { data: s } = await sb.auth.getSession();
-        if (!s.session) { log('X لا توجد جلسة دخول، ادخل أولاً من auth.html'); return; }
+        if (!s.session) { log('X لا توجد جلسة دخول'); return; }
         const uid = s.session.user.id;
         log('2) المستخدم: ' + s.session.user.email);
 
@@ -43,14 +50,18 @@
         const path = uid + '/avatar.jpg';
         const up = await sb.storage.from('photos').upload(path, blob, { upsert: true, contentType: 'image/jpeg' });
         if (up.error) { log('X فشل الرفع: ' + up.error.message); return; }
-        log('4) تم الرفع إلى: ' + path);
+        log('4) تم الرفع ✓');
 
         const r = await sb.from('profiles').update({ photo_path: path }).eq('id', uid).select('photo_path');
         if (r.error) { log('X فشل تحديث الملف: ' + r.error.message); return; }
-        log('5) تحديث الملف: ' + JSON.stringify(r.data));
-        if (!r.data || !r.data.length) log('X لم يتغير أي صف. لا يوجد ملف شخصي لهذا الحساب؟');
-        else log('تم بنجاح ✓');
+        log(r.data && r.data.length ? 'تم بنجاح ✓✓' : 'X لم يتغير أي صف (لا يوجد ملف شخصي؟)');
       } catch (err) { log('X خطأ: ' + (err && err.message ? err.message : err)); }
+    }
+
+    ['f1', 'f2', 'f3'].forEach(id => {
+      const el = document.getElementById(id);
+      el.addEventListener('change', e => { log('(حدث change من ' + id + ')'); handle(e); });
+      el.addEventListener('input', () => log('(حدث input من ' + id + ')'));
     });
   </script>
 </body>
