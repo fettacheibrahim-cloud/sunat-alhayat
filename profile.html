@@ -29,9 +29,11 @@
     <div class="ph">
       <div id="img">؟</div>
       <div>
-        <button id="pick" class="btn sm" type="button">اختيار صورة</button>
+        <span style="position:relative;display:inline-block">
+          <button id="pick" class="btn sm" type="button">اختيار صورة</button>
+          <input id="file" type="file" accept="image/*" style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0">
+        </span>
         <button id="delPhoto" class="btn ghost sm" type="button" style="display:none">حذف</button>
-        <input id="file" type="file" accept="image/*" style="position:absolute;opacity:0;width:1px;height:1px;pointer-events:none">
         <p id="phNote" style="font-size:13px;color:var(--muted);margin:6px 0 0"></p>
       </div>
     </div>
@@ -113,9 +115,8 @@
       });
     }
 
-    $('pick').onclick = () => {
-      if (!exists) { msg('احفظ ملفك الشخصي أولاً (زر حفظ في الأسفل) ثم أضف الصورة', 'error'); return; }
-      $('file').click();
+    $('file').onclick = e => {
+      if (!exists) { e.preventDefault(); msg('احفظ ملفك الشخصي أولاً (زر حفظ في الأسفل) ثم أضف الصورة', 'error'); }
     };
 
     $('file').onchange = async e => {
@@ -184,4 +185,4 @@
     $('out').onclick = logout;
   </script>
 </body>
-</html>
+  </html>
