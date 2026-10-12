@@ -13,7 +13,14 @@
       <label>البريد الإلكتروني</label>
       <input id="email" type="email" required>
       <label>كلمة المرور</label>
-      <input id="password" type="password" minlength="6" required>
+      <input id="password" type="password" minlength="8" required>
+      <p id="forgotRow" style="margin:8px 0 0;font-size:14px">
+        <a href="#" id="forgot">نسيت كلمة المرور؟</a>
+      </p>
+      <div id="termsRow" style="display:none;align-items:flex-start;gap:8px;margin-top:14px;font-size:14px;line-height:1.7">
+        <input id="terms" type="checkbox" style="width:auto;margin-top:6px">
+        <label for="terms" style="margin:0;font-weight:500">أوافق على <a href="legal.html#terms" target="_blank">الشروط والأحكام</a> و<a href="legal.html#privacy" target="_blank">سياسة الخصوصية</a>، وأؤكد أن عمري 18 سنة فأكثر.</label>
+      </div>
       <button id="btn" type="submit" class="btn" style="width:100%;margin-top:16px">دخول</button>
     </form>
     <p id="msg" style="display:none;margin-top:12px"></p>
@@ -30,6 +37,7 @@
   <script>
     let isLogin = true;
     const $ = id => document.getElementById(id);
+    const base = location.origin + location.pathname.replace('auth.html', '');
 
     $('toggle').onclick = e => {
       e.preventDefault();
@@ -37,7 +45,18 @@
       $('title').textContent = isLogin ? 'تسجيل الدخول' : 'إنشاء حساب';
       $('btn').textContent = isLogin ? 'دخول' : 'تسجيل';
       $('toggle').textContent = isLogin ? 'ليس لديك حساب؟ سجّل الآن' : 'لديك حساب؟ ادخل';
+      $('forgotRow').style.display = isLogin ? 'block' : 'none';
+      $('termsRow').style.display = isLogin ? 'none' : 'flex';
       $('msg').style.display = 'none';
+    };
+
+    $('forgot').onclick = async e => {
+      e.preventDefault();
+      const email = $('email').value.trim();
+      if (!email) { showMsg('msg', 'اكتب بريدك الإلكتروني أولاً ثم اضغط «نسيت كلمة المرور».', 'error'); return; }
+      const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: base + 'reset.html' });
+      if (error) { showMsg('msg', 'تعذّر الإرسال: ' + error.message, 'error'); return; }
+      showMsg('msg', 'إن كان البريد مسجّلاً لدينا فقد أرسلنا إليه رابط تغيير كلمة المرور. (انظر في المزعج أيضاً)', 'ok');
     };
 
     $('form').onsubmit = async e => {
@@ -55,9 +74,10 @@
           }
           location.href = 'profile.html';
         } else {
+          if (!$('terms').checked) throw new Error('يجب الموافقة على الشروط وسياسة الخصوصية للتسجيل.');
           const { data, error } = await sb.auth.signUp({
             email, password,
-            options: { emailRedirectTo: location.origin + location.pathname.replace('auth.html', '') + 'profile.html' }
+            options: { emailRedirectTo: base + 'profile.html' }
           });
           if (error) throw error;
           if (data.session) { location.href = 'profile.html'; return; }
