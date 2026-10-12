@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>سنة الحياة - كلمة مرور جديدة</title>
+  <link rel="stylesheet" href="style.css?v=8">
+</head>
+<body>
+  <main class="card" style="max-width:420px;margin:40px auto;padding:24px">
+    <h1>كلمة مرور جديدة</h1>
+    <p id="wait" style="color:var(--muted)">جاري التحقق من الرابط...</p>
+    <form id="form" style="display:none">
+      <label>كلمة المرور الجديدة (8 أحرف على الأقل)</label>
+      <input id="p1" type="password" minlength="8" required>
+      <label>أعد كتابة كلمة المرور</label>
+      <input id="p2" type="password" minlength="8" required>
+      <button id="btn" type="submit" class="btn" style="width:100%;margin-top:16px">حفظ كلمة المرور</button>
+    </form>
+    <p id="msg" style="display:none;margin-top:12px"></p>
+    <p style="text-align:center;margin-top:16px"><a href="auth.html">العودة لتسجيل الدخول</a></p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js?v=9"></script>
+  <script>
+    const $ = id => document.getElementById(id);
+    let ready = false;
+
+    function showForm() {
+      if (ready) return;
+      ready = true;
+      $('wait').style.display = 'none';
+      $('form').style.display = 'block';
+    }
+
+    sb.auth.onAuthStateChange((ev, session) => { if (ev === "PASSWORD_RECOVERY" || (session && ev === "SIGNED_IN")) showForm(); });
+
+    setTimeout(async () => {
+      if (ready) return;
+      const s = await getSession();
+      if (s) showForm();
+      else $('wait').textContent = 'الرابط غير صالح أو انتهت صلاحيته. اطلب رابطاً جديداً من صفحة الدخول.';
+    }, 1500);
+
+    $('form').onsubmit = async e => {
+      e.preventDefault();
+      const p1 = $('p1').value, p2 = $('p2').value;
+      if (p1 !== p2) { showMsg('msg', 'كلمتا المرور غير متطابقتين.', 'error'); return; }
+      $('btn').disabled = true;
+      const { error } = await sb.auth.updateUser({ password: p1 });
+      if (error) { showMsg('msg', 'تعذّر الحفظ: ' + error.message, 'error'); $('btn').disabled = false; return; }
+      showMsg('msg', 'تم تغيير كلمة المرور ✓ سيتم تحويلك الآن...', 'ok');
+      setTimeout(() => { location.href = 'profile.html'; }, 1500);
+    };
+  </script>
+</body>
+</html>
