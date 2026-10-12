@@ -58,6 +58,7 @@
       <button id="save" type="submit" class="btn" style="width:100%;margin-top:18px">حفظ</button>
     </form>
     <button id="out" class="btn ghost" style="width:100%;margin-top:12px">تسجيل الخروج</button>
+    <button id="delAcc" class="btn ghost" style="width:100%;margin-top:12px;color:var(--err);border-color:var(--err)">حذف حسابي نهائياً</button>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -121,7 +122,6 @@
 
     $('file').onchange = async e => {
       const f = e.target.files[0]; if (!f) return;
-      alert('وصل الملف: ' + f.name + ' (' + Math.round(f.size / 1024) + ' KB)'); // للتشخيص فقط، احذفه لاحقاً
       try {
         $('pick').disabled = true;
         msg('جاري رفع الصورة...', 'ok');
@@ -183,6 +183,23 @@
     };
 
     $('out').onclick = logout;
+
+    $('delAcc').onclick = async () => {
+      if (!confirm('سيتم حذف حسابك وملفك ومحادثاتك وصورتك نهائياً ولا يمكن التراجع. هل أنت متأكد؟')) return;
+      if (prompt('للتأكيد اكتب كلمة: حذف') !== 'حذف') { msg('لم يتم الحذف.', 'error'); return; }
+      $('delAcc').disabled = true;
+      try {
+        if (photoPath) await sb.storage.from('photos').remove([photoPath]);
+        const { error } = await sb.rpc('delete_my_account');
+        if (error) throw error;
+        await sb.auth.signOut();
+        alert('تم حذف حسابك. نتمنى لك التوفيق.');
+        location.href = 'index.html';
+      } catch (err) {
+        $('delAcc').disabled = false;
+        msg('تعذّر حذف الحساب: ' + (err && err.message ? err.message : err), 'error');
+      }
+    };
   </script>
 </body>
-  </html>
+</html>
