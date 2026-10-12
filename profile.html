@@ -79,8 +79,16 @@
       const box = $('img'); box.innerHTML = '';
       if (!photoPath) { box.textContent = ($('first_name').value || '؟').charAt(0).toUpperCase(); $('delPhoto').style.display = 'none'; return; }
       const { data, error } = await sb.storage.from('photos').createSignedUrl(photoPath, 3600);
-      if (error) { box.textContent = '!'; return; }
-      const i = document.createElement('img'); i.src = data.signedUrl; box.appendChild(i);
+            if (error) {
+        box.textContent = '!';
+        $('phNote').textContent = 'تعذّر تحميل الصورة: ' + error.message;
+        $('delPhoto').style.display = 'inline-block';
+        return;
+      }
+      const i = document.createElement('img');
+      i.onerror = () => { box.textContent = '!'; $('phNote').textContent = 'الصورة مرفوعة لكن تعذّر عرضها، تحقق من سياسات التخزين.'; };
+      i.src = data.signedUrl + (data.signedUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
+      box.appendChild(i);
       $('delPhoto').style.display = 'inline-block';
     }
 
