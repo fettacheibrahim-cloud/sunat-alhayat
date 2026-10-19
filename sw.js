@@ -1,5 +1,10 @@
+// عامل خدمة بسيط: يعرض إشعارات النظام ويفتح الصفحة المناسبة عند الضغط عليها،
+// ووجوده مع manifest.webmanifest يسمح بتثبيت الموقع كتطبيق.
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
+
+// لا نخزّن شيئاً مؤقتاً؛ الطلبات تمر كما هي إلى الشبكة
+self.addEventListener('fetch', () => {});
 
 self.addEventListener('notificationclick', e => {
   e.notification.close();
