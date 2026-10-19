@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>سنة الحياة - موقع الزواج الجاد</title>
   <meta name="description" content="موقع للتعارف بنيّة الزواج، بخصوصية وجدية واحترام.">
+  <meta name="theme-color" content="#0E3B3C">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="سنة الحياة - موقع الزواج الجاد">
+  <meta property="og:description" content="موقع للتعارف بنيّة الزواج، بخصوصية وجدية واحترام.">
+  <meta property="og:image" content="https://fettacheibrahim-cloud.github.io/sunat-alhayat/icon-512.png">
+  <meta property="og:locale" content="ar_AR">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="style.css?v=7">
   <style>
     .top{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;
@@ -45,7 +54,10 @@
 <body>
   <header class="top">
     <a class="brand" href="index.html">سنة <span>الحياة</span></a>
-    <a class="btn" href="auth.html">دخول</a>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button id="install" class="btn ghost" type="button" style="display:none">📲 تثبيت</button>
+      <a class="btn" href="auth.html">دخول</a>
+    </div>
   </header>
 
   <div class="hero">
@@ -89,6 +101,25 @@
     </div>
   </section>
 
-  <footer><a href="legal.html#privacy">الخصوصية</a> · <a href="legal.html#terms">الشروط</a><br>© سنة الحياة — جميع الحقوق محفوظة</footer>
+  <footer><a href="faq.html">الأسئلة الشائعة</a> · <a href="contact.html">اتصل بنا</a> · <a href="legal.html#privacy">الخصوصية</a> · <a href="legal.html#terms">الشروط</a><br>© سنة الحياة — جميع الحقوق محفوظة</footer>
+
+  <script>
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
+    var deferredPrompt = null;
+    var installBtn = document.getElementById('install');
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'inline-block';
+    });
+    installBtn.onclick = async function () {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      try { await deferredPrompt.userChoice; } catch (e) {}
+      deferredPrompt = null;
+      installBtn.style.display = 'none';
+    };
+    window.addEventListener('appinstalled', function () { installBtn.style.display = 'none'; });
+  </script>
 </body>
 </html>
