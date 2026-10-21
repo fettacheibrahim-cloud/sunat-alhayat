@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ترقية الحساب — سنة الحياة</title>
+  <link href="icon.svg" rel="icon" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css"> <!-- استخدم نفس ملف الستايل الخاص بك -->
+  <style>
+    /* تنسيقات إضافية خاصة بصفحة الأسعار لضمان الجمالية والتناسق */
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: #f9fafb;
+      color: #1f2937;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #ffffff;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header a {
+      text-decoration: none;
+      color: #111827;
+      font-weight: bold;
+    }
+    header a span {
+      color: #0d9488;
+    }
+    .pricing-container {
+      max-width: 1000px;
+      margin: 3rem auto;
+      padding: 0 1.5rem;
+      text-align: center;
+    }
+    .pricing-container h1 {
+      font-size: 2.25rem;
+      color: #111827;
+      margin-bottom: 0.5rem;
+    }
+    .pricing-container p.subtitle {
+      color: #6b7280;
+      margin-bottom: 2.5rem;
+      font-size: 1.1rem;
+    }
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    .plan-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      position: relative;
+      transition: transform 0.2s;
+    }
+    .plan-card:hover {
+      transform: translateY(-5px);
+    }
+    .plan-card.featured {
+      border-color: #0d9488;
+      box-shadow: 0 10px 15px -3px rgba(13, 148, 136, 0.15);
+    }
+    .plan-card.featured::before {
+      content: "الأكثر طلباً";
+      position: absolute;
+      top: -12px;
+      right: 50%;
+      transform: translateX(50%);
+      background: #0d9488;
+      color: #ffffff;
+      padding: 0.25rem 1rem;
+      font-size: 0.85rem;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+    .plan-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    .plan-price {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #0d9488;
+      margin-bottom: 1.5rem;
+    }
+    .plan-price span {
+      font-size: 1rem;
+      color: #6b7280;
+      font-weight: normal;
+    }
+    .plan-features {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 2rem 0;
+      text-align: right;
+    }
+    .plan-features li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #4b5563;
+      font-size: 0.95rem;
+    }
+    .plan-features li::before {
+      content: "✓ ";
+      color: #0d9488;
+      font-weight: bold;
+      margin-left: 0.5rem;
+    }
+    .btn-plan {
+      display: block;
+      width: 100%;
+      background: #0d9488;
+      color: #ffffff;
+      text-align: center;
+      padding: 0.75rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .btn-plan:hover {
+      background: #0f766e;
+      color: #ffffff;
+    }
+    .payment-info {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: right;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .payment-info h3 {
+      color: #111827;
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
+    .payment-info p {
+      color: #4b5563;
+      line-height: 1.6;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #6b7280;
+      font-size: 0.9rem;
+      border-top: 1px solid #e5e7eb;
+      margin-top: 4rem;
+      background: #ffffff;
+    }
+    footer a {
+      color: #4b5563;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html">سنة <span>الحياة</span></a>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="faq.html">الأسئلة الشائعة</a>
+    </nav>
+    <div>
+      <a href="auth.html">دخول</a>
+    </div>
+  </header>
+
+  <div class="pricing-container">
+    <h1>اختر العضوية المناسبة لرحلتك</h1>
+    <p class="subtitle">استمتع بميزات إضافية لتسريع البحث والتواصل بجدية تامة</p>
+
+    <div class="plans-grid">
+      <!-- الخطة المجانية -->
+      <div class="plan-card">
+        <div class="plan-title">العضوية المجانية</div>
+        <div class="plan-price">0 درهم <span>/ دائماً</span></div>
+        <ul class="plan-features">
+          <li>إنشاء ملف شخصي ومراجعته</li>
+          <li>تصفح الأعضاء المقبولين</li>
+          <li>إرسال عدد محدود من الاهتمامات يومياً</li>
+          <li>محادثة خاصة عند تبادل القبول</li>
+        </ul>
+        <a href="auth.html" class="btn-plan" style="background: #4b5563;">حسابك الحالي</a>
+      </div>
+
+      <!-- العضوية المميزة -->
+      <div class="plan-card featured">
+        <div class="plan-title">عضوية سنة الحياة VIP</div>
+        <div class="plan-price">50 درهم <span>/ شهرياً</span></div>
+        <ul class="plan-features">
+          <li>إرسال رسائل واهتمامات غير محدودة</li>
+          <li>معرفة من قام بزيارة ملفك الشخصي</li>
+          <li>ظهور مميز في مقدمة نتائج البحث (Boost)</li>
+          <li>شارة موثق / جاد على ملفك الشخصي</li>
+          <li>دعم فني خاص وأولوية في مراجعة التعديلات</li>
+        </ul>
+        <a href="#payment" class="btn-plan">ترقية الحساب الآن</a>
+      </div>
+    </div>
+
+    <!-- قسم طريقة الدفع -->
+    <div id="payment" class="payment-info">
+      <h3>كيف تتم عملية الترقية؟</h3>
+      <p>
+        نظراً لحرصنا على الخصوصية والسهولة، يتم الدفع حالياً عبر التحويل البنكي المحلي أو خدمات التحويل السريع (مثل Wafacash أو Cash Plus).
+      </p>
+      <p>
+        <strong>الخطوات:</strong><br>
+        1. قم بتحويل مبلغ الاشتراك (50 درهم للشهر).<br>
+        2. أرسل صورة إيصال التحويل ورقم حسابك المسجل عبر صفحة <a href="contact.html" style="color: #0d9488; font-weight: bold;">اتصل بنا</a> أو عبر واتساب الإدارة.<br>
+        3. سيتم تفعيل حسابك (VIP) خلال ساعات قليلة بkل أمان.
+      </p>
+    </div>
+  </div>
+
+  <footer>
+    <a href="faq.html">الأسئلة الشائعة</a> · <a href="contact.html">اتصل بنا</a> · <a href="legal.html#privacy">الخصوصية</a>
+    <br><br>© سنة الحياة — جميع الحقوق محفوظة
+  </footer>
+
+</body>
+</html>
