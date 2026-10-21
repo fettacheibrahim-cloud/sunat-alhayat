@@ -190,6 +190,15 @@
       $('delAcc').disabled = true;
       try {
         if (photoPath) await sb.storage.from('photos').remove([photoPath]);
+                // حذف صور ورسائل المحادثة الصوتية التي أرسلها العضو
+        try {
+          const { data: mm } = await sb.from('messages').select('media_path')
+            .eq('sender_id', uid).not('media_path', 'is', null);
+          const paths = (mm || []).map(x => x.media_path).filter(Boolean);
+          for (let i = 0; i < paths.length; i += 100) {
+            await sb.storage.from('chat-media').remove(paths.slice(i, i + 100));
+          }
+        } catch (e) { /* لا نوقف الحذف بسبب هذه الخطوة */ }
         const { error } = await sb.rpc('delete_my_account');
         if (error) throw error;
         await sb.auth.signOut();
