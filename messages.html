@@ -7,7 +7,11 @@
   <link rel="stylesheet" href="style.css?v=8">
   <style>
     .conv{display:flex;align-items:center;gap:12px;width:100%;text-align:start;padding:14px;margin:8px 0;background:#fff;border:1px solid var(--line);border-radius:16px;font:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(14,59,60,.05)}
-    .av{flex:none;width:44px;height:44px;border-radius:50%;background:var(--green);color:var(--gold2);display:flex;align-items:center;justify-content:center;font:700 20px 'Amiri',serif}
+    .av{flex:none;width:44px;height:44px;border-radius:50%;background:var(--green);color:var(--gold2);display:flex;align-items:center;justify-content:center;font:700 20px 'Amiri',serif;overflow:hidden}
+    .av img{width:100%;height:100%;object-fit:cover}
+    .conv .col{flex:1;min-width:0;display:flex;flex-direction:column}
+    .conv .pv{color:var(--muted);font-size:13px;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .badge{flex:none;background:var(--gold);color:#fff;border-radius:999px;min-width:22px;height:22px;padding:0 6px;font-size:12px;display:inline-flex;align-items:center;justify-content:center}
     .hd{display:flex;align-items:center;gap:10px;margin:8px 0}
     .hd h2{margin:0;flex:1}
     .sm{padding:6px 14px;min-height:36px;font-size:14px}
@@ -17,9 +21,35 @@
     .b{max-width:80%;padding:8px 14px;border-radius:16px;word-wrap:break-word;white-space:pre-wrap}
     .b.me{align-self:flex-start;background:var(--green);color:#fff}
     .b.other{align-self:flex-end;background:#fff;border:1px solid var(--line)}
-    #send{display:flex;gap:8px}
-    #text{flex:1}
+    .b time{display:block;font-size:11px;opacity:.7;margin-top:2px}
+    .b.img{padding:4px}
+    .b.img img{display:block;max-width:100%;width:230px;min-height:90px;max-height:300px;object-fit:cover;border-radius:12px;background:rgba(0,0,0,.08);cursor:zoom-in}
+    .b.img time{padding:0 8px 2px}
+    .b.aud{padding:8px 12px;min-width:210px}
+    .ap{display:flex;align-items:center;gap:10px}
+    .ap-btn{flex:none;width:38px;height:38px;border-radius:50%;border:0;cursor:pointer;font-size:15px;line-height:1;background:var(--gold);color:#fff}
+    .ap-bar{flex:1;height:6px;border-radius:999px;background:rgba(127,127,127,.35);overflow:hidden;cursor:pointer}
+    .ap-fill{height:100%;width:0;background:var(--gold2)}
+    .b.other .ap-fill{background:var(--green)}
+    .ap-t{flex:none;font-size:12px;opacity:.85;min-width:34px;text-align:end;direction:ltr}
+    .empty{margin:auto;text-align:center;color:var(--muted)}
+
+    #send{display:flex;gap:8px;align-items:center}
+    #text{flex:1;min-width:0}
+    .ibtn{flex:none;position:relative;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:20px;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+    .ibtn:disabled{opacity:.5;cursor:not-allowed}
+    .ibtn input[type=file]{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0}
+    #recBar{display:none;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:8px 12px}
+    #recBar .dot{width:12px;height:12px;border-radius:50%;background:#c0392b;animation:bl 1s infinite}
+    #recBar .grow{flex:1;color:var(--muted);font-size:14px}
+    #recT{font-variant-numeric:tabular-nums;direction:ltr;min-width:38px}
+    @keyframes bl{50%{opacity:.25}}
+    #note{color:var(--muted);font-size:13px;margin:6px 2px 0;min-height:18px}
     #rep{display:none;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0}
+
+    #lb{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.92);align-items:center;justify-content:center}
+    #lb img{max-width:96vw;max-height:88vh;border-radius:8px}
+    #lb button{position:absolute;top:14px;left:14px;width:42px;height:42px;border-radius:50%;border:0;background:rgba(255,255,255,.2);color:#fff;font-size:20px;cursor:pointer}
   </style>
 </head>
 <body>
@@ -56,19 +86,65 @@
       </div>
 
       <div id="box"></div>
+
       <form id="send">
-        <input id="text" placeholder="اكتب رسالة..." autocomplete="off" required>
-        <button class="btn" type="submit">إرسال</button>
+        <span class="ibtn" id="imgBtn" title="إرسال صورة" aria-label="إرسال صورة">📷<input id="imgFile" type="file" accept="image/*"></span>
+        <input id="text" placeholder="اكتب رسالة..." autocomplete="off" maxlength="1000">
+        <button id="micBtn" class="ibtn" type="button" title="تسجيل رسالة صوتية" aria-label="تسجيل رسالة صوتية">🎤</button>
+        <button id="sendBtn" class="btn" type="submit">إرسال</button>
       </form>
+
+      <div id="recBar">
+        <span class="dot"></span>
+        <b id="recT">0:00</b>
+        <span class="grow">جارٍ التسجيل…</span>
+        <button id="recCancel" class="btn ghost sm danger" type="button">🗑 إلغاء</button>
+        <button id="recSend" class="btn sm" type="button">إرسال ➤</button>
+      </div>
+      <p id="note"></p>
     </div>
   </main>
+
+  <div id="lb"><img id="lbImg" alt=""><button id="lbX" aria-label="إغلاق">✕</button></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js?v=9"></script>
   <script>
     const $ = id => document.getElementById(id);
-    let me = null, cur = null, curOther = null, timer = null, lastCount = -1;
+    const BUCKET = 'chat-media';
+    const MAX_REC = 120;                      // أقصى مدة تسجيل بالثواني
+    let me = null, cur = null, curOther = null, timer = null;
+    let lastTs = '', sending = false, rec = null, curAudio = null;
+    const rendered = new Set();
+    const urlCache = {};
 
+    /* ---------- أدوات ---------- */
+    function seenKey(o) { return 'seen_' + me + '_' + o; }
+    function getSeen(o) { try { return localStorage.getItem(seenKey(o)) || ''; } catch (e) { return ''; } }
+    function setSeen(o, t) { try { localStorage.setItem(seenKey(o), t); } catch (e) {} }
+
+    function fmtTime(iso) {
+      const d = new Date(iso), n = new Date();
+      const hm = d.toLocaleTimeString('ar', { hour: '2-digit', minute: '2-digit' });
+      if (d.toDateString() === n.toDateString()) return hm;
+      return d.toLocaleDateString('ar', { day: 'numeric', month: 'short' }) + ' ' + hm;
+    }
+    function fmtDur(s) {
+      s = Math.max(0, Math.floor(s || 0));
+      return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    }
+    function note(t) { $('note').textContent = t || ''; }
+
+    async function mediaUrl(path) {
+      const c = urlCache[path];
+      if (c && Date.now() - c.t < 50 * 60 * 1000) return c.url;
+      const { data, error } = await sb.storage.from(BUCKET).createSignedUrl(path, 3600);
+      if (error || !data) throw (error || new Error('no url'));
+      urlCache[path] = { url: data.signedUrl, t: Date.now() };
+      return data.signedUrl;
+    }
+
+    /* ---------- قائمة المحادثات ---------- */
     async function loadList() {
       const { data: convs, error } = await sb.from('conversations')
         .select('id,user_a,user_b').or('user_a.eq.' + me + ',user_b.eq.' + me);
@@ -93,50 +169,164 @@
         return;
       }
       $('info').textContent = '';
-      const { data: ps } = await sb.from('profiles').select('id,first_name').in('id', others);
-      const names = {};
-      (ps || []).forEach(p => names[p.id] = p.first_name);
+      const { data: ps } = await sb.from('profiles')
+        .select('id,first_name,photo_path,photo_visible_to_matches').in('id', others);
+      const names = {}, photos = {};
+      (ps || []).forEach(p => { names[p.id] = p.first_name; if (p.photo_path && p.photo_visible_to_matches) photos[p.id] = p.photo_path; });
 
-      others.forEach(other => {
+      const allIds = convs.map(c => c.id);
+      const { data: ms } = await sb.from('messages').select('conversation_id,sender_id,body,created_at')
+        .in('conversation_id', allIds).order('created_at', { ascending: false }).limit(300);
+      const last = {}, unread = {}, convOwner = {};
+      Object.keys(groups).forEach(o => groups[o].forEach(id => convOwner[id] = o));
+      (ms || []).forEach(m => {
+        const o = convOwner[m.conversation_id]; if (!o) return;
+        if (!last[o]) last[o] = m;
+        if (m.sender_id !== me && m.created_at > getSeen(o)) unread[o] = (unread[o] || 0) + 1;
+      });
+      others.sort((a, b) => ((last[b] && last[b].created_at) || '').localeCompare((last[a] && last[a].created_at) || ''));
+
+      for (const other of others) {
         const name = names[other] || 'عضو';
         const b = document.createElement('button');
         b.className = 'conv';
         const av = document.createElement('div'); av.className = 'av'; av.textContent = name.charAt(0).toUpperCase();
+        if (photos[other]) {
+          sb.storage.from('photos').createSignedUrl(photos[other], 3600).then(r => {
+            if (r.error || !r.data) return;
+            const i = document.createElement('img'); i.src = r.data.signedUrl;
+            i.onload = () => { av.textContent = ''; av.appendChild(i); };
+          });
+        }
+        const col = document.createElement('div'); col.className = 'col';
         const t = document.createElement('b'); t.textContent = name;
-        b.append(av, t);
+        const pv = document.createElement('span'); pv.className = 'pv';
+        pv.textContent = last[other] ? (last[other].sender_id === me ? 'أنت: ' : '') + last[other].body : 'ابدأ المحادثة';
+        col.append(t, pv);
+        b.append(av, col);
+        if (unread[other]) { const bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = unread[other]; b.appendChild(bd); }
         b.onclick = () => openChat(groups[other], other, name);
         $('list').appendChild(b);
-      });
+      }
+    }
+
+    /* ---------- عناصر الرسائل ---------- */
+    function openLb(src) {
+      if (!src) return;
+      $('lbImg').src = src;
+      $('lb').style.display = 'flex';
+    }
+    function closeLb() { $('lb').style.display = 'none'; $('lbImg').removeAttribute('src'); }
+    $('lb').onclick = closeLb;
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+
+    function audioPlayer(m) {
+      const wrap = document.createElement('div'); wrap.className = 'ap';
+      const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'ap-btn'; btn.textContent = '▶';
+      btn.setAttribute('aria-label', 'تشغيل');
+      const bar = document.createElement('div'); bar.className = 'ap-bar';
+      const fill = document.createElement('div'); fill.className = 'ap-fill'; bar.appendChild(fill);
+      const t = document.createElement('span'); t.className = 'ap-t'; t.textContent = fmtDur(m.media_secs);
+      wrap.append(btn, bar, t);
+
+      const a = new Audio(); a.preload = 'none';
+      let loaded = false;
+      const total = () => (isFinite(a.duration) && a.duration > 0) ? a.duration : (m.media_secs || 0);
+
+      btn.onclick = async () => {
+        if (!loaded) {
+          try { a.src = await mediaUrl(m.media_path); loaded = true; }
+          catch (e) { btn.textContent = '!'; t.textContent = 'تعذّر'; return; }
+        }
+        if (a.paused) {
+          if (curAudio && curAudio !== a) curAudio.pause();
+          curAudio = a;
+          a.play().catch(() => { btn.textContent = '!'; });
+        } else a.pause();
+      };
+      a.onplay = () => { btn.textContent = '⏸'; };
+      a.onpause = () => { btn.textContent = '▶'; };
+      a.onended = () => { btn.textContent = '▶'; fill.style.width = '0'; t.textContent = fmtDur(m.media_secs); };
+      a.ontimeupdate = () => {
+        const tot = total();
+        fill.style.width = tot ? Math.min(100, a.currentTime / tot * 100) + '%' : '0';
+        t.textContent = fmtDur(a.currentTime);
+      };
+      bar.onclick = e => {
+        if (!loaded || !isFinite(a.duration) || !a.duration) return;
+        const r = bar.getBoundingClientRect();
+        const x = getComputedStyle(bar).direction === 'rtl' ? r.right - e.clientX : e.clientX - r.left;
+        a.currentTime = Math.max(0, Math.min(1, x / r.width)) * a.duration;
+      };
+      return wrap;
+    }
+
+    function msgEl(m, stick) {
+      const d = document.createElement('div');
+      const kind = m.kind || 'text';
+      d.className = 'b ' + (m.sender_id === me ? 'me' : 'other') + (kind === 'image' ? ' img' : '') + (kind === 'audio' ? ' aud' : '');
+      d.dataset.id = m.id;
+      if (kind === 'image' && m.media_path) {
+        const im = document.createElement('img');
+        im.alt = 'صورة'; im.loading = 'lazy';
+        im.onload = () => { if (stick) $('box').scrollTop = $('box').scrollHeight; };
+        im.onclick = () => openLb(im.src);
+        d.appendChild(im);
+        mediaUrl(m.media_path).then(u => { im.src = u; }).catch(() => { im.removeAttribute('src'); im.alt = 'تعذّر تحميل الصورة'; });
+      } else if (kind === 'audio' && m.media_path) {
+        d.appendChild(audioPlayer(m));
+      } else {
+        d.appendChild(document.createTextNode(m.body));
+      }
+      const tm = document.createElement('time'); tm.textContent = fmtTime(m.created_at);
+      d.appendChild(tm);
+      return d;
     }
 
     async function loadMsgs() {
       if (!cur) return;
-      const { data, error } = await sb.from('messages').select('*')
-        .in('conversation_id', cur).order('created_at');
-      if (error || data.length === lastCount) return;
-      lastCount = data.length;
-      const box = $('box'); box.innerHTML = '';
-      data.forEach(m => {
-        const d = document.createElement('div');
-        d.className = 'b ' + (m.sender_id === me ? 'me' : 'other');
-        d.textContent = m.body;
-        box.appendChild(d);
-      });
-      box.scrollTop = box.scrollHeight;
+      const mine = cur;
+      let q = sb.from('messages').select('*').in('conversation_id', mine).order('created_at');
+      if (lastTs) q = q.gte('created_at', lastTs);
+      const { data, error } = await q;
+      if (cur !== mine || error) return;
+
+      const box = $('box');
+      const fresh = (data || []).filter(m => !rendered.has(m.id));
+      if (!fresh.length) {
+        if (!rendered.size && !box.children.length) {
+          const e = document.createElement('p'); e.className = 'empty';
+          e.textContent = 'ابدأ المحادثة بالسلام والاحترام 🌿';
+          box.appendChild(e);
+        }
+        return;
+      }
+      const empty = box.querySelector('.empty'); if (empty) empty.remove();
+      const stick = box.scrollHeight - box.scrollTop - box.clientHeight < 120 || !rendered.size;
+      fresh.forEach(m => { rendered.add(m.id); box.appendChild(msgEl(m, stick)); });
+      if (stick) box.scrollTop = box.scrollHeight;
+      lastTs = data[data.length - 1].created_at;
+      setSeen(curOther, lastTs);
     }
 
+    /* ---------- فتح وإغلاق المحادثة ---------- */
     function openChat(ids, other, name) {
-      cur = ids; curOther = other; lastCount = -1;
+      cur = ids; curOther = other; lastTs = ''; rendered.clear();
+      $('box').innerHTML = ''; note('');
       $('who').textContent = name;
       $('rep').style.display = 'none';
       $('listView').style.display = 'none';
       $('chatView').style.display = 'block';
       loadMsgs();
-      timer = setInterval(loadMsgs, 4000);
+      clearInterval(timer);
+      timer = setInterval(() => { if (!document.hidden) loadMsgs(); }, 4000);
     }
 
     function closeChat() {
-      clearInterval(timer); cur = null; curOther = null;
+      clearInterval(timer);
+      if (rec) stopRec(false);
+      if (curAudio) { curAudio.pause(); curAudio = null; }
+      cur = null; curOther = null;
       $('chatView').style.display = 'none';
       $('listView').style.display = 'block';
       loadList();
@@ -165,16 +355,150 @@
       alert('تم إرسال البلاغ للإدارة. شكراً لك.');
     };
 
+    /* ---------- الإرسال ---------- */
+    function setBusy(b) {
+      ['imgFile', 'text', 'micBtn', 'sendBtn'].forEach(id => { $(id).disabled = b; });
+      $('imgBtn').style.opacity = b ? '.5' : '';
+    }
+
     $('send').onsubmit = async e => {
       e.preventDefault();
       const body = $('text').value.trim();
-      if (!body) return;
+      if (!body || sending) return;
+      sending = true;
       $('text').value = '';
       const { error } = await sb.from('messages').insert({ conversation_id: cur[0], sender_id: me, body });
+      sending = false;
       if (error) { alert('تعذّر الإرسال: ' + error.message); $('text').value = body; return; }
-      lastCount = -1; loadMsgs();
+      await loadMsgs();
+      $('text').focus();
     };
 
+    async function sendMedia(kind, blob, ext, ctype, secs) {
+      if (sending || !cur) return;
+      sending = true; setBusy(true);
+      note(kind === 'image' ? 'جاري رفع الصورة…' : 'جاري إرسال الرسالة الصوتية…');
+      const cid = cur[0];
+      const path = cid + '/' + me + '_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8) + '.' + ext;
+      try {
+        const up = await sb.storage.from(BUCKET).upload(path, blob, { contentType: ctype, cacheControl: '3600', upsert: false });
+        if (up.error) throw up.error;
+        const row = {
+          conversation_id: cid, sender_id: me, kind, media_path: path,
+          body: kind === 'image' ? '📷 صورة' : '🎤 رسالة صوتية'
+        };
+        if (secs) row.media_secs = secs;
+        const ins = await sb.from('messages').insert(row);
+        if (ins.error) { await sb.storage.from(BUCKET).remove([path]); throw ins.error; }
+        note('');
+        await loadMsgs();
+      } catch (err) {
+        note('');
+        alert('تعذّر الإرسال: ' + (err && err.message ? err.message : err));
+      } finally {
+        sending = false; setBusy(false);
+      }
+    }
+
+    /* ---------- الصور ---------- */
+    function toJpeg(file, max) {
+      return new Promise((resolve, reject) => {
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => {
+          const s = Math.min(1, max / Math.max(img.width, img.height));
+          const c = document.createElement('canvas');
+          c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+          URL.revokeObjectURL(url);
+          c.toBlob(b => b ? resolve(b) : reject(new Error('تعذّر تصغير الصورة')), 'image/jpeg', 0.82);
+        };
+        img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('تعذّر قراءة الصورة، جرّب صورة JPG أو PNG')); };
+        img.src = url;
+      });
+    }
+
+    $('imgFile').onchange = async e => {
+      const f = e.target.files && e.target.files[0];
+      e.target.value = '';
+      if (!f || !cur) return;
+      if (!/^image\//.test(f.type) && f.type) { alert('اختر ملف صورة.'); return; }
+      if (f.size > 20 * 1024 * 1024) { alert('الصورة كبيرة جداً (الحد 20 ميغابايت).'); return; }
+      try {
+        note('جاري تجهيز الصورة…');
+        const blob = await toJpeg(f, 1280);
+        await sendMedia('image', blob, 'jpg', 'image/jpeg', 0);
+      } catch (err) { note(''); alert(err.message || err); }
+    };
+
+    /* ---------- الرسائل الصوتية ---------- */
+    function pickMime() {
+      if (!window.MediaRecorder) return null;
+      const list = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'];
+      for (const m of list) { try { if (MediaRecorder.isTypeSupported(m)) return m; } catch (e) {} }
+      return '';
+    }
+
+    async function startRec() {
+      if (rec || sending || !cur) return;
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || pickMime() === null) {
+        alert('متصفحك لا يدعم التسجيل الصوتي. جرّب Chrome أو Safari حديثاً.'); return;
+      }
+      let stream;
+      try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
+      catch (e) { alert('تعذّر الوصول إلى الميكروفون. اسمح للموقع باستعماله من إعدادات المتصفح ثم أعد المحاولة.'); return; }
+
+      const mime = pickMime();
+      let mr;
+      try { mr = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined); }
+      catch (e) { stream.getTracks().forEach(t => t.stop()); alert('تعذّر بدء التسجيل على هذا المتصفح.'); return; }
+
+      const r = { mr, stream, chunks: [], t0: Date.now(), send: false, tick: null, mime: (mr.mimeType || mime || 'audio/webm') };
+      mr.ondataavailable = ev => { if (ev.data && ev.data.size) r.chunks.push(ev.data); };
+      mr.onstop = () => finishRec(r);
+      rec = r;
+      mr.start();
+
+      $('send').style.display = 'none';
+      $('recBar').style.display = 'flex';
+      $('recT').textContent = '0:00';
+      r.tick = setInterval(() => {
+        const s = (Date.now() - r.t0) / 1000;
+        $('recT').textContent = fmtDur(s);
+        if (s >= MAX_REC) stopRec(true);
+      }, 250);
+    }
+
+    function stopRec(send) {
+      const r = rec;
+      if (!r) return;
+      r.send = !!send;
+      clearInterval(r.tick);
+      try { if (r.mr.state !== 'inactive') r.mr.stop(); else finishRec(r); } catch (e) { finishRec(r); }
+      r.stream.getTracks().forEach(t => t.stop());
+    }
+
+    function finishRec(r) {
+      if (rec !== r) return;
+      rec = null;
+      clearInterval(r.tick);
+      r.stream.getTracks().forEach(t => t.stop());
+      $('recBar').style.display = 'none';
+      $('send').style.display = 'flex';
+      if (!r.send) return;
+
+      const secs = Math.round((Date.now() - r.t0) / 1000);
+      if (secs < 1 || !r.chunks.length) { alert('التسجيل قصير جداً.'); return; }
+      const type = r.mime.split(';')[0];
+      const ext = type.includes('mp4') ? 'm4a' : type.includes('ogg') ? 'ogg' : 'webm';
+      sendMedia('audio', new Blob(r.chunks, { type }), ext, type, Math.min(secs, MAX_REC));
+    }
+
+    $('micBtn').onclick = startRec;
+    $('recCancel').onclick = () => stopRec(false);
+    $('recSend').onclick = () => stopRec(true);
+
+    /* ---------- البدء ---------- */
     (async () => {
       const session = await getSession();
       if (!session) { location.href = 'auth.html'; return; }
