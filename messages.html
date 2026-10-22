@@ -4,51 +4,88 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>سنة الحياة - المحادثات</title>
-  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="style.css?v=10">
   <style>
-    .conv{display:flex;align-items:center;gap:12px;width:100%;text-align:start;padding:14px;margin:8px 0;background:#fff;border:1px solid var(--line);border-radius:16px;font:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(14,59,60,.05)}
-    .av{flex:none;width:44px;height:44px;border-radius:50%;background:var(--green);color:var(--gold2);display:flex;align-items:center;justify-content:center;font:700 20px 'Amiri',serif;overflow:hidden}
+    /* ===== قائمة المحادثات ===== */
+    h1{margin-bottom:4px}
+    #info{color:var(--muted);font-size:14px;margin:0 0 14px}
+    #list{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--sh-sm)}
+    .conv{display:flex;align-items:center;gap:12px;width:100%;text-align:start;padding:13px 14px;background:#fff;border:0;border-bottom:1px solid var(--sand);font:inherit;cursor:pointer}
+    .conv:last-child{border-bottom:0}
+    .conv:hover{background:#f7f3e8}
+    .av{flex:none;width:48px;height:48px;border-radius:50%;background:linear-gradient(160deg,var(--green2),var(--green3));color:var(--gold2);display:flex;align-items:center;justify-content:center;font:700 20px 'Amiri',serif;overflow:hidden;box-shadow:0 2px 6px rgba(14,59,60,.25)}
     .av img{width:100%;height:100%;object-fit:cover}
     .conv .col{flex:1;min-width:0;display:flex;flex-direction:column}
-    .conv .pv{color:var(--muted);font-size:13px;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .badge{flex:none;background:var(--gold);color:#fff;border-radius:999px;min-width:22px;height:22px;padding:0 6px;font-size:12px;display:inline-flex;align-items:center;justify-content:center}
-    .hd{display:flex;align-items:center;gap:10px;margin:8px 0}
-    .hd h2{margin:0;flex:1}
-    .sm{padding:6px 14px;min-height:36px;font-size:14px}
-    .danger{background:#fff;color:var(--err);border-color:var(--err)}
-    .danger:hover{background:var(--err);color:#fff}
-    #box{height:50vh;overflow:auto;display:flex;flex-direction:column;gap:6px;padding:12px;background:var(--sand);border-radius:16px;margin:10px 0}
-    .b{max-width:80%;padding:8px 14px;border-radius:16px;word-wrap:break-word;white-space:pre-wrap}
-    .b.me{align-self:flex-start;background:var(--green);color:#fff}
-    .b.other{align-self:flex-end;background:#fff;border:1px solid var(--line)}
-    .b time{display:block;font-size:11px;opacity:.7;margin-top:2px}
-    .b.img{padding:4px}
-    .b.img img{display:block;max-width:100%;width:230px;min-height:90px;max-height:300px;object-fit:cover;border-radius:12px;background:rgba(0,0,0,.08);cursor:zoom-in}
-    .b.img time{padding:0 8px 2px}
-    .b.aud{padding:8px 12px;min-width:210px}
+    .conv .pv{color:var(--muted);font-size:13.5px;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .badge{flex:none;background:linear-gradient(180deg,var(--gold2),var(--gold));color:#fff;border-radius:999px;min-width:22px;height:22px;padding:0 7px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(184,144,63,.4)}
+
+    /* ===== شاشة المحادثة (واتساب ستايل) ===== */
+    #chatView{display:none;flex-direction:column;height:100dvh;background:#efe9dd}
+    @media(min-width:761px){
+      #chatView{height:80vh;border-radius:22px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--sh-lg)}
+    }
+    .hd{display:flex;align-items:center;gap:10px;background:linear-gradient(180deg,var(--green2),var(--green));color:#fff;padding:8px 12px;flex:none}
+    #back{flex:none;width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.15);color:#fff;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
+    #back:hover{background:rgba(255,255,255,.28)}
+    .av-sm{flex:none;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.16);border:1.5px solid rgba(216,181,101,.6);color:var(--gold3);display:flex;align-items:center;justify-content:center;font:700 18px 'Amiri',serif}
+    .hd h2{margin:0;flex:1;color:#fff;font-size:1.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .hd .sm{padding:6px 12px;min-height:34px;font-size:13px;background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.4);color:#fff;box-shadow:none}
+    .hd .sm:hover{background:rgba(255,255,255,.28)}
+    .hd .danger{background:rgba(255,255,255,.14);border-color:rgba(255,180,180,.6);color:#ffd9d9}
+    .hd .danger:hover{background:#9b1c1c;border-color:#9b1c1c;color:#fff}
+
+    /* ===== منطقة الرسائل ===== */
+    #box{flex:1;overflow:auto;display:flex;flex-direction:column;gap:5px;padding:14px 10px;
+      background-color:#efe9dd;
+      background-image:radial-gradient(rgba(14,59,60,.07) 1.2px,transparent 1.3px);
+      background-size:26px 26px}
+    .b{max-width:78%;padding:7px 10px 5px;border-radius:14px;position:relative;
+      box-shadow:0 1px 1.5px rgba(0,0,0,.14);word-wrap:break-word;white-space:pre-wrap;font-size:15.5px;line-height:1.6}
+    .b.me{align-self:flex-start;background:#d6f3cd;border-bottom-left-radius:4px}
+    .b.other{align-self:flex-end;background:#fff;border-bottom-right-radius:4px}
+    .b time{display:block;text-align:end;font-size:11px;opacity:.6;margin-top:3px;direction:ltr}
+    .b.me time::after{content:" ✓✓";font-weight:700}
+    .b.img{padding:4px;background:#fff !important}
+    .b.img img{display:block;max-width:100%;width:230px;min-height:90px;max-height:300px;object-fit:cover;border-radius:10px;background:rgba(0,0,0,.08);cursor:zoom-in}
+    .b.img time{padding:0 6px 2px}
+    .b.aud{min-width:220px}
     .ap{display:flex;align-items:center;gap:10px}
-    .ap-btn{flex:none;width:38px;height:38px;border-radius:50%;border:0;cursor:pointer;font-size:15px;line-height:1;background:var(--gold);color:#fff}
-    .ap-bar{flex:1;height:6px;border-radius:999px;background:rgba(127,127,127,.35);overflow:hidden;cursor:pointer}
-    .ap-fill{height:100%;width:0;background:var(--gold2)}
-    .b.other .ap-fill{background:var(--green)}
-    .ap-t{flex:none;font-size:12px;opacity:.85;min-width:34px;text-align:end;direction:ltr}
-    .empty{margin:auto;text-align:center;color:var(--muted)}
+    .ap-btn{flex:none;width:38px;height:38px;border-radius:50%;border:0;cursor:pointer;font-size:15px;line-height:1;background:linear-gradient(180deg,var(--gold2),var(--gold));color:#fff;box-shadow:0 2px 6px rgba(184,144,63,.4)}
+    .ap-bar{flex:1;height:5px;border-radius:999px;background:rgba(127,127,127,.3);overflow:hidden;cursor:pointer}
+    .ap-fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold2),var(--gold))}
+    .b.other .ap-fill{background:var(--green2)}
+    .ap-t{flex:none;font-size:12px;opacity:.75;min-width:36px;text-align:end;direction:ltr}
+    .empty{margin:auto;text-align:center;color:#8a8272;background:rgba(255,255,255,.55);padding:10px 20px;border-radius:999px;font-size:14px}
 
-    #send{display:flex;gap:8px;align-items:center}
-    #text{flex:1;min-width:0}
-    .ibtn{flex:none;position:relative;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:20px;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
-    .ibtn:disabled{opacity:.5;cursor:not-allowed}
-    #attachPanel{display:none;gap:8px;margin:0 0 8px;flex-wrap:wrap}
-    .opt{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:#fff;cursor:pointer;font-size:14px}
+    /* ===== نموذج الإرسال ===== */
+    #send{display:flex;gap:8px;align-items:center;padding:8px 10px;background:#f0ede6;flex:none}
+    #text{flex:1;min-width:0;border:0;border-radius:999px;padding:12px 18px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.12)}
+    #text:focus{box-shadow:0 1px 2px rgba(0,0,0,.12),0 0 0 3px rgba(184,144,63,.25)}
+    .ibtn{flex:none;position:relative;width:44px;height:44px;border-radius:50%;border:0;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.18);font-size:20px;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:.2s}
+    .ibtn:hover{transform:scale(1.06)}
+    .ibtn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    #sendBtn{flex:none;width:48px;height:48px;min-height:48px;border-radius:50%;padding:0;font-size:20px;
+      background:linear-gradient(180deg,var(--gold2),var(--gold));border-color:var(--gold);
+      box-shadow:0 3px 10px rgba(184,144,63,.45)}
+    #sendBtn:hover{transform:scale(1.07)}
+
+    /* ===== لوحة المرفقات ===== */
+    #attachPanel{display:none;gap:8px;padding:10px;background:#fff;border-radius:18px;margin:0 10px 8px;box-shadow:0 4px 16px rgba(0,0,0,.15);flex-wrap:wrap}
+    .opt{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border:1px solid var(--line);border-radius:999px;background:var(--cream);cursor:pointer;font-size:14px;font-weight:500}
     .opt input[type=file]{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0}
-    #recBar{display:none;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:8px 12px}
-    #recBar .dot{width:12px;height:12px;border-radius:50%;background:#c0392b;animation:bl 1s infinite}
-    #recBar .grow{flex:1;color:var(--muted);font-size:14px}
-    #recT{font-variant-numeric:tabular-nums;direction:ltr;min-width:38px}
-    @keyframes bl{50%{opacity:.25}}
-    #note{color:var(--muted);font-size:13px;margin:6px 2px 0;min-height:18px}
-    #rep{display:none;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0}
 
+    /* ===== شريط التسجيل ===== */
+    #recBar{display:none;align-items:center;gap:10px;background:#fff;border-radius:18px;padding:8px 12px;margin:0 10px 8px;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+    #recBar .dot{width:12px;height:12px;border-radius:50%;background:#c0392b;animation:bl 1s infinite;flex:none}
+    #recBar .grow{flex:1;color:var(--muted);font-size:14px}
+    #recT{font-variant-numeric:tabular-nums;direction:ltr;min-width:40px;font-weight:700}
+    @keyframes bl{50%{opacity:.25}}
+    #note{color:var(--muted);font-size:13px;margin:6px 12px 0;min-height:18px}
+
+    /* ===== لوحة الإبلاغ ===== */
+    #rep{display:none;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px;box-shadow:var(--sh-md)}
+
+    /* ===== عارض الصور ===== */
     #lb{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.92);align-items:center;justify-content:center}
     #lb img{max-width:96vw;max-height:88vh;border-radius:8px}
     #lb button{position:absolute;top:14px;left:14px;width:42px;height:42px;border-radius:50%;border:0;background:rgba(255,255,255,.2);color:#fff;font-size:20px;cursor:pointer}
@@ -64,7 +101,8 @@
 
     <div id="chatView" style="display:none">
       <div class="hd">
-        <button id="back" class="btn ghost sm">→ رجوع</button>
+        <button id="back" type="button" aria-label="رجوع">→</button>
+        <div class="av-sm" id="chatAv">؟</div>
         <h2 id="who"></h2>
         <button id="repBtn" class="btn ghost sm">إبلاغ</button>
         <button id="blkBtn" class="btn danger sm">حظر</button>
@@ -99,7 +137,7 @@
         <button id="attachBtn" class="ibtn" type="button" title="إرسال صورة" aria-label="إرسال صورة">📷</button>
         <input id="text" placeholder="اكتب رسالة..." autocomplete="off" maxlength="1000">
         <button id="micBtn" class="ibtn" type="button" title="تسجيل رسالة صوتية" aria-label="تسجيل رسالة صوتية">🎤</button>
-        <button id="sendBtn" class="btn" type="submit">إرسال</button>
+        <button id="sendBtn" class="btn" type="submit" title="إرسال" aria-label="إرسال" style="transform:scaleX(-1)">➤</button>
       </form>
 
       <div id="recBar">
@@ -322,9 +360,10 @@
       cur = ids; curOther = other; lastTs = ''; rendered.clear();
       $('box').innerHTML = ''; note('');
       $('who').textContent = name;
+      $('chatAv').textContent = name.charAt(0).toUpperCase();
       $('rep').style.display = 'none';
       $('listView').style.display = 'none';
-      $('chatView').style.display = 'block';
+      $('chatView').style.display = 'flex';
       loadMsgs();
       clearInterval(timer);
       timer = setInterval(() => { if (!document.hidden) loadMsgs(); }, 4000);
@@ -444,7 +483,6 @@
       } catch (err) { note(''); alert(err.message || err); }
     }
 
-    // نأخذ الملف ثم نفرّغ الحقل (ليمكن اختيار الصورة نفسها مرة أخرى)
     function takeFrom(input) {
       const f = input.files && input.files[0];
       if (!f) return false;
@@ -460,7 +498,6 @@
       el.addEventListener('click', () => { pickedAt = Date.now(); });
     });
 
-    // بعض المتصفحات لا تطلق حدث الاختيار؛ نفحص الحقول عند العودة من نافذة الاختيار
     function afterPicker() {
       if (!pickedAt || afterT) return;
       setTimeout(recheck, 400);
