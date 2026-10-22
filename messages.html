@@ -38,7 +38,9 @@
     #text{flex:1;min-width:0}
     .ibtn{flex:none;position:relative;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:20px;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
     .ibtn:disabled{opacity:.5;cursor:not-allowed}
-    .ibtn input[type=file]{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0}
+    #attachPanel{display:none;gap:8px;margin:0 0 8px;flex-wrap:wrap}
+    .opt{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:#fff;cursor:pointer;font-size:14px}
+    .opt input[type=file]{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0}
     #recBar{display:none;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:8px 12px}
     #recBar .dot{width:12px;height:12px;border-radius:50%;background:#c0392b;animation:bl 1s infinite}
     #recBar .grow{flex:1;color:var(--muted);font-size:14px}
@@ -87,8 +89,14 @@
 
       <div id="box"></div>
 
+      <div id="attachPanel">
+        <label class="opt">🖼 المعرض<input id="fGallery" type="file" accept="image/*"></label>
+        <label class="opt">📁 الملفات<input id="fFiles" type="file"></label>
+        <label class="opt">📸 الكاميرا<input id="fCam" type="file" accept="image/*" capture="environment"></label>
+      </div>
+
       <form id="send">
-        <span class="ibtn" id="imgBtn" title="إرسال صورة" aria-label="إرسال صورة">📷<input id="imgFile" type="file" accept="image/*"></span>
+        <button id="attachBtn" class="ibtn" type="button" title="إرسال صورة" aria-label="إرسال صورة">📷</button>
         <input id="text" placeholder="اكتب رسالة..." autocomplete="off" maxlength="1000">
         <button id="micBtn" class="ibtn" type="button" title="تسجيل رسالة صوتية" aria-label="تسجيل رسالة صوتية">🎤</button>
         <button id="sendBtn" class="btn" type="submit">إرسال</button>
@@ -357,8 +365,7 @@
 
     /* ---------- الإرسال ---------- */
     function setBusy(b) {
-      ['imgFile', 'text', 'micBtn', 'sendBtn'].forEach(id => { $(id).disabled = b; });
-      $('imgBtn').style.opacity = b ? '.5' : '';
+      ['text', 'micBtn', 'sendBtn', 'attachBtn', 'fGallery', 'fFiles', 'fCam'].forEach(id => { $(id).disabled = b; });
     }
 
     $('send').onsubmit = async e => {
@@ -418,18 +425,56 @@
       });
     }
 
-    $('imgFile').onchange = async e => {
-      const f = e.target.files && e.target.files[0];
-      e.target.value = '';
-      if (!f || !cur) return;
-      if (!/^image\//.test(f.type) && f.type) { alert('اختر ملف صورة.'); return; }
+    const PICKERS = ['fGallery', 'fFiles', 'fCam'];
+    let pickedAt = 0, afterT = null;
+
+    function togglePanel(open) { $('attachPanel').style.display = open ? 'flex' : 'none'; }
+    $('attachBtn').onclick = () => togglePanel($('attachPanel').style.display !== 'flex');
+
+    async function handleFile(f) {
+      pickedAt = 0; togglePanel(false);
+      if (!cur) return;
+      const okType = /^image\//.test(f.type) || /\.(jpe?g|png|webp|gif|bmp|heic|heif)$/i.test(f.name || '');
+      if (!okType) { alert('اختر ملف صورة (JPG أو PNG).'); return; }
       if (f.size > 20 * 1024 * 1024) { alert('الصورة كبيرة جداً (الحد 20 ميغابايت).'); return; }
       try {
         note('جاري تجهيز الصورة…');
         const blob = await toJpeg(f, 1280);
         await sendMedia('image', blob, 'jpg', 'image/jpeg', 0);
       } catch (err) { note(''); alert(err.message || err); }
-    };
+    }
+
+    // نأخذ الملف ثم نفرّغ الحقل (ليمكن اختيار الصورة نفسها مرة أخرى)
+    function takeFrom(input) {
+      const f = input.files && input.files[0];
+      if (!f) return false;
+      input.value = '';
+      handleFile(f);
+      return true;
+    }
+    function recheck() { return PICKERS.some(id => takeFrom($(id))); }
+
+    PICKERS.forEach(id => {
+      const el = $(id);
+      ['change', 'input'].forEach(ev => el.addEventListener(ev, () => takeFrom(el)));
+      el.addEventListener('click', () => { pickedAt = Date.now(); });
+    });
+
+    // بعض المتصفحات لا تطلق حدث الاختيار؛ نفحص الحقول عند العودة من نافذة الاختيار
+    function afterPicker() {
+      if (!pickedAt || afterT) return;
+      setTimeout(recheck, 400);
+      afterT = setTimeout(() => {
+        afterT = null;
+        recheck();
+        if (pickedAt) {
+          pickedAt = 0;
+          note('لم تصل أي صورة من المتصفح. جرّب خيار «الملفات» أو «الكاميرا»، أو افتح الموقع في متصفح آخر.');
+        }
+      }, 2500);
+    }
+    window.addEventListener('focus', afterPicker);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) afterPicker(); });
 
     /* ---------- الرسائل الصوتية ---------- */
     function pickMime() {
