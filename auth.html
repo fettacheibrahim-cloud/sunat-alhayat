@@ -38,7 +38,8 @@
     let isLogin = true;
     const $ = id => document.getElementById(id);
     const base = location.origin + location.pathname.replace('auth.html', '');
-
+    // مسجّل الدخول أصلاً؟ لا حاجة لصفحة الدخول
+    getSession().then(s => { if (s) location.replace('browse.html'); });
     $('toggle').onclick = e => {
       e.preventDefault();
       isLogin = !isLogin;
