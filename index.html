@@ -14,106 +14,46 @@
   <link rel="icon" type="image/svg+xml" href="icon.svg">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="style.css?v=10">
+  <link rel="stylesheet" href="style.css?v=7">
   <style>
-    .top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 26px;
-      background:rgba(250,247,240,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-      position:sticky;top:0;z-index:50;border-bottom:1px solid var(--line)}
-    .brand{font:700 1.65rem 'Amiri',serif;color:var(--green);text-decoration:none;display:flex;align-items:center;gap:8px}
+    .top{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;
+      background:rgba(250,247,240,.92);backdrop-filter:blur(8px);position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line)}
+    .brand{font:700 1.6rem 'Amiri',serif;color:var(--green);text-decoration:none}
     .brand span{color:var(--gold)}
-    .nav-links{display:flex;gap:26px}
-    .nav-links a{color:var(--ink);text-decoration:none;font-weight:500;font-size:15.5px;position:relative;padding:4px 0}
-    .nav-links a::after{content:"";position:absolute;bottom:0;right:0;width:0;height:2px;
-      background:var(--gold);border-radius:2px;transition:width .25s var(--ease)}
-    .nav-links a:hover{color:var(--green)}
-    .nav-links a:hover::after{width:100%}
-    .top .btn{padding:9px 24px;min-height:42px;font-size:15px}
-
-    .hero{background:
-        radial-gradient(1100px 500px at 85% -10%,rgba(216,181,101,.22),transparent 60%),
-        radial-gradient(900px 500px at 10% 110%,rgba(216,181,101,.14),transparent 60%),
-        linear-gradient(160deg,var(--green) 0%,var(--green3) 100%);
-      color:#fff;text-align:center;padding:64px 22px 72px;position:relative;overflow:hidden}
-    .hero::after{content:"";position:absolute;inset:0;opacity:.06;pointer-events:none;
-      background:repeating-linear-gradient(45deg,#fff 0 1px,transparent 1px 24px),
-                 repeating-linear-gradient(-45deg,#fff 0 1px,transparent 1px 24px)}
+    .top .btn{padding:8px 20px;min-height:40px;font-size:15px}
+    .hero{background:linear-gradient(160deg,var(--green) 0%,#0a2c2d 100%);color:#fff;text-align:center;
+      padding:56px 22px 64px;position:relative;overflow:hidden}
+    .hero::after{content:"";position:absolute;inset:0;opacity:.07;
+      background:repeating-linear-gradient(45deg,#fff 0 1px,transparent 1px 22px),repeating-linear-gradient(-45deg,#fff 0 1px,transparent 1px 22px)}
     .hero>*{position:relative;z-index:1}
-    .hero h1{color:#fff;font-size:clamp(2.2rem,6vw,3.2rem);margin:10px 0 8px;
-      text-shadow:0 2px 20px rgba(0,0,0,.25)}
-    .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);
-      border:1px solid rgba(216,181,101,.55);color:var(--gold3);border-radius:999px;
-      padding:7px 18px;font-size:14px;font-weight:700;backdrop-filter:blur(4px)}
-    .hero .sub{color:#efe6cd;max-width:540px;margin:0 auto 30px;font-size:1.1rem}
-    .orn{color:var(--gold2);letter-spacing:10px;font-size:18px;opacity:.9}
-    .hero .btn.gold{font-size:1.05rem;padding:14px 44px}
-    .stats{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:38px}
-    .stats div{background:rgba(255,255,255,.08);border:1px solid rgba(216,181,101,.35);
-      border-radius:14px;padding:10px 22px;font-weight:700;font-size:15px}
-    .stats span{display:block;color:var(--gold2);font-size:13px;font-weight:500;margin-top:2px}
-
-    .verse{max-width:660px;margin:40px auto 0;padding:28px 24px;border:1px solid rgba(216,181,101,.5);
-      border-radius:22px;background:rgba(255,255,255,.07);backdrop-filter:blur(4px);
-      box-shadow:0 14px 40px rgba(0,0,0,.18)}
+    .hero h1{color:#fff;font-size:2.6rem;margin:0 0 6px}
+    .hero .sub{color:#e9dfc4;max-width:520px;margin:0 auto 26px}
+    .orn{color:var(--gold2);letter-spacing:8px;font-size:18px}
+    .verse{max-width:640px;margin:34px auto 0;padding:26px 22px;border:1px solid rgba(216,181,101,.5);
+      border-radius:20px;background:rgba(255,255,255,.06)}
     .verse .ar{font:400 1.55rem/2.1 'Amiri',serif;color:#fff;margin:0}
     .verse .en{font-size:15px;line-height:1.7;color:#e9dfc4;margin:14px 0 0;direction:ltr;font-style:italic}
-    .verse .ref{color:var(--gold2);font-size:14px;margin-top:12px;font-weight:700}
-
-    section{max-width:780px;margin:0 auto;padding:52px 20px}
-    section h2{text-align:center;font-size:1.8rem}
-    .sec-sub{text-align:center;color:var(--muted);margin:-6px auto 8px;max-width:480px}
-
-    .steps{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
+    .verse .ref{color:var(--gold2);font-size:14px;margin-top:10px}
+    section{max-width:720px;margin:0 auto;padding:44px 20px}
+    section h2{text-align:center}
+    .steps{display:grid;gap:14px;margin-top:22px}
     .step{display:flex;gap:16px;align-items:flex-start;background:#fff;border:1px solid var(--line);
-      border-radius:18px;padding:20px;box-shadow:var(--sh-sm);
-      transition:transform .22s var(--ease),box-shadow .22s var(--ease)}
-    .step:hover{transform:translateY(-4px);box-shadow:var(--sh-md)}
-    .num{flex:none;width:46px;height:46px;border-radius:14px;
-      background:linear-gradient(160deg,var(--gold2),var(--gold));color:#fff;
-      display:flex;align-items:center;justify-content:center;font:700 21px 'Amiri',serif;
-      box-shadow:0 4px 12px rgba(184,144,63,.35)}
-    .step b{display:block;color:var(--green);font-size:18px;margin-bottom:2px}
-    .step p{margin:0;color:var(--muted);font-size:15px;line-height:1.75}
-
-    .trust{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px}
-    .trust div{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 14px;
-      text-align:center;font-weight:700;color:var(--green);box-shadow:var(--sh-sm);
-      transition:transform .22s var(--ease),box-shadow .22s var(--ease)}
-    .trust div:hover{transform:translateY(-4px);box-shadow:var(--sh-md)}
-    .trust svg{width:34px;height:34px;margin-bottom:8px}
-    .trust small{display:block;font-weight:400;color:var(--muted);margin-top:6px;font-size:13.5px}
-
-    .cta-card{background:
-        radial-gradient(600px 300px at 80% -20%,rgba(216,181,101,.25),transparent 60%),
-        linear-gradient(160deg,var(--green),var(--green3));
-      color:#fff;text-align:center;border:none}
-    .cta-card h2{color:#fff}
-    .cta-card::before{display:none}
-    .cta-card p{color:#efe6cd}
-    .cta-card .btn.gold{font-size:1.05rem;padding:14px 44px}
-
-    footer{text-align:center;padding:30px 20px 34px;color:var(--muted);font-size:14px;
-      border-top:1px solid var(--line);background:rgba(255,255,255,.5)}
-    footer a{color:var(--green2);text-decoration:none;font-weight:500}
-    footer a:hover{color:var(--gold);text-decoration:underline}
-
-    @media(max-width:760px){
-      .nav-links{display:none}
-      .steps{grid-template-columns:1fr}
-      .trust{grid-template-columns:1fr 1fr}
-      .verse .ar{font-size:1.3rem}
-      .hero .btn.gold{width:auto;padding:14px 36px}
-    }
+      border-radius:18px;padding:18px;box-shadow:0 6px 18px rgba(14,59,60,.05)}
+    .num{flex:none;width:44px;height:44px;border-radius:50%;background:var(--gold);color:#fff;
+      display:flex;align-items:center;justify-content:center;font:700 20px 'Amiri',serif}
+    .step b{display:block;color:var(--green);font-size:18px}
+    .step p{margin:2px 0 0;color:var(--muted);font-size:15px;line-height:1.7}
+    .trust{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+    .trust div{background:var(--sand);border-radius:16px;padding:16px;text-align:center;font-weight:700;color:var(--green)}
+    .trust small{display:block;font-weight:400;color:var(--muted);margin-top:4px}
+    .cta{text-align:center}
+    footer{text-align:center;padding:26px 20px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
+    @media(max-width:600px){.hero h1{font-size:2.1rem}.verse .ar{font-size:1.3rem}.trust{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
   <header class="top">
     <a class="brand" href="index.html">سنة <span>الحياة</span></a>
-    <nav class="nav-links">
-      <a href="index.html">الرئيسية</a>
-      <a href="#how">كيف يعمل</a>
-      <a href="#privacy">خصوصيتك</a>
-      <a href="faq.html">الأسئلة الشائعة</a>
-    </nav>
     <div style="display:flex;gap:8px;align-items:center">
       <button id="install" class="btn ghost" type="button" style="display:none">📲 تثبيت</button>
       <a class="btn" href="auth.html">دخول</a>
@@ -121,17 +61,10 @@
   </header>
 
   <div class="hero">
-    <div class="badge">✦ موقع جاد للزواج الشرعي</div>
-    <div class="orn" style="margin-top:14px">✦ ✦ ✦</div>
+    <div class="orn">✦ ✦ ✦</div>
     <h1>سنة الحياة</h1>
     <p class="sub">موقع جاد للتعارف بنيّة الزواج، على أساس من الاحترام والخصوصية والمودّة.</p>
-    <a class="btn gold" href="auth.html">ابدأ رحلتك الآن</a>
-
-    <div class="stats">
-      <div>مجاني بالكامل<span>التسجيل ولا يستغرق دقيقة</span></div>
-      <div>مراجعة يدوية<span>لكل ملف قبل الظهور</span></div>
-      <div>خصوصية تامة<span>محادثاتك بينك وبين الطرف الآخر فقط</span></div>
-    </div>
+    <a class="btn gold" href="auth.html">ابدأ رحلتك</a>
 
     <div class="verse">
       <p class="ar">﴿ وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَٰلِكَ لَآيَاتٍ لِّقَوْمٍ يَتَفَكَّرُونَ ﴾</p>
@@ -140,9 +73,8 @@
     </div>
   </div>
 
-  <section id="how">
+  <section>
     <h2>كيف يعمل الموقع؟</h2>
-    <p class="sec-sub">أربع خطوات بسيطة تفصلك عن بداية جديدة بإذن الله</p>
     <div class="steps">
       <div class="step"><div class="num">1</div><div><b>أنشئ حسابك وملفك</b><p>سجّل بريدك وأكمل بياناتك الأساسية بصدق.</p></div></div>
       <div class="step"><div class="num">2</div><div><b>مراجعة الإدارة</b><p>تتم مراجعة كل ملف قبل ظهوره، لضمان الجدية.</p></div></div>
@@ -151,43 +83,28 @@
     </div>
   </section>
 
-  <section id="privacy" style="padding-top:0">
-    <h2>خصوصيتك أولاً</h2>
-    <p class="sec-sub">بنينا الموقع لتحميك، لا للتسلية</p>
-    <div class="trust">
-      <div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="#B8903F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
-        محادثات خاصة<small>بين الطرفين فقط</small>
-      </div>
-      <div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="#B8903F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg>
-        ملفات مراجَعة<small>قبل أن تظهر</small>
-      </div>
-      <div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="#B8903F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M5.5 5.5l13 13"/></svg>
-        حظر وإبلاغ<small>لحمايتك دائماً</small>
-      </div>
-      <div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="#B8903F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.5-9-9c-1.2-3 .8-6.5 4-6.5 2 0 3.5 1 5 3 1.5-2 3-3 5-3 3.2 0 5.2 3.5 4 6.5-2 4.5-9 9-9 9z"/></svg>
-        بنيّة الزواج<small>موقع جاد لا للتسلية</small>
-      </div>
-    </div>
-  </section>
-
   <section style="padding-top:0">
-    <div class="card cta-card">
-      <div class="orn" style="margin-bottom:6px">✦ ✦ ✦</div>
-      <h2>ابدأ الآن</h2>
-      <p>التسجيل مجاني ولا يستغرق دقيقة واحدة.</p>
-      <a class="btn gold" href="auth.html">إنشاء حساب</a>
+    <h2>خصوصيتك أولاً</h2>
+    <div class="trust">
+      <div>🔒 محادثات خاصة<small>بين الطرفين فقط</small></div>
+      <div>✅ ملفات مراجَعة<small>قبل أن تظهر</small></div>
+      <div>🚫 حظر وإبلاغ<small>لحمايتك دائماً</small></div>
+      <div>🤝 بنيّة الزواج<small>موقع جاد لا للتسلية</small></div>
     </div>
   </section>
 
-  <footer>
-    <a href="faq.html">الأسئلة الشائعة</a> · <a href="contact.html">اتصل بنا</a> · <a href="legal.html#privacy">الخصوصية</a> · <a href="legal.html#terms">الشروط</a>
-    <br><br>© سنة الحياة — جميع الحقوق محفوظة
-  </footer>
+  <section class="cta" style="padding-top:0">
+    <div class="card">
+      <h2>ابدأ الآن</h2>
+      <p style="color:var(--muted)">التسجيل مجاني ولا يستغرق دقيقة.</p>
+      <a class="btn" href="auth.html">إنشاء حساب</a>
+    </div>
+  </section>
 
+  <footer><a href="faq.html">الأسئلة الشائعة</a> · <a href="contact.html">اتصل بنا</a> · <a href="legal.html#privacy">الخصوصية</a> · <a href="legal.html#terms">الشروط</a><br>© سنة الحياة — جميع الحقوق محفوظة</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js?v=9"></script>
   <script>
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
     var deferredPrompt = null;
@@ -205,6 +122,15 @@
       installBtn.style.display = 'none';
     };
     window.addEventListener('appinstalled', function () { installBtn.style.display = 'none'; });
+
+    // العضو مسجّل الدخول: نخفي «دخول / إنشاء حساب» ونظهر شريط حسابه (يضيفه app.js)
+    getSession().then(function (s) {
+      if (!s) return;
+      var top = document.querySelector('.top'); if (top) top.style.display = 'none';
+      var go = document.querySelector('.hero a.btn.gold');
+      if (go) { go.href = 'browse.html'; go.textContent = 'تصفّح الأعضاء'; }
+      var cta = document.querySelector('section.cta'); if (cta) cta.style.display = 'none';
+    }).catch(function () {});
   </script>
 </body>
 </html>
