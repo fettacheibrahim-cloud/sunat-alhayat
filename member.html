@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>سنة الحياة - ملف عضو</title>
+  <link rel="stylesheet" href="style.css?v=10">
+  <style>
+    .top{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
+    .top .av{width:104px;height:104px;font-size:44px}
+    .score{background:var(--sand);border-radius:var(--radius);padding:14px 16px;margin:16px 0}
+    .score .row{display:flex;justify-content:space-between;align-items:center;font-weight:700;color:var(--green)}
+    .bar{height:8px;border-radius:999px;background:#fff;overflow:hidden;margin:10px 0 8px}
+    .bar i{display:block;height:100%;background:var(--gold)}
+    .score small{color:var(--muted)}
+    .sec{margin-top:20px}
+    .sec h3{margin:0 0 6px;border-bottom:1px solid var(--line);padding-bottom:4px}
+    .sec p{margin:6px 0;white-space:pre-wrap}
+    .kv{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .kv div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+    .kv span{display:block;font-size:12px;color:var(--muted)}
+    .kv b{font-size:15px;color:var(--green)}
+    .actions{display:flex;gap:8px;margin-top:20px}
+    .actions .btn{flex:1}
+    .actions .btn.heart{flex:none;width:52px;padding:0;font-size:22px}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <a href="browse.html" style="text-decoration:none;font-weight:700">← رجوع</a>
+    <p id="msg" style="display:none"></p>
+    <div id="box" class="card" style="margin-top:10px;display:none"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js?v=10"></script>
+  <script src="compat.js?v=1"></script>
+  <script>
+    const $ = id => document.getElementById(id);
+    function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; }
+    const id = new URLSearchParams(location.search).get('id');
+    let me = null, fav = false, sent = false;
+
+    function sec(title, body) { const s = el('div', 'sec'); s.appendChild(el('h3', '', title)); s.appendChild(body); return s; }
+
+    async function show(p, mine, vip) {
+      const box = $('box'); box.innerHTML = ''; box.style.display = 'block';
+
+      const top = el('div', 'top');
+      const av = el('div', 'av', (p.first_name || '؟').charAt(0).toUpperCase());
+      if (p.photo_path) {
+        try {
+          const { data } = await sb.storage.from('photos').createSignedUrl(p.photo_path, 3600);
+          if (data && data.signedUrl) {
+            const im = new Image();
+            im.onload = () => { av.textContent = ''; av.appendChild(im); };
+            im.src = data.signedUrl;
+          }
+        } catch (e) {}
+      }
+      top.appendChild(av);
+      const nm = el('h1', '', p.first_name || 'عضو');
+      if (vip) nm.appendChild(el('span', 'vip', '⭐ مميز'));
+      top.appendChild(nm);
+      const a = ageOf(p.birth_date);
+      top.appendChild(el('div', 'meta', [a ? a + ' سنة' : '', [p.city, p.country].filter(Boolean).join('، ')].filter(Boolean).join(' · ')));
+      box.appendChild(top);
+
+      const c = compat(mine, p);
+      const sc = el('div', 'score');
+      if (c) {
+        const row = el('div', 'row'); row.appendChild(el('span', '', 'نسبة التوافق التقريبية'));
+        row.appendChild(el('span', pctClass(c.pct), c.pct + '٪'));
+        const bar = el('div', 'bar'); const i = el('i'); i.style.width = c.pct + '%'; bar.appendChild(i);
+        sc.append(row, bar);
+        sc.appendChild(el('small', '', c.reasons.length ? 'نقاط التقاء: ' + c.reasons.join(' • ') : 'تقدير مبني على بيانات الملفين فقط، وليس حكماً نهائياً.'));
+      } else {
+        sc.appendChild(el('small', '', 'لا تتوفر بيانات كافية لحساب التوافق. أكمل ملفك (القيم ونمط الحياة) لتظهر النسبة.'));
+      }
+      box.appendChild(sc);
+
+      if (p.bio) box.appendChild(sec('نبذة', el('p', '', p.bio)));
+      if (p.looking_for) box.appendChild(sec('ما الذي يبحث عنه', el('p', '', p.looking_for)));
+
+      const kv = el('div', 'kv');
+      [['الحالة الاجتماعية', LBL.marital[p.marital_status]], ['المستوى الدراسي', LBL.edu[p.education]],
+       ['المهنة', p.occupation], ['الطول', p.height_cm ? p.height_cm + ' سم' : ''],
+       ['الالتزام', LBL.religiosity[p.religiosity]], ['الصلاة', LBL.prayer[p.prayer]],
+       ['التدخين', LBL.smoking[p.smoking]], ['الأطفال', LBL.children[p.wants_children]]]
+        .forEach(([k, v]) => { if (!v) return; const d = el('div'); d.appendChild(el('span', '', k)); d.appendChild(el('b', '', v)); kv.appendChild(d); });
+      if (kv.children.length) box.appendChild(sec('تفاصيل', kv));
+
+      const acts = el('div', 'actions');
+      const send = el('button', 'btn');
+      if (sent) { send.textContent = 'تم إرسال الاهتمام ✓'; send.disabled = true; }
+      else {
+        send.textContent = 'إبداء اهتمام 💌';
+        send.onclick = async () => {
+          send.disabled = true;
+          const { error } = await sb.from('interests').insert({ from_id: me, to_id: p.id, status: 'sent' });
+          if (error) {
+            send.disabled = false;
+            if (/INTEREST_LIMIT/.test(error.message || '')) {
+              if (confirm('وصلت إلى الحد الأسبوعي للاهتمامات. هل تريد معرفة العضوية المميزة التي ترفع الحد؟')) location.href = 'premium.html';
+            } else alert('خطأ: ' + error.message);
+            return;
+          }
+          send.textContent = 'تم إرسال الاهتمام ✓';
+        };
+      }
+      const h = el('button', 'btn ghost heart' + (fav ? ' on' : ''), fav ? '❤️' : '🤍');
+      h.type = 'button'; h.title = 'حفظ في المفضلة';
+      h.onclick = async () => {
+        h.disabled = true;
+        if (fav) {
+          const r = await sb.from('favorites').delete().eq('user_id', me).eq('target_id', p.id);
+          if (!r.error) { fav = false; h.classList.remove('on'); h.textContent = '🤍'; }
+        } else {
+          const r = await sb.from('favorites').insert({ user_id: me, target_id: p.id });
+          if (!r.error) { fav = true; h.classList.add('on'); h.textContent = '❤️'; } else alert('تعذّر الحفظ: ' + r.error.message);
+        }
+        h.disabled = false;
+      };
+      acts.append(send, h);
+      box.appendChild(acts);
+    }
+
+    (async () => {
+      const s = await getSession();
+      if (!s) { location.href = 'auth.html'; return; }
+      me = s.user.id;
+      if (!id) { showMsg('msg', 'رابط غير صحيح.', 'error'); return; }
+
+      const { data: mine } = await sb.from('profiles').select('*').eq('id', me).maybeSingle();
+      if (!mine) { showMsg('msg', 'أكمل ملفك الشخصي أولاً.', 'error'); return; }
+      if (mine.status !== 'approved') { showMsg('msg', 'حسابك قيد المراجعة. ستظهر الملفات بعد قبوله.', 'error'); return; }
+
+      const { data: p } = await sb.from('profiles').select('*').eq('id', id).eq('status', 'approved').maybeSingle();
+      if (!p || p.id === me) { showMsg('msg', 'هذا الملف غير متاح.', 'error'); return; }
+
+      const { data: bl } = await sb.from('blocks').select('blocker_id,blocked_id')
+        .or('blocker_id.eq.' + me + ',blocked_id.eq.' + me);
+      if ((bl || []).some(b => b.blocker_id === id || b.blocked_id === id)) { showMsg('msg', 'هذا الملف غير متاح.', 'error'); return; }
+
+      const [ints, fv, vp] = await Promise.all([
+        sb.from('interests').select('id').eq('from_id', me).eq('to_id', id).limit(1),
+        sb.from('favorites').select('target_id').eq('user_id', me).eq('target_id', id).limit(1),
+        sb.rpc('premium_ids')
+      ]);
+      sent = !!(ints.data && ints.data.length);
+      fav = !!(fv.data && fv.data.length);
+      const vip = (vp.data || []).some(x => (typeof x === 'string' ? x : Object.values(x || {})[0]) === id);
+      show(p, mine, vip);
+    })();
+  </script>
+</body>
+</html>
