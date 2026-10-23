@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sunat Al-Hayat - Serious Matrimonial Platform</title>
+  <meta name="description" content="A serious matrimonial platform built on privacy, respect, and mutual affection.">
+  <meta name="theme-color" content="#0E3B3C">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Sunat Al-Hayat - Serious Matrimonial Platform">
+  <meta property="og:description" content="A serious matrimonial platform built on privacy, respect, and mutual affection.">
+  <meta property="og:image" content="https://fettacheibrahim-cloud.github.io/sunat-alhayat/icon-512.png">
+  <meta property="og:locale" content="en_US">
+  <link rel="icon" type="image/svg+xml" href="../icon.svg">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="stylesheet" href="../style.css?v=10">
+  <style>
+    .top{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;
+      background:rgba(250,247,240,.92);backdrop-filter:blur(8px);position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line)}
+    .brand{font:700 1.6rem 'Amiri',serif;color:var(--green);text-decoration:none}
+    .brand span{color:var(--gold)}
+    .top .btn{padding:8px 20px;min-height:40px;font-size:15px}
+    .hero{background:linear-gradient(160deg,var(--green) 0%,#0a2c2d 100%);color:#fff;text-align:center;
+      padding:56px 22px 64px;position:relative;overflow:hidden}
+    .hero::after{content:"";position:absolute;inset:0;opacity:.07;
+      background:repeating-linear-gradient(45deg,#fff 0 1px,transparent 1px 22px),repeating-linear-gradient(-45deg,#fff 0 1px,transparent 1px 22px)}
+    .hero>*{position:relative;z-index:1}
+    .hero h1{color:#fff;font-size:2.6rem;margin:0 0 6px}
+    .hero .sub{color:#e9dfc4;max-width:520px;margin:0 auto 26px}
+    .orn{color:var(--gold2);letter-spacing:8px;font-size:18px}
+    .verse{max-width:640px;margin:34px auto 0;padding:26px 22px;border:1px solid rgba(216,181,101,.5);
+      border-radius:20px;background:rgba(255,255,255,.06)}
+    .verse .ar{font:400 1.55rem/2.1 'Amiri',serif;color:#fff;margin:0;direction:rtl}
+    .verse .en{font-size:15px;line-height:1.7;color:#e9dfc4;margin:14px 0 0;direction:ltr;font-style:italic}
+    .verse .ref{color:var(--gold2);font-size:14px;margin-top:10px}
+    section{max-width:720px;margin:0 auto;padding:44px 20px}
+    section h2{text-align:center}
+    .steps{display:grid;gap:14px;margin-top:22px}
+    .step{display:flex;gap:16px;align-items:flex-start;background:#fff;border:1px solid var(--line);
+      border-radius:18px;padding:18px;box-shadow:0 6px 18px rgba(14,59,60,.05)}
+    .num{flex:none;width:44px;height:44px;border-radius:50%;background:var(--gold);color:#fff;
+      display:flex;align-items:center;justify-content:center;font:700 20px 'Amiri',serif}
+    .step b{display:block;color:var(--green);font-size:18px}
+    .step p{margin:2px 0 0;color:var(--muted);font-size:15px;line-height:1.7}
+    .trust{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+    .trust div{background:var(--sand);border-radius:16px;padding:16px;text-align:center;font-weight:700;color:var(--green)}
+    .trust small{display:block;font-weight:400;color:var(--muted);margin-top:4px}
+    .cta{text-align:center}
+    footer{text-align:center;padding:26px 20px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
+    @media(max-width:600px){.hero h1{font-size:2.1rem}.verse .ar{font-size:1.3rem}.trust{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="../index.html">Sunat <span>Al-Hayat</span></a>
+    <div style="display:flex;gap:8px;align-items:center">
+      <a class="btn ghost" href="../" style="text-decoration:none">🌐 العربية</a>
+      <button id="install" class="btn ghost" type="button" style="display:none">📲 Install</button>
+      <a class="btn" href="../auth.html">Login</a>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="orn">✦ ✦ ✦</div>
+    <h1>Sunat Al-Hayat</h1>
+    <p class="sub">A serious matrimonial platform built on respect, privacy, and mutual affection.</p>
+    <a class="btn gold" href="../auth.html">Get Started</a>
+
+    <div class="verse">
+      <p class="ar">﴿ وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَٰلِكَ لَآيَاتٍ لِّقَوْمٍ يَتَفَكَّرُونَ ﴾</p>
+      <p class="ref">Surah Ar-Rum — Verse 21</p>
+      <p class="en">"And of His signs is that He created for you from yourselves mates that you may find tranquility in them; and He placed between you affection and mercy. Indeed in that are signs for a people who give thought." (Quran 30:21)</p>
+    </div>
+  </div>
+
+  <section>
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><div><b>Create Your Profile</b><p>Sign up with your email and complete your basic details honestly.</p></div></div>
+      <div class="step"><div class="num">2</div><div><b>Verification & Review</b><p>Profiles are automatically checked and manually reviewed to ensure seriousness.</p></div></div>
+      <div class="step"><div class="num">3</div><div><b>Browse & Express Interest</b><p>View verified members and send interest to matches that suit you.</p></div></div>
+      <div class="step"><div class="num">4</div><div><b>Respectful Chat</b><p>Once interest is accepted, a private chat opens between both parties.</p></div></div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <h2>Your Privacy First</h2>
+    <div class="trust">
+      <div>🔒 Private Chats<small>Strictly between both parties</small></div>
+      <div>✅ Reviewed Profiles<small>Before appearing publicly</small></div>
+      <div>🚫 Block & Report<small>To protect you at all times</small></div>
+      <div>🤝 Marriage Minded<small>A serious site, not for casual dating</small></div>
+    </div>
+  </section>
+
+  <section class="cta" style="padding-top:0">
+    <div class="card">
+      <h2>Start Now</h2>
+      <p style="color:var(--muted)">Free registration and takes less than a minute.</p>
+      <a class="btn" href="../auth.html">Create Account</a>
+    </div>
+  </section>
+
+  <footer><a href="../faq.html">FAQ</a> · <a href="../contact.html">Contact Us</a> · <a href="../legal.html#privacy">Privacy Policy</a> · <a href="../legal.html#terms">Terms of Service</a><br>© Sunat Al-Hayat — All Rights Reserved</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../app.js?v=10"></script>
+  <script>
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js').catch(function () {});
+    var deferredPrompt = null;
+    var installBtn = document.getElementById('install');
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'inline-block';
+    });
+    installBtn.onclick = async function () {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      try { await deferredPrompt.userChoice; } catch (e) {}
+      deferredPrompt = null;
+      installBtn.style.display = 'none';
+    };
+    window.addEventListener('appinstalled', function () { installBtn.style.display = 'none'; });
+
+    getSession().then(function (s) {
+      if (!s) return;
+      var top = document.querySelector('.top'); if (top) top.style.display = 'none';
+      var go = document.querySelector('.hero a.btn.gold');
+      if (go) { go.href = '../browse.html'; go.textContent = 'Browse Members'; }
+      var cta = document.querySelector('section.cta'); if (cta) cta.style.display = 'none';
+    }).catch(function () {});
+  </script>
+</body>
+</html>
