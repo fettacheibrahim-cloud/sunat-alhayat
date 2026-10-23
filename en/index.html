@@ -75,4 +75,66 @@
   </div>
 
   <section>
-    
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><div><b>Create Your Profile</b><p>Sign up with your email and complete your basic details honestly.</p></div></div>
+      <div class="step"><div class="num">2</div><div><b>Verification & Review</b><p>Profiles are automatically checked and manually reviewed to ensure seriousness.</p></div></div>
+      <div class="step"><div class="num">3</div><div><b>Browse & Express Interest</b><p>View verified members and send interest to matches that suit you.</p></div></div>
+      <div class="step"><div class="num">4</div><div><b>Respectful Chat</b><p>Once interest is accepted, a private chat opens between both parties.</p></div></div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <h2>Your Privacy First</h2>
+    <div class="trust">
+      <div>🔒 Private Chats<small>Strictly between both parties</small></div>
+      <div>✅ Reviewed Profiles<small>Before appearing publicly</small></div>
+      <div>🚫 Block & Report<small>To protect you at all times</small></div>
+      <div>🤝 Marriage Minded<small>A serious site, not for casual dating</small></div>
+    </div>
+  </section>
+
+  <section class="cta" style="padding-top:0">
+    <div class="card">
+      <h2>Start Now</h2>
+      <p style="color:var(--muted)">Free registration and takes less than a minute.</p>
+      <a class="btn" href="https://fettacheibrahim-cloud.github.io/sunat-alhayat/auth.html">Create Account</a>
+    </div>
+  </section>
+
+  <footer><a href="https://fettacheibrahim-cloud.github.io/sunat-alhayat/faq.html">FAQ</a> · <a href="https://fettacheibrahim-cloud.github.io/sunat-alhayat/contact.html">Contact Us</a> · <a href="https://fettacheibrahim-cloud.github.io/sunat-alhayat/legal.html#privacy">Privacy Policy</a> · <a href="https://fettacheibrahim-cloud.github.io/sunat-alhayat/legal.html#terms">Terms of Service</a><br>© Sunat Al-Hayat — All Rights Reserved</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- تم تعديل مسار app.js ليشير مباشرة للملف في الجذر منعا لأخطاء المسارات -->
+  <script src="https://fettacheibrahim-cloud.github.io/sunat-alhayat/app.js?v=10"></script>
+  <script>
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js').catch(function () {});
+    var deferredPrompt = null;
+    var installBtn = document.getElementById('install');
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'inline-block';
+    });
+    installBtn.onclick = async function () {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      try { await deferredPrompt.userChoice; } catch (e) {}
+      deferredPrompt = null;
+      installBtn.style.display = 'none';
+    };
+    window.addEventListener('appinstalled', function () { installBtn.style.display = 'none'; });
+
+    // تم تعديل التحقق من الجلسة ليتوافق مع الروابط المطلقة
+    if (typeof getSession === 'function') {
+      getSession().then(function (s) {
+        if (!s) return;
+        var top = document.querySelector('.top'); if (top) top.style.display = 'none';
+        var go = document.querySelector('.hero a.btn.gold');
+        if (go) { go.href = 'https://fettacheibrahim-cloud.github.io/sunat-alhayat/browse.html'; go.textContent = 'Browse Members'; }
+        var cta = document.querySelector('section.cta'); if (cta) cta.style.display = 'none';
+      }).catch(function () {});
+    }
+  </script>
+</body>
+</html>
