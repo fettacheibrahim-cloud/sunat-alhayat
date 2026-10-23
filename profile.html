@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>سنة الحياة - ملفي</title>
-  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="style.css?v=10">
   <style>
     .f label{display:block;margin:12px 0 4px;font-weight:700}
     .st{display:inline-block;padding:4px 14px;border-radius:999px;font-size:14px;background:#eee}
@@ -54,6 +54,21 @@
       <select id="marital_status"><option value="">اختر</option><option value="never_married">أعزب / عزباء</option><option value="divorced">مطلّق / مطلّقة</option><option value="widowed">أرمل / أرملة</option></select>
       <label>المستوى الدراسي</label>
       <select id="education"><option value="">اختر</option><option value="secondary">ثانوي</option><option value="diploma">دبلوم</option><option value="bachelor">إجازة / بكالوريوس</option><option value="postgraduate">دراسات عليا</option></select>
+      <label>المهنة</label><input id="occupation" maxlength="60" placeholder="مثال: معلّم، مهندسة، طالب…">
+      <label>الطول (سم)</label><input id="height_cm" type="number" inputmode="numeric" min="120" max="230" placeholder="مثال: 175">
+
+      <h3 style="margin-top:22px">القيم ونمط الحياة</h3>
+      <p style="margin:0;color:var(--muted);font-size:14px">اختيارية، لكنها ترفع دقة نسبة التوافق وتساعد الطرف الآخر على معرفتك.</p>
+      <label>درجة الالتزام</label>
+      <select id="religiosity"><option value="">اختر</option><option value="practicing">ملتزم/ة</option><option value="moderate">متوسّط الالتزام</option><option value="learning">في طريق الالتزام</option></select>
+      <label>المحافظة على الصلاة</label>
+      <select id="prayer"><option value="">اختر</option><option value="always">أحافظ عليها</option><option value="mostly">غالباً</option><option value="sometimes">أحياناً</option><option value="rarely">نادراً</option></select>
+      <label>التدخين</label>
+      <select id="smoking"><option value="">اختر</option><option value="no">لا أدخّن</option><option value="quit">أقلعت عنه</option><option value="yes">أدخّن</option></select>
+      <label>الرغبة في الأطفال</label>
+      <select id="wants_children"><option value="">اختر</option><option value="yes">نعم</option><option value="open">منفتح/ة على الأمر</option><option value="no">لا</option></select>
+
+      <h3 style="margin-top:22px">عنّي</h3>
       <label>نبذة عني</label><textarea id="bio" rows="4"></textarea>
       <label>ما الذي أبحث عنه</label><textarea id="looking_for" rows="3"></textarea>
       <button id="save" type="submit" class="btn" style="width:100%;margin-top:18px">حفظ</button>
@@ -63,10 +78,10 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js?v=9"></script>
+  <script src="app.js?v=10"></script>
   <script>
     const $ = id => document.getElementById(id);
-    const fields = ['first_name','gender','birth_date','country','city','marital_status','education','bio','looking_for'];
+    const fields = ['first_name','gender','birth_date','country','city','marital_status','education','occupation','height_cm','religiosity','prayer','smoking','wants_children','bio','looking_for'];
     const stAr = { pending:'قيد المراجعة', approved:'مقبول', suspended:'موقوف' };
     let uid = null, exists = false, photoPath = null;
 
@@ -207,14 +222,20 @@
       if (!isAdult($('birth_date').value)) { msg('يجب أن يكون عمرك 18 سنة فأكثر', 'error'); return; }
       const btn = $('save'); btn.disabled = true;
       const row = {}; fields.forEach(k => { row[k] = $(k).value.trim() || null; });
+      if (row.height_cm != null) row.height_cm = parseInt(row.height_cm, 10) || null;
       row.photo_visible_to_matches = $('photo_visible_to_matches').checked;
       let res;
       if (exists) res = await sb.from('profiles').update(row).eq('id', uid);
       else { row.id = uid; row.status = 'pending'; res = await sb.from('profiles').insert(row); }
       btn.disabled = false;
       if (res.error) { msg('خطأ: ' + res.error.message, 'error'); return; }
-      if (!exists) { exists = true; setStatus('pending'); enablePhoto(); }
-      msg('تم الحفظ ✓', 'ok');
+      if (!exists) { exists = true; enablePhoto(); }
+      const st = await sb.from('profiles').select('status').eq('id', uid).maybeSingle();
+      const status = st.data ? st.data.status : 'pending';
+      setStatus(status);
+      if (status === 'approved') msg('تم الحفظ ✓ — حسابك مقبول، يمكنك الآن تصفّح الأعضاء.', 'ok');
+      else if (status === 'pending') msg('تم الحفظ ✓ — ملفك قيد المراجعة اليدوية. للقبول الفوري: أكمل كل الحقول، واكتب نبذة (30 حرفاً فأكثر) دون أرقام هاتف أو روابط أو حسابات تواصل.', 'ok');
+      else msg('تم الحفظ ✓', 'ok');
     };
 
     $('out').onclick = logout;
