@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>سنة الحياة - الدخول</title>
-  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
   <main class="card" style="max-width:420px;margin:40px auto;padding:24px">
@@ -33,13 +33,15 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js?v=9"></script>
+  <script src="app.js?v=10"></script>
   <script>
     let isLogin = true;
     const $ = id => document.getElementById(id);
     const base = location.origin + location.pathname.replace('auth.html', '');
+
     // مسجّل الدخول أصلاً؟ لا حاجة لصفحة الدخول
     getSession().then(s => { if (s) location.replace('browse.html'); });
+
     $('toggle').onclick = e => {
       e.preventDefault();
       isLogin = !isLogin;
