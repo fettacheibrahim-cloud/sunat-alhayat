@@ -17,6 +17,8 @@
     .chk{display:flex;align-items:center;gap:10px;margin-top:12px}
     .chk input{width:auto}
     .sm{padding:6px 16px;min-height:38px;font-size:14px}
+    .opt{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:#fff;cursor:pointer;font-size:14px;margin:0 0 6px 6px}
+    .opt input[type=file]{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0}
   </style>
 </head>
 <body>
@@ -29,10 +31,9 @@
     <div class="ph">
       <div id="img">؟</div>
       <div>
-        <span style="position:relative;display:inline-block">
-          <button id="pick" class="btn sm" type="button">اختيار صورة</button>
-          <input id="file" type="file" accept="image/*" style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0">
-        </span>
+        <label class="opt">🖼 المعرض<input id="fGallery" type="file" accept="image/*"></label>
+        <label class="opt">📁 الملفات<input id="fFiles" type="file"></label>
+        <label class="opt">📸 الكاميرا<input id="fCam" type="file" accept="image/*" capture="user"></label>
         <button id="delPhoto" class="btn ghost sm" type="button" style="display:none">حذف</button>
         <p id="phNote" style="font-size:13px;color:var(--muted);margin:6px 0 0"></p>
       </div>
@@ -116,14 +117,15 @@
       });
     }
 
-    $('file').onclick = e => {
-      if (!exists) { e.preventDefault(); msg('احفظ ملفك الشخصي أولاً (زر حفظ في الأسفل) ثم أضف الصورة', 'error'); }
-    };
+    const PICKERS = ['fGallery', 'fFiles', 'fCam'];
+    let pickedAt = 0, afterT = null, busy = false;
 
-    $('file').onchange = async e => {
-      const f = e.target.files[0]; if (!f) return;
+    async function uploadPhoto(f) {
+      pickedAt = 0;
+      if (busy) return;
+      if (!/^image\//.test(f.type) && !/\.(jpe?g|png|webp|gif|bmp|heic|heif)$/i.test(f.name || '')) { msg('اختر ملف صورة (JPG أو PNG).', 'error'); return; }
+      busy = true;
       try {
-        $('pick').disabled = true;
         msg('جاري رفع الصورة...', 'ok');
         const blob = await resize(f);
         const path = uid + '/avatar.jpg';
@@ -134,10 +136,43 @@
         photoPath = path; await showPhoto(); msg('تم رفع الصورة ✓', 'ok');
       } catch (err) {
         msg('تعذّر رفع الصورة: ' + (err && err.message ? err.message : err), 'error');
-        alert('خطأ الرفع: ' + (err && err.message ? err.message : err));
       }
-      $('pick').disabled = false; e.target.value = '';
-    };
+      busy = false;
+    }
+
+    function takeFrom(input) {
+      const f = input.files && input.files[0];
+      if (!f) return false;
+      input.value = '';
+      uploadPhoto(f);
+      return true;
+    }
+    function recheck() { return PICKERS.some(id => takeFrom($(id))); }
+
+    PICKERS.forEach(id => {
+      const el = $(id);
+      ['change', 'input'].forEach(ev => el.addEventListener(ev, () => takeFrom(el)));
+      el.addEventListener('click', e => {
+        if (!exists) { e.preventDefault(); msg('احفظ ملفك الشخصي أولاً (زر حفظ في الأسفل) ثم أضف الصورة', 'error'); return; }
+        pickedAt = Date.now();
+      });
+    });
+
+    // بعض المتصفحات لا تطلق حدث الاختيار؛ نفحص الحقول عند العودة من نافذة الاختيار
+    function afterPicker() {
+      if (!pickedAt || afterT) return;
+      setTimeout(recheck, 400);
+      afterT = setTimeout(() => {
+        afterT = null;
+        recheck();
+        if (pickedAt) {
+          pickedAt = 0;
+          $('phNote').textContent = 'لم تصل أي صورة من المتصفح. جرّب «الملفات» أو «الكاميرا»، أو افتح الموقع في متصفح آخر.';
+        }
+      }, 2500);
+    }
+    window.addEventListener('focus', afterPicker);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) afterPicker(); });
 
     $('delPhoto').onclick = async () => {
       if (!confirm('حذف الصورة؟')) return;
@@ -190,7 +225,7 @@
       $('delAcc').disabled = true;
       try {
         if (photoPath) await sb.storage.from('photos').remove([photoPath]);
-                // حذف صور ورسائل المحادثة الصوتية التي أرسلها العضو
+        // حذف صور ورسائل المحادثة الصوتية التي أرسلها العضو (إن كانت ميزة الوسائط مفعّلة)
         try {
           const { data: mm } = await sb.from('messages').select('media_path')
             .eq('sender_id', uid).not('media_path', 'is', null);
