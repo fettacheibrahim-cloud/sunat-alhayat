@@ -55,7 +55,7 @@
   <header class="top">
     <a class="brand" href="index.html">سنة <span>الحياة</span></a>
     <div style="display:flex;gap:8px;align-items:center">
-      <!-- زر تغيير اللغة إلى الإنجليزية -->
+      <!-- تم تصحيح زر تغيير اللغة هنا -->
       <a class="btn ghost" href="./en/" style="text-decoration:none">🌐 English</a>
       <button id="install" class="btn ghost" type="button" style="display:none">📲 تثبيت</button>
       <a class="btn" href="auth.html">دخول</a>
@@ -78,61 +78,4 @@
   <section>
     <h2>كيف يعمل الموقع؟</h2>
     <div class="steps">
-      <div class="step"><div class="num">1</div><div><b>أنشئ حسابك وملفك</b><p>سجّل بريدك وأكمل بياناتك الأساسية بصدق.</p></div></div>
-      <div class="step"><div class="num">2</div><div><b>تحقق ومراجعة</b><p>يُفحص كل ملف آلياً، وتراجع الإدارة ما يحتاج مراجعة، لضمان الجدية.</p></div></div>
-      <div class="step"><div class="num">3</div><div><b>تصفّح وأبدِ اهتمامك</b><p>تعرض الصفحة أعضاء مقبولين، وتُبدي اهتماماً بمن يناسبك.</p></div></div>
-      <div class="step"><div class="num">4</div><div><b>تحدّثا باحترام</b><p>عند قبول الاهتمام تُفتح محادثة بين الطرفين فقط.</p></div></div>
-    </div>
-  </section>
-
-  <section style="padding-top:0">
-    <h2>خصوصيتك أولاً</h2>
-    <div class="trust">
-      <div>🔒 محادثات خاصة<small>بين الطرفين فقط</small></div>
-      <div>✅ ملفات مراجَعة<small>قبل أن تظهر</small></div>
-      <div>🚫 حظر وإبلاغ<small>لحمايتك دائماً</small></div>
-      <div>🤝 بنيّة الزواج<small>موقع جاد لا للتسلية</small></div>
-    </div>
-  </section>
-
-  <section class="cta" style="padding-top:0">
-    <div class="card">
-      <h2>ابدأ الآن</h2>
-      <p style="color:var(--muted)">التسجيل مجاني ولا يستغرق دقيقة.</p>
-      <a class="btn" href="auth.html">إنشاء حساب</a>
-    </div>
-  </section>
-
-  <footer><a href="faq.html">الأسئلة الشائعة</a> · <a href="contact.html">اتصل بنا</a> · <a href="legal.html#privacy">الخصوصية</a> · <a href="legal.html#terms">الشروط</a><br>© سنة الحياة — جميع الحقوق محفوظة</footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js?v=10"></script>
-  <script>
-    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
-    var deferredPrompt = null;
-    var installBtn = document.getElementById('install');
-    window.addEventListener('beforeinstallprompt', function (e) {
-      e.preventDefault();
-      deferredPrompt = e;
-      installBtn.style.display = 'inline-block';
-    });
-    installBtn.onclick = async function () {
-      if (!deferredPrompt) return;
-      deferredPrompt.prompt();
-      try { await deferredPrompt.userChoice; } catch (e) {}
-      deferredPrompt = null;
-      installBtn.style.display = 'none';
-    };
-    window.addEventListener('appinstalled', function () { installBtn.style.display = 'none'; });
-
-    // العضو مسجّل الدخول: نخفي «دخول / إنشاء حساب» ونظهر شريط حسابه (يضيفه app.js)
-    getSession().then(function (s) {
-      if (!s) return;
-      var top = document.querySelector('.top'); if (top) top.style.display = 'none';
-      var go = document.querySelector('.hero a.btn.gold');
-      if (go) { go.href = 'browse.html'; go.textContent = 'تصفّح الأعضاء'; }
-      var cta = document.querySelector('section.cta'); if (cta) cta.style.display = 'none';
-    }).catch(function () {});
-  </script>
-</body>
-</html>
+      <div class="step"><div class="num">
