@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>سنة الحياة - العضوية المميزة</title>
+  <link rel="stylesheet" href="style.css?v=8">
+  <style>
+    .plans{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+    .plan{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px}
+    .plan.pro{border:2px solid var(--gold);box-shadow:0 8px 22px rgba(14,59,60,.08)}
+    .plan h3{margin:0 0 8px;color:var(--green)}
+    .plan ul{margin:0;padding:0 18px 0 0;font-size:14px;line-height:1.9;color:var(--ink)}
+    .plan .pr{font-weight:700;color:var(--gold);margin-top:10px}
+    .quota{background:var(--sand);border-radius:16px;padding:14px;margin:12px 0}
+    .bar{height:8px;border-radius:999px;background:#fff;overflow:hidden;margin-top:8px}
+    .bar i{display:block;height:100%;background:var(--gold)}
+    .badge{display:inline-block;background:var(--gold);color:#fff;border-radius:999px;padding:3px 12px;font-size:13px;font-weight:700}
+    @media(max-width:520px){.plans{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <main class="card" style="max-width:600px;margin:20px auto;padding:22px">
+    <h1>العضوية المميزة ⭐</h1>
+    <p id="msg" style="display:none"></p>
+
+    <div class="quota" id="quota">جاري التحميل…</div>
+
+    <div class="plans">
+      <div class="plan">
+        <h3>مجانية</h3>
+        <ul>
+          <li>تصفّح الأعضاء</li>
+          <li><b id="freeLim">3</b> اهتمامات في الأسبوع</li>
+          <li>محادثة كاملة عند القبول</li>
+        </ul>
+        <div class="pr">مجاناً دائماً</div>
+      </div>
+      <div class="plan pro">
+        <h3>مميزة <span class="badge">⭐</span></h3>
+        <ul>
+          <li><b id="proLim">30</b> اهتماماً في الأسبوع</li>
+          <li>شارة «مميز» على ملفك</li>
+          <li>ظهور ملفك في أعلى نتائج التصفح</li>
+        </ul>
+        <div class="pr" id="price"></div>
+      </div>
+    </div>
+
+    <h2 style="font-size:1.2rem">كيف أشترك؟</h2>
+    <ol style="line-height:2;color:var(--ink);padding-right:20px">
+      <li>تواصل معنا عبر الزر أدناه.</li>
+      <li>سنرسل لك طريقة الدفع المتاحة.</li>
+      <li>بعد التأكد من الدفع تُفعَّل عضويتك خلال وقت قصير، وسترى الشارة هنا.</li>
+    </ol>
+    <a id="contactBtn" class="btn gold" href="contact.html" style="display:block;text-align:center">تواصل لتفعيل العضوية</a>
+    <p style="font-size:13px;color:var(--muted);margin-top:12px">المحادثة والخصوصية والأمان مجانية للجميع، ولا تُحجب خلف الاشتراك.</p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js?v=9"></script>
+  <script>
+    // ===== أدخل بياناتك هنا =====
+    const WHATSAPP = '';          // رقمك بالصيغة الدولية بدون + أو أصفار، مثال: 212600000000 (اتركه فارغاً لاستعمال صفحة «اتصل بنا»)
+    const PRICE_TEXT = '';        // مثال: «50 درهماً / شهر» — اتركه فارغاً لإخفائه
+    // ============================
+
+    const $ = id => document.getElementById(id);
+    function dateAr(d) { return new Date(d).toLocaleDateString('ar-MA-u-nu-latn', { year: 'numeric', month: 'long', day: 'numeric' }); }
+
+    (async () => {
+      const s = await getSession();
+      if (!s) { location.href = 'auth.html'; return; }
+
+      if (PRICE_TEXT) $('price').textContent = PRICE_TEXT; else $('price').style.display = 'none';
+      if (WHATSAPP) {
+        const t = 'السلام عليكم، أرغب في تفعيل العضوية المميزة في «سنة الحياة». بريدي: ' + s.user.email;
+        $('contactBtn').href = 'https://wa.me/' + encodeURIComponent(WHATSAPP) + '?text=' + encodeURIComponent(t);
+        $('contactBtn').target = '_blank'; $('contactBtn').rel = 'noopener';
+      }
+
+      const { data, error } = await sb.rpc('my_interest_quota');
+      const q = $('quota');
+      if (error || !data || !data.length) {
+        q.textContent = 'تعذّر تحميل حالة عضويتك. تأكد من تشغيل ملف premium.sql.';
+        return;
+      }
+      const r = data[0];
+      const pct = Math.min(100, Math.round(r.used / r.lim * 100));
+      q.innerHTML = '';
+      const head = document.createElement('div');
+      if (r.premium_until) {
+        const b = document.createElement('span'); b.className = 'badge'; b.textContent = '⭐ عضو مميز';
+        head.append(b, ' ينتهي في ' + dateAr(r.premium_until));
+        $('contactBtn').textContent = 'تمديد العضوية';
+      } else head.textContent = 'خطتك الحالية: مجانية';
+      const line = document.createElement('div');
+      line.style.marginTop = '8px';
+      line.textContent = 'الاهتمامات في آخر 7 أيام: ' + r.used + ' من ' + r.lim;
+      const bar = document.createElement('div'); bar.className = 'bar';
+      const i = document.createElement('i'); i.style.width = pct + '%'; bar.appendChild(i);
+      q.append(head, line, bar);
+      if (r.premium_until) $('proLim').textContent = r.lim; else $('freeLim').textContent = r.lim;
+    })();
+  </script>
+</body>
+</html>
