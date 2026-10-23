@@ -4,17 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>سنة الحياة - الاهتمامات</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=10">
   <style>
-    .it{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px;margin:8px 0;background:#f7f5ee;border:1px solid #e5dcc5;border-radius:14px}
-    .it .acts{display:flex;gap:6px}
-    .tag{font-size:13px;padding:3px 10px;border-radius:999px;background:#eee}
+    .it{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px;margin:8px 0;background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .it .who{display:flex;align-items:center;gap:10px;min-width:0}
+    .it .av{width:44px;height:44px;font-size:20px}
+    .it a.n{font-weight:700;color:var(--green);text-decoration:none}
+    .it .acts{display:flex;gap:6px;flex:none}
+    .tag{font-size:13px;padding:3px 12px;border-radius:999px;background:#eee;white-space:nowrap}
     .tag.accepted{background:#dff3e3;color:#1f6b33}
     .tag.declined{background:#fbdcdc;color:#9b1c1c}
+    .go{font-size:13px;margin-right:6px}
   </style>
 </head>
 <body>
-  <main class="card" style="max-width:600px;margin:30px auto;padding:20px">
+  <main class="wrap">
     <h1>الاهتمامات</h1>
     <p id="msg" style="display:none"></p>
     <h2>الواردة</h2>
@@ -24,13 +28,18 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v=10"></script>
   <script>
     const $ = id => document.getElementById(id);
-    const stAr = { sent:'بانتظار الرد', pending:'بانتظار الرد', accepted:'مقبول', declined:'مرفوض' };
+    const stAr = { sent: 'بانتظار الرد', pending: 'بانتظار الرد', accepted: 'مقبول', declined: 'مرفوض' };
     let me = null, names = {};
 
-    function empty(el, t) { el.innerHTML = ''; const p = document.createElement('p'); p.style.color = '#666'; p.textContent = t; el.appendChild(p); }
+    function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; }
+
+    function empty(box, title, text) {
+      box.innerHTML = '';
+      const e = el('div', 'empty'); e.appendChild(el('b', '', title)); e.append(text); box.appendChild(e);
+    }
 
     async function setStatus(id, status) {
       const { error } = await sb.from('interests').update({ status }).eq('id', id);
@@ -39,22 +48,27 @@
     }
 
     function item(i, incoming) {
-      const d = document.createElement('div'); d.className = 'it';
-      const n = document.createElement('b');
-      n.textContent = names[incoming ? i.from_id : i.to_id] || 'عضو';
-      d.appendChild(n);
+      const other = incoming ? i.from_id : i.to_id;
+      const nm = names[other] || 'عضو';
+      const d = el('div', 'it');
+      const who = el('div', 'who');
+      who.appendChild(el('div', 'av', nm.charAt(0).toUpperCase()));
+      const a = el('a', 'n', nm); a.href = 'member.html?id=' + other;
+      who.appendChild(a);
+      d.appendChild(who);
       const open = i.status === 'sent' || i.status === 'pending';
       if (incoming && open) {
-        const a = document.createElement('div'); a.className = 'acts';
-        const ok = document.createElement('button'); ok.className = 'btn'; ok.textContent = 'قبول';
-        ok.onclick = () => setStatus(i.id, 'accepted');
-        const no = document.createElement('button'); no.className = 'btn';
-        no.style.cssText = 'background:#fff;color:#9b1c1c;border:1px solid #9b1c1c';
-        no.textContent = 'رفض'; no.onclick = () => setStatus(i.id, 'declined');
-        a.append(ok, no); d.appendChild(a);
+        const acts = el('div', 'acts');
+        const ok = el('button', 'btn sm', 'قبول'); ok.onclick = () => setStatus(i.id, 'accepted');
+        const no = el('button', 'btn ghost sm', 'رفض'); no.onclick = () => setStatus(i.id, 'declined');
+        acts.append(ok, no); d.appendChild(acts);
+      } else if (i.status === 'accepted') {
+        const w = el('div', 'acts');
+        w.appendChild(el('span', 'tag accepted', 'مقبول'));
+        const chat = el('a', 'btn sm', 'محادثة 💬'); chat.href = 'messages.html'; w.appendChild(chat);
+        d.appendChild(w);
       } else {
-        const t = document.createElement('span'); t.className = 'tag ' + i.status;
-        t.textContent = stAr[i.status] || i.status; d.appendChild(t);
+        d.appendChild(el('span', 'tag ' + i.status, stAr[i.status] || i.status));
       }
       return d;
     }
@@ -62,7 +76,7 @@
     async function load() {
       const { data, error } = await sb.from('interests').select('*')
         .or('from_id.eq.' + me + ',to_id.eq.' + me).order('created_at', { ascending: false });
-      if (error) { $('msg').style.display = 'block'; $('msg').textContent = 'خطأ: ' + error.message; return; }
+      if (error) { showMsg('msg', 'خطأ: ' + error.message, 'error'); return; }
       const ids = [...new Set(data.flatMap(i => [i.from_id, i.to_id]))];
       if (ids.length) {
         const { data: ps } = await sb.from('profiles').select('id,first_name').in('id', ids);
@@ -70,8 +84,10 @@
       }
       const inbox = data.filter(i => i.to_id === me), sent = data.filter(i => i.from_id === me);
       $('inbox').innerHTML = ''; $('sent').innerHTML = '';
-      if (!inbox.length) empty($('inbox'), 'لا توجد اهتمامات واردة'); else inbox.forEach(i => $('inbox').appendChild(item(i, true)));
-      if (!sent.length) empty($('sent'), 'لم ترسل أي اهتمام بعد'); else sent.forEach(i => $('sent').appendChild(item(i, false)));
+      if (!inbox.length) empty($('inbox'), 'لا توجد اهتمامات واردة', 'عندما يُبدي أحد اهتمامه بك سيظهر هنا.');
+      else inbox.forEach(i => $('inbox').appendChild(item(i, true)));
+      if (!sent.length) empty($('sent'), 'لم ترسل أي اهتمام بعد', 'تصفّح الأعضاء وأبدِ اهتمامك بمن يناسبك.');
+      else sent.forEach(i => $('sent').appendChild(item(i, false)));
     }
 
     (async () => {
