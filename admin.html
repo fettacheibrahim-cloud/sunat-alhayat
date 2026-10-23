@@ -69,6 +69,13 @@
       loadAll(); return true;
     }
 
+    async function setPremium(id, days) {
+      if (days === 0 && !confirm('إلغاء العضوية المميزة لهذا العضو؟')) return;
+      const { error } = await sb.rpc('admin_set_premium', { target: id, days });
+      if (error) { alert('خطأ: ' + error.message + '\nتأكد من تشغيل premium.sql'); return; }
+      loadList();
+    }
+
     async function closeReport(id) {
       const { error } = await sb.from('reports').update({ status: 'reviewed' }).eq('id', id);
       if (error) { alert('خطأ: ' + error.message); return; }
@@ -80,6 +87,11 @@
       const { data, error } = await sb.from('profiles').select('*').eq('status', cur).order('created_at', { ascending: false });
       if (error) { list.textContent = 'خطأ: ' + error.message; return; }
       if (!data.length) { list.innerHTML = '<p style="color:#666">لا توجد حسابات في هذه القائمة</p>'; return; }
+      const prem = {};
+      if (cur === 'approved') {
+        const mm = await sb.from('memberships').select('user_id,premium_until');
+        (mm.data || []).forEach(x => { if (new Date(x.premium_until) > new Date()) prem[x.user_id] = x.premium_until; });
+      }
       data.forEach(p => {
         const d = document.createElement('div'); d.className = 'm';
         const n = document.createElement('b');
@@ -90,7 +102,19 @@
         if (p.bio) { const b = document.createElement('small'); b.textContent = p.bio; d.appendChild(b); }
         const a = document.createElement('div'); a.className = 'acts';
         if (cur === 'pending') a.append(btn('قبول', () => setStatus(p.id, 'approved')), btn('رفض', () => setStatus(p.id, 'suspended'), true));
-        if (cur === 'approved') a.append(btn('إيقاف', () => setStatus(p.id, 'suspended'), true));
+        if (cur === 'approved') {
+          if (prem[p.id]) {
+            const ps = document.createElement('small');
+            ps.textContent = '⭐ مميز حتى ' + new Date(prem[p.id]).toLocaleDateString('en-GB');
+            d.appendChild(ps);
+          }
+          a.append(
+            btn('⭐ +30 يوماً', () => setPremium(p.id, 30)),
+            btn('⭐ +365 يوماً', () => setPremium(p.id, 365))
+          );
+          if (prem[p.id]) a.append(btn('إلغاء المميز', () => setPremium(p.id, 0), true));
+          a.append(btn('إيقاف', () => setStatus(p.id, 'suspended'), true));
+        }
         if (cur === 'suspended') a.append(btn('إعادة تفعيل', () => setStatus(p.id, 'approved')));
         d.appendChild(a);
         list.appendChild(d);
