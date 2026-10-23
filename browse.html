@@ -29,6 +29,10 @@
     .flt label{margin:0 0 4px;font-size:13px;font-weight:700}
     .flt input,.flt select{padding:9px 12px}
     .cnt{color:var(--muted);font-size:14px;margin:6px 2px}
+    .vip{display:inline-block;background:var(--gold);color:#fff;border-radius:999px;padding:1px 10px;font-size:12px;font-weight:700;margin-right:6px;vertical-align:middle}
+    .p.pro{border-color:var(--gold)}
+    .quota{font-size:14px;color:var(--muted);margin:6px 2px}
+    .quota a{color:var(--green);font-weight:700}
   </style>
 </head>
 <body>
@@ -36,6 +40,7 @@
     <h1>تصفّح الأعضاء</h1>
     <p id="msg" style="display:none"></p>
 
+    <p id="quota" class="quota" style="display:none"></p>
     <div id="tools" style="display:none">
       <details class="flt" id="flt">
         <summary><span>🔎 تصفية النتائج <b id="fcount"></b></span><span>▾</span></summary>
@@ -70,6 +75,20 @@
     const F_KEY = 'browse_filters';
     let me = null, all = [];
     const sentTo = new Set();
+    const vipSet = new Set();
+
+    async function loadQuota() {
+      try {
+        const { data } = await sb.rpc('my_interest_quota');
+        if (!data || !data.length) return;
+        const r = data[0], q = $('quota');
+        q.textContent = '';
+        q.append('اهتماماتك في آخر 7 أيام: ' + r.used + ' من ' + r.lim + ' ');
+        const a = document.createElement('a'); a.href = 'premium.html';
+        a.textContent = r.premium_until ? '⭐ عضويتك المميزة' : 'زد الحد بالعضوية المميزة';
+        q.appendChild(a); q.style.display = 'block';
+      } catch (e) {}
+    }
 
     function age(d) {
       if (!d) return '';
@@ -87,11 +106,14 @@
     }
 
     function card(p) {
-      const c = el('div', 'p');
+      const vip = vipSet.has(p.id);
+      const c = el('div', vip ? 'p pro' : 'p');
       const top = el('div', 'top');
       top.appendChild(el('div', 'av', (p.first_name || '؟').charAt(0).toUpperCase()));
       const info = el('div');
-      info.appendChild(el('div', 'nm', p.first_name || 'عضو'));
+      const nm = el('div', 'nm', p.first_name || 'عضو');
+      if (vip) nm.appendChild(el('span', 'vip', '⭐ مميز'));
+      info.appendChild(nm);
       info.appendChild(el('div', 'meta', age(p.birth_date) + ' سنة · ' + [p.city, p.country].filter(Boolean).join('، ')));
       top.appendChild(info);
       c.appendChild(top);
@@ -114,9 +136,16 @@
         b.onclick = async () => {
           b.disabled = true;
           const { error } = await sb.from('interests').insert({ from_id: me, to_id: p.id, status: 'sent' });
-          if (error) { b.disabled = false; alert('خطأ: ' + error.message); return; }
+          if (error) {
+            b.disabled = false;
+            if (/INTEREST_LIMIT/.test(error.message || '')) {
+              if (confirm('وصلت إلى الحد الأسبوعي للاهتمامات. هل تريد معرفة العضوية المميزة التي ترفع الحد؟')) location.href = 'premium.html';
+            } else alert('خطأ: ' + error.message);
+            return;
+          }
           sentTo.add(p.id);
           b.textContent = 'تم إرسال الاهتمام ✓';
+          loadQuota();
         };
       }
       c.appendChild(b);
@@ -190,7 +219,14 @@
         .order('created_at', { ascending: false });
       if (error) { showMsg('msg', 'خطأ: ' + error.message, 'error'); return; }
 
+      try {
+        const v = await sb.rpc('premium_ids');
+        (v.data || []).forEach(x => vipSet.add(typeof x === 'string' ? x : (x && (x.premium_ids || Object.values(x)[0]))));
+      } catch (e) {}
       all = data.filter(p => !hidden.has(p.id));
+      // المميزون أولاً (الترتيب الأصلي محفوظ داخل كل مجموعة)
+      all = all.filter(p => vipSet.has(p.id)).concat(all.filter(p => !vipSet.has(p.id)));
+      loadQuota();
       $('tools').style.display = 'block';
       loadFilters();
       if (activeCount() > 0) $('flt').open = true;
