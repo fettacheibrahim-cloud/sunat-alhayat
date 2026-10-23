@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>سنة الحياة - المفضلة</title>
+  <link rel="stylesheet" href="style.css?v=10">
+</head>
+<body>
+  <main class="wrap">
+    <h1>المفضلة</h1>
+    <div class="tabsx"><a href="browse.html">🔍 التصفح</a><a class="on" href="favorites.html">❤️ المفضلة</a></div>
+    <p style="color:var(--muted);font-size:14px;margin:4px 2px">قائمتك خاصة بك، ولا يعلم الأعضاء أنك حفظتهم.</p>
+    <p id="msg" style="display:none"></p>
+    <div id="grid" class="grid"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js?v=10"></script>
+  <script src="compat.js?v=1"></script>
+  <script>
+    const $ = id => document.getElementById(id);
+    function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; }
+    let me = null, mine = null;
+    const sentTo = new Set();
+
+    function empty() {
+      const g = $('grid'); g.innerHTML = '';
+      const e = el('div', 'empty');
+      e.appendChild(el('b', '', 'لا يوجد أعضاء في المفضلة بعد'));
+      e.append('اضغط 🤍 على أي ملف في التصفح لتجده هنا.');
+      const a = el('a', 'btn sm', 'تصفّح الأعضاء'); a.href = 'browse.html'; a.style.marginTop = '12px';
+      e.appendChild(el('br')); e.appendChild(a);
+      g.appendChild(e);
+    }
+
+    function card(p) {
+      const c = el('div', 'p');
+      const hd = el('div', 'hd');
+      hd.appendChild(el('div', 'av', (p.first_name || '؟').charAt(0).toUpperCase()));
+      const who = el('div', 'who');
+      who.appendChild(el('div', 'nm', p.first_name || 'عضو'));
+      who.appendChild(el('div', 'meta', [ageOf(p.birth_date) ? ageOf(p.birth_date) + ' سنة' : '', [p.city, p.country].filter(Boolean).join('، ')].filter(Boolean).join(' · ')));
+      hd.appendChild(who);
+      if (p._c) hd.appendChild(el('span', pctClass(p._c.pct), p._c.pct + '٪ توافق'));
+      c.appendChild(hd);
+      if (p.bio) c.appendChild(el('p', 'bio', p.bio));
+
+      const acts = el('div', 'acts');
+      const view = el('a', 'btn ghost', 'عرض الملف'); view.href = 'member.html?id=' + p.id;
+      const send = el('button', 'btn');
+      if (sentTo.has(p.id)) { send.textContent = 'تم الإرسال ✓'; send.disabled = true; }
+      else {
+        send.textContent = 'اهتمام 💌';
+        send.onclick = async () => {
+          send.disabled = true;
+          const { error } = await sb.from('interests').insert({ from_id: me, to_id: p.id, status: 'sent' });
+          if (error) {
+            send.disabled = false;
+            if (/INTEREST_LIMIT/.test(error.message || '')) {
+              if (confirm('وصلت إلى الحد الأسبوعي للاهتمامات. هل تريد معرفة العضوية المميزة التي ترفع الحد؟')) location.href = 'premium.html';
+            } else alert('خطأ: ' + error.message);
+            return;
+          }
+          send.textContent = 'تم الإرسال ✓';
+        };
+      }
+      const h = el('button', 'btn ghost heart on', '❤️'); h.type = 'button'; h.title = 'إزالة من المفضلة';
+      h.onclick = async () => {
+        h.disabled = true;
+        const { error } = await sb.from('favorites').delete().eq('user_id', me).eq('target_id', p.id);
+        if (error) { h.disabled = false; alert('خطأ: ' + error.message); return; }
+        c.remove();
+        if (!$('grid').children.length) empty();
+      };
+      acts.append(view, send, h);
+      c.appendChild(acts);
+      return c;
+    }
+
+    (async () => {
+      const s = await getSession();
+      if (!s) { location.href = 'auth.html'; return; }
+      me = s.user.id;
+      const { data: m } = await sb.from('profiles').select('*').eq('id', me).maybeSingle();
+      mine = m;
+      if (!mine || mine.status !== 'approved') { showMsg('msg', 'تظهر المفضلة بعد قبول حسابك.', 'error'); return; }
+
+      const { data: favs, error } = await sb.from('favorites').select('target_id,created_at').eq('user_id', me).order('created_at', { ascending: false });
+      if (error) { showMsg('msg', 'خطأ: ' + error.message + ' — تأكد من تشغيل ملف social.sql', 'error'); return; }
+      if (!favs.length) { empty(); return; }
+
+      const ids = favs.map(f => f.target_id);
+      const { data: ps } = await sb.from('profiles').select('*').in('id', ids).eq('status', 'approved');
+      const { data: ints } = await sb.from('interests').select('to_id').eq('from_id', me);
+      (ints || []).forEach(i => sentTo.add(i.to_id));
+      const { data: bl } = await sb.from('blocks').select('blocker_id,blocked_id').or('blocker_id.eq.' + me + ',blocked_id.eq.' + me);
+      const hidden = new Set(); (bl || []).forEach(b => hidden.add(b.blocker_id === me ? b.blocked_id : b.blocker_id));
+
+      const byId = {}; (ps || []).forEach(p => { if (!hidden.has(p.id)) { p._c = compat(mine, p); byId[p.id] = p; } });
+      const list = ids.map(i => byId[i]).filter(Boolean);
+      if (!list.length) { empty(); return; }
+      const g = $('grid'); list.forEach(p => g.appendChild(card(p)));
+    })();
+  </script>
+</body>
+</html>
