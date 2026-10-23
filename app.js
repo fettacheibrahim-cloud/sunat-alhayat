@@ -6,7 +6,7 @@ window.sb = sb;
 (function () {
   const l = document.createElement('link');
   l.rel = 'stylesheet';
-  l.href = 'style.css?v=8';
+  l.href = 'style.css?v=10';
   document.head.appendChild(l);
 })();
 
