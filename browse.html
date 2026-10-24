@@ -4,46 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>سنة الحياة - التصفح</title>
-  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="style.css?v=10">
   <style>
-    .grid{display:grid;gap:14px;margin-top:16px}
-    .p{position:relative;background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 6px 18px rgba(14,59,60,.06)}
-    .p::before{content:"";position:absolute;top:0;right:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));border-radius:20px 20px 0 0}
-    .top{display:flex;align-items:center;gap:14px}
-    .av{flex:none;width:58px;height:58px;border-radius:50%;background:var(--green);color:var(--gold2);display:flex;align-items:center;justify-content:center;font:700 26px 'Amiri',serif}
-    .nm{font:700 1.3rem 'Amiri',serif;color:var(--green)}
-    .meta{color:var(--muted);font-size:14px}
-    .tags{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
-    .tg{background:var(--sand);color:var(--green);border-radius:999px;padding:3px 12px;font-size:13px}
-    .bio{font-size:15px;margin:6px 0;color:var(--ink)}
-    .lf{font-size:14px;color:var(--muted);margin:4px 0 12px}
-    .lf b{color:var(--green)}
-    .p .btn{width:100%}
-    .sm{padding:6px 16px;min-height:38px;font-size:14px}
-
-    .flt{background:#fff;border:1px solid var(--line);border-radius:18px;margin:12px 0 4px;box-shadow:0 4px 12px rgba(14,59,60,.05)}
+    .flt{background:#fff;border:1px solid var(--line);border-radius:var(--radius);margin:10px 0 4px;box-shadow:var(--shadow)}
     .flt summary{cursor:pointer;padding:12px 16px;font-weight:700;color:var(--green);list-style:none;display:flex;justify-content:space-between;align-items:center}
     .flt summary::-webkit-details-marker{display:none}
     .flt .body{padding:0 16px 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .flt .full{grid-column:1/-1}
-    .flt label{margin:0 0 4px;font-size:13px;font-weight:700}
+    .flt label{margin:0 0 4px;font-size:13px}
     .flt input,.flt select{padding:9px 12px}
-    .cnt{color:var(--muted);font-size:14px;margin:6px 2px}
-    .vip{display:inline-block;background:var(--gold);color:#fff;border-radius:999px;padding:1px 10px;font-size:12px;font-weight:700;margin-right:6px;vertical-align:middle}
-    .p.pro{border-color:var(--gold)}
-    .quota{font-size:14px;color:var(--muted);margin:6px 2px}
+    .cnt{color:var(--muted);font-size:14px;margin:8px 2px 0}
+    .quota{font-size:14px;color:var(--muted);margin:4px 2px 0}
     .quota a{color:var(--green);font-weight:700}
   </style>
 </head>
 <body>
-  <main style="max-width:640px;margin:0 auto;padding:20px 16px">
+  <main class="wrap">
     <h1>تصفّح الأعضاء</h1>
+    <div class="tabsx"><a class="on" href="browse.html">🔍 التصفح</a><a href="favorites.html">❤️ المفضلة</a></div>
     <p id="msg" style="display:none"></p>
-
     <p id="quota" class="quota" style="display:none"></p>
+
     <div id="tools" style="display:none">
       <details class="flt" id="flt">
-        <summary><span>🔎 تصفية النتائج <b id="fcount"></b></span><span>▾</span></summary>
+        <summary><span>🔎 تصفية وترتيب <b id="fcount"></b></span><span>▾</span></summary>
         <div class="body">
           <div><label for="f_min">العمر من</label><input id="f_min" type="number" inputmode="numeric" min="18" max="99" placeholder="18"></div>
           <div><label for="f_max">العمر إلى</label><input id="f_max" type="number" inputmode="numeric" min="18" max="99" placeholder="60"></div>
@@ -56,7 +40,15 @@
             <label for="f_edu">المستوى الدراسي</label>
             <select id="f_edu"><option value="">الكل</option><option value="secondary">ثانوي</option><option value="diploma">دبلوم</option><option value="bachelor">إجازة / بكالوريوس</option><option value="postgraduate">دراسات عليا</option></select>
           </div>
-          <div class="full"><button id="f_reset" type="button" class="btn ghost sm" style="width:100%">مسح الفلاتر</button></div>
+          <div>
+            <label for="f_rel">درجة الالتزام</label>
+            <select id="f_rel"><option value="">الكل</option><option value="practicing">ملتزم/ة</option><option value="moderate">متوسّط</option><option value="learning">في طريق الالتزام</option></select>
+          </div>
+          <div>
+            <label for="f_sort">الترتيب</label>
+            <select id="f_sort"><option value="">الأحدث</option><option value="compat">الأكثر توافقاً</option></select>
+          </div>
+          <div class="full"><button id="f_reset" type="button" class="btn ghost sm block">مسح الفلاتر</button></div>
         </div>
       </details>
       <p id="cnt" class="cnt"></p>
@@ -66,37 +58,16 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js?v=9"></script>
+  <script src="i18n-dict.js?v=1"></script>
+  <script src="i18n.js?v=1"></script>
+  <script src="app.js?v=10"></script>
+  <script src="compat.js?v=1"></script>
   <script>
     const $ = id => document.getElementById(id);
-    const mAr = { never_married:'أعزب/عزباء', divorced:'مطلّق/ة', widowed:'أرمل/ة' };
-    const eAr = { secondary:'ثانوي', diploma:'دبلوم', bachelor:'إجازة', postgraduate:'دراسات عليا' };
-    const F_IDS = ['f_min', 'f_max', 'f_city', 'f_mar', 'f_edu'];
+    const F_IDS = ['f_min', 'f_max', 'f_city', 'f_mar', 'f_edu', 'f_rel', 'f_sort'];
     const F_KEY = 'browse_filters';
-    let me = null, all = [];
-    const sentTo = new Set();
-    const vipSet = new Set();
-
-    async function loadQuota() {
-      try {
-        const { data } = await sb.rpc('my_interest_quota');
-        if (!data || !data.length) return;
-        const r = data[0], q = $('quota');
-        q.textContent = '';
-        q.append('اهتماماتك في آخر 7 أيام: ' + r.used + ' من ' + r.lim + ' ');
-        const a = document.createElement('a'); a.href = 'premium.html';
-        a.textContent = r.premium_until ? '⭐ عضويتك المميزة' : 'زد الحد بالعضوية المميزة';
-        q.appendChild(a); q.style.display = 'block';
-      } catch (e) {}
-    }
-
-    function age(d) {
-      if (!d) return '';
-      const b = new Date(d), t = new Date();
-      let a = t.getFullYear() - b.getFullYear();
-      if (t.getMonth() < b.getMonth() || (t.getMonth() === b.getMonth() && t.getDate() < b.getDate())) a--;
-      return a;
-    }
+    let me = null, mine = null, all = [];
+    const sentTo = new Set(), favs = new Set(), vipSet = new Set();
 
     function el(tag, cls, text) {
       const e = document.createElement(tag);
@@ -105,50 +76,75 @@
       return e;
     }
 
+    async function loadQuota() {
+      try {
+        const { data } = await sb.rpc('my_interest_quota');
+        if (!data || !data.length) return;
+        const r = data[0], q = $('quota');
+        q.textContent = '';
+        q.append('اهتماماتك في آخر 7 أيام: ' + r.used + ' من ' + r.lim + ' ');
+        const a = el('a'); a.href = 'premium.html';
+        a.textContent = r.premium_until ? '⭐ عضويتك المميزة' : 'زد الحد بالعضوية المميزة';
+        q.appendChild(a); q.style.display = 'block';
+      } catch (e) {}
+    }
+
+    async function toggleFav(p, b) {
+      b.disabled = true;
+      if (favs.has(p.id)) {
+        const { error } = await sb.from('favorites').delete().eq('user_id', me).eq('target_id', p.id);
+        if (!error) { favs.delete(p.id); b.classList.remove('on'); b.textContent = '🤍'; }
+      } else {
+        const { error } = await sb.from('favorites').insert({ user_id: me, target_id: p.id });
+        if (!error) { favs.add(p.id); b.classList.add('on'); b.textContent = '❤️'; }
+        else alert('تعذّر الحفظ: ' + error.message);
+      }
+      b.disabled = false;
+    }
+
+    async function sendInterest(p, b) {
+      b.disabled = true;
+      const { error } = await sb.from('interests').insert({ from_id: me, to_id: p.id, status: 'sent' });
+      if (error) {
+        b.disabled = false;
+        if (/INTEREST_LIMIT/.test(error.message || '')) {
+          if (confirm('وصلت إلى الحد الأسبوعي للاهتمامات. هل تريد معرفة العضوية المميزة التي ترفع الحد؟')) location.href = 'premium.html';
+        } else alert('خطأ: ' + error.message);
+        return;
+      }
+      sentTo.add(p.id);
+      b.textContent = 'تم إرسال الاهتمام ✓';
+      loadQuota();
+    }
+
     function card(p) {
       const vip = vipSet.has(p.id);
       const c = el('div', vip ? 'p pro' : 'p');
-      const top = el('div', 'top');
-      top.appendChild(el('div', 'av', (p.first_name || '؟').charAt(0).toUpperCase()));
-      const info = el('div');
+      const hd = el('div', 'hd');
+      hd.appendChild(el('div', 'av', (p.first_name || '؟').charAt(0).toUpperCase()));
+      const who = el('div', 'who');
       const nm = el('div', 'nm', p.first_name || 'عضو');
       if (vip) nm.appendChild(el('span', 'vip', '⭐ مميز'));
-      info.appendChild(nm);
-      info.appendChild(el('div', 'meta', age(p.birth_date) + ' سنة · ' + [p.city, p.country].filter(Boolean).join('، ')));
-      top.appendChild(info);
-      c.appendChild(top);
+      who.appendChild(nm);
+      who.appendChild(el('div', 'meta', [ageOf(p.birth_date) ? ageOf(p.birth_date) + ' سنة' : '', [p.city, p.country].filter(Boolean).join('، ')].filter(Boolean).join(' · ')));
+      hd.appendChild(who);
+      if (p._c) hd.appendChild(el('span', pctClass(p._c.pct), p._c.pct + '٪ توافق'));
+      c.appendChild(hd);
 
-      const tags = el('div', 'tags');
-      if (mAr[p.marital_status]) tags.appendChild(el('span', 'tg', mAr[p.marital_status]));
-      if (eAr[p.education]) tags.appendChild(el('span', 'tg', eAr[p.education]));
-      if (tags.children.length) c.appendChild(tags);
-
+      const chips = el('div', 'chips');
+      [LBL.marital[p.marital_status], LBL.edu[p.education], LBL.religiosity[p.religiosity], p.occupation].forEach(t => { if (t) chips.appendChild(el('span', 'chip', t)); });
+      if (chips.children.length) c.appendChild(chips);
       if (p.bio) c.appendChild(el('p', 'bio', p.bio));
-      if (p.looking_for) {
-        const lf = el('p', 'lf'); lf.appendChild(el('b', '', 'أبحث عن: ')); lf.append(p.looking_for);
-        c.appendChild(lf);
-      }
 
-      const b = el('button', 'btn');
-      if (sentTo.has(p.id)) { b.textContent = 'تم إرسال الاهتمام ✓'; b.disabled = true; }
-      else {
-        b.textContent = 'إبداء اهتمام 💌';
-        b.onclick = async () => {
-          b.disabled = true;
-          const { error } = await sb.from('interests').insert({ from_id: me, to_id: p.id, status: 'sent' });
-          if (error) {
-            b.disabled = false;
-            if (/INTEREST_LIMIT/.test(error.message || '')) {
-              if (confirm('وصلت إلى الحد الأسبوعي للاهتمامات. هل تريد معرفة العضوية المميزة التي ترفع الحد؟')) location.href = 'premium.html';
-            } else alert('خطأ: ' + error.message);
-            return;
-          }
-          sentTo.add(p.id);
-          b.textContent = 'تم إرسال الاهتمام ✓';
-          loadQuota();
-        };
-      }
-      c.appendChild(b);
+      const acts = el('div', 'acts');
+      const view = el('a', 'btn ghost', 'عرض الملف'); view.href = 'member.html?id=' + p.id;
+      const send = el('button', 'btn');
+      if (sentTo.has(p.id)) { send.textContent = 'تم الإرسال ✓'; send.disabled = true; }
+      else { send.textContent = 'اهتمام 💌'; send.onclick = () => sendInterest(p, send); }
+      const h = el('button', 'btn ghost heart' + (favs.has(p.id) ? ' on' : ''), favs.has(p.id) ? '❤️' : '🤍');
+      h.type = 'button'; h.title = 'حفظ في المفضلة'; h.onclick = () => toggleFav(p, h);
+      acts.append(view, send, h);
+      c.appendChild(acts);
       return c;
     }
 
@@ -169,17 +165,21 @@
     function render() {
       const min = parseInt($('f_min').value, 10), max = parseInt($('f_max').value, 10);
       const city = $('f_city').value.trim().toLowerCase();
-      const mar = $('f_mar').value, edu = $('f_edu').value;
+      const mar = $('f_mar').value, edu = $('f_edu').value, rel = $('f_rel').value;
 
-      const list = all.filter(p => {
-        const a = age(p.birth_date);
-        if (!isNaN(min) && (a === '' || a < min)) return false;
-        if (!isNaN(max) && (a === '' || a > max)) return false;
+      let list = all.filter(p => {
+        const a = ageOf(p.birth_date);
+        if (!isNaN(min) && (a == null || a < min)) return false;
+        if (!isNaN(max) && (a == null || a > max)) return false;
         if (city && !(((p.city || '') + ' ' + (p.country || '')).toLowerCase().includes(city))) return false;
         if (mar && p.marital_status !== mar) return false;
         if (edu && p.education !== edu) return false;
+        if (rel && p.religiosity !== rel) return false;
         return true;
       });
+      if ($('f_sort').value === 'compat') {
+        list = list.slice().sort((x, y) => ((y._c ? y._c.pct : -1) - (x._c ? x._c.pct : -1)));
+      }
 
       const g = $('grid'); g.innerHTML = '';
       const n = activeCount();
@@ -187,7 +187,10 @@
       $('cnt').textContent = 'عدد النتائج: ' + list.length + (list.length !== all.length ? ' من ' + all.length : '');
 
       if (!list.length) {
-        g.appendChild(el('p', 'meta', all.length ? 'لا توجد نتائج مطابقة، جرّب تخفيف الفلاتر.' : 'لا يوجد أعضاء متاحون حالياً.'));
+        const e = el('div', 'empty');
+        e.appendChild(el('b', '', all.length ? 'لا توجد نتائج مطابقة' : 'لا يوجد أعضاء متاحون حالياً'));
+        e.append(all.length ? 'جرّب تخفيف الفلاتر.' : 'عُد لاحقاً، يصل أعضاء جدد باستمرار.');
+        g.appendChild(e);
         return;
       }
       list.forEach(p => g.appendChild(card(p)));
@@ -198,7 +201,8 @@
       if (!s) { location.href = 'auth.html'; return; }
       me = s.user.id;
 
-      const { data: mine } = await sb.from('profiles').select('gender,status').eq('id', me).maybeSingle();
+      const { data: m } = await sb.from('profiles').select('*').eq('id', me).maybeSingle();
+      mine = m;
       if (!mine) { showMsg('msg', 'أكمل ملفك الشخصي أولاً', 'error'); return; }
       if (mine.status !== 'approved') { showMsg('msg', 'حسابك قيد المراجعة. سيظهر التصفح بعد قبوله.', 'error'); return; }
 
@@ -212,6 +216,10 @@
       const { data: bl } = await sb.from('blocks').select('blocker_id,blocked_id')
         .or('blocker_id.eq.' + me + ',blocked_id.eq.' + me);
       (bl || []).forEach(b => hidden.add(b.blocker_id === me ? b.blocked_id : b.blocker_id));
+      try {
+        const f = await sb.from('favorites').select('target_id').eq('user_id', me);
+        (f.data || []).forEach(x => favs.add(x.target_id));
+      } catch (e) {}
 
       const opposite = mine.gender === 'male' ? 'female' : 'male';
       const { data, error } = await sb.from('profiles').select('*')
@@ -224,9 +232,11 @@
         (v.data || []).forEach(x => vipSet.add(typeof x === 'string' ? x : (x && (x.premium_ids || Object.values(x)[0]))));
       } catch (e) {}
       all = data.filter(p => !hidden.has(p.id));
+      all.forEach(p => { p._c = compat(mine, p); });
       // المميزون أولاً (الترتيب الأصلي محفوظ داخل كل مجموعة)
       all = all.filter(p => vipSet.has(p.id)).concat(all.filter(p => !vipSet.has(p.id)));
       loadQuota();
+
       $('tools').style.display = 'block';
       loadFilters();
       if (activeCount() > 0) $('flt').open = true;
