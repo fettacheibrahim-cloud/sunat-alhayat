@@ -58,6 +58,8 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="i18n-dict.js?v=1"></script>
+  <script src="i18n.js?v=1"></script>
   <script src="app.js?v=10"></script>
   <script>
     // ===== أدخل بياناتك هنا =====
@@ -66,7 +68,7 @@
     // ============================
 
     const $ = id => document.getElementById(id);
-    function dateAr(d) { return new Date(d).toLocaleDateString('ar-MA-u-nu-latn', { year: 'numeric', month: 'long', day: 'numeric' }); }
+    function dateAr(d) { return new Date(d).toLocaleDateString({ ar: 'ar-MA-u-nu-latn', fr: 'fr-FR', en: 'en-GB' }[window.I18N_LANG || 'ar'], { year: 'numeric', month: 'long', day: 'numeric' }); }
 
     (async () => {
       const s = await getSession();
