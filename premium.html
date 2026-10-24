@@ -6,7 +6,7 @@
   <title>سنة الحياة - العضوية المميزة</title>
   <link rel="stylesheet" href="style.css?v=10">
   <style>
-    .plans{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+    .cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
     .plan{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px}
     .plan.pro{border:2px solid var(--gold);box-shadow:0 8px 22px rgba(14,59,60,.08)}
     .plan h3{margin:0 0 8px;color:var(--green)}
@@ -16,7 +16,15 @@
     .bar{height:8px;border-radius:999px;background:#fff;overflow:hidden;margin-top:8px}
     .bar i{display:block;height:100%;background:var(--gold)}
     .badge{display:inline-block;background:var(--gold);color:#fff;border-radius:999px;padding:3px 12px;font-size:13px;font-weight:700}
-    @media(max-width:520px){.plans{grid-template-columns:1fr}}
+    .packs{display:grid;gap:10px;margin:12px 0}
+    .pack{position:relative;display:flex;align-items:center;gap:12px;background:#fff;border:2px solid var(--line);border-radius:16px;padding:14px;cursor:pointer;margin:0;font-weight:500}
+    .pack input{width:auto;margin:0}
+    .pack.on{border-color:var(--gold);background:#fffaf0}
+    .pack .t{flex:1;font-weight:700;color:var(--green)}
+    .pack .t small{display:block;font-weight:400;color:#1f6b33;font-size:13px}
+    .pack .pr{font:700 1.15rem 'Amiri',serif;color:var(--gold);white-space:nowrap}
+    .pack .tag{position:absolute;top:-10px;inset-inline-end:14px;background:var(--gold);color:#fff;border-radius:999px;padding:1px 10px;font-size:12px;font-weight:700}
+    @media(max-width:520px){.cmp{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -26,7 +34,7 @@
 
     <div class="quota" id="quota">جاري التحميل…</div>
 
-    <div class="plans">
+    <div class="cmp">
       <div class="plan">
         <h3>مجانية</h3>
         <ul>
@@ -43,13 +51,14 @@
           <li>شارة «مميز» على ملفك</li>
           <li>ظهور ملفك في أعلى نتائج التصفح</li>
         </ul>
-        <div class="pr" id="price"></div>
       </div>
     </div>
 
-    <h2 style="font-size:1.2rem">كيف أشترك؟</h2>
+    <h2 style="font-size:1.2rem">اختر مدة الاشتراك</h2>
+    <div class="packs" id="packs"></div>
+
     <ol style="line-height:2;color:var(--ink);padding-right:20px">
-      <li>تواصل معنا عبر الزر أدناه.</li>
+      <li>اضغط الزر أدناه لمراسلتنا مع الباقة التي اخترتها.</li>
       <li>سنرسل لك طريقة الدفع المتاحة.</li>
       <li>بعد التأكد من الدفع تُفعَّل عضويتك خلال وقت قصير، وسترى الشارة هنا.</li>
     </ol>
@@ -58,28 +67,53 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="i18n-dict.js?v=1"></script>
-  <script src="i18n.js?v=1"></script>
-  <script src="app.js?v=10"></script>
+  <script src="i18n-dict.js?v=2"></script>
+  <script src="i18n.js?v=2"></script>
+  <script src="app.js?v=11"></script>
   <script>
-    // ===== أدخل بياناتك هنا =====
+    // ===== أدخل بياناتك هنا (وطابق الأسعار مع ثوابت admin.html) =====
     const WHATSAPP = '212615959425'; // 0615959425 بالصيغة الدولية للمغرب
-    const PRICE_TEXT = '50 درهماً / شهر'; // اتركه فارغاً لإخفائه
-    // ============================
+    const PLANS = [
+      { days: 30,  price: 50 },
+      { days: 90,  price: 120, popular: true },
+      { days: 365, price: 400 }
+    ];
+    const BASE_MONTHLY = 50;   // سعر الشهر الواحد، لحساب التوفير
+    // ================================================================
 
     const $ = id => document.getElementById(id);
+    const TITLES = { 30: 'شهر واحد', 90: '3 أشهر', 365: 'سنة كاملة' };
+    let email = '', chosen = PLANS.find(p => p.popular) || PLANS[0];
+
     function dateAr(d) { return new Date(d).toLocaleDateString({ ar: 'ar-MA-u-nu-latn', fr: 'fr-FR', en: 'en-GB' }[window.I18N_LANG || 'ar'], { year: 'numeric', month: 'long', day: 'numeric' }); }
+
+    function waLink() {
+      const t = 'السلام عليكم، أرغب في تفعيل العضوية المميزة (' + TITLES[chosen.days] + ' — ' + chosen.price + ' درهماً) في «سنة الحياة». بريدي: ' + email;
+      return 'https://wa.me/' + encodeURIComponent(WHATSAPP) + '?text=' + encodeURIComponent(t);
+    }
+
+    function renderPacks() {
+      const box = $('packs'); box.innerHTML = '';
+      PLANS.forEach(p => {
+        const l = document.createElement('label'); l.className = 'pack' + (p === chosen ? ' on' : '');
+        const r = document.createElement('input'); r.type = 'radio'; r.name = 'plan'; r.checked = p === chosen;
+        const t = document.createElement('span'); t.className = 't'; t.textContent = TITLES[p.days];
+        const months = Math.round(p.days / 30), save = BASE_MONTHLY * months - p.price;
+        if (save > 0) { const s = document.createElement('small'); s.textContent = 'وفّر ' + save + ' درهماً'; t.appendChild(s); }
+        const pr = document.createElement('span'); pr.className = 'pr'; pr.textContent = p.price + ' درهماً';
+        l.append(r, t, pr);
+        if (p.popular) { const g = document.createElement('span'); g.className = 'tag'; g.textContent = 'الأكثر طلباً'; l.appendChild(g); }
+        r.onchange = () => { chosen = p; renderPacks(); updateBtn(); };
+        box.appendChild(l);
+      });
+    }
+    function updateBtn() { if (WHATSAPP) { const b = $('contactBtn'); b.href = waLink(); b.target = '_blank'; b.rel = 'noopener'; } }
 
     (async () => {
       const s = await getSession();
       if (!s) { location.href = 'auth.html'; return; }
-
-      if (PRICE_TEXT) $('price').textContent = PRICE_TEXT; else $('price').style.display = 'none';
-      if (WHATSAPP) {
-        const t = 'السلام عليكم، أرغب في تفعيل العضوية المميزة في «سنة الحياة». بريدي: ' + s.user.email;
-        $('contactBtn').href = 'https://wa.me/' + encodeURIComponent(WHATSAPP) + '?text=' + encodeURIComponent(t);
-        $('contactBtn').target = '_blank'; $('contactBtn').rel = 'noopener';
-      }
+      email = s.user.email || '';
+      renderPacks(); updateBtn();
 
       const { data, error } = await sb.rpc('my_interest_quota');
       const q = $('quota');
