@@ -78,6 +78,8 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="i18n-dict.js?v=1"></script>
+  <script src="i18n.js?v=1"></script>
   <script src="app.js?v=10"></script>
   <script>
     const $ = id => document.getElementById(id);
@@ -242,7 +244,8 @@
 
     $('delAcc').onclick = async () => {
       if (!confirm('سيتم حذف حسابك وملفك ومحادثاتك وصورتك نهائياً ولا يمكن التراجع. هل أنت متأكد؟')) return;
-      if (prompt('للتأكيد اكتب كلمة: حذف') !== 'حذف') { msg('لم يتم الحذف.', 'error'); return; }
+      const word = (prompt('للتأكيد اكتب كلمة: حذف') || '').trim().toLowerCase();
+      if (!['حذف', 'supprimer', 'delete'].includes(word)) { msg('لم يتم الحذف.', 'error'); return; }
       $('delAcc').disabled = true;
       try {
         if (photoPath) await sb.storage.from('photos').remove([photoPath]);
