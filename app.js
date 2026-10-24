@@ -60,6 +60,11 @@ async function logout() {
     .app-bar a.on{color:#0E3B3C;font-weight:700;border-top-color:#B8903F;background:#FAF7F0}
     .app-badge{position:absolute;top:3px;left:calc(50% + 6px);background:#C0392B;color:#fff;border-radius:999px;
       min-width:18px;height:18px;padding:0 5px;font:700 11px 'Tajawal',sans-serif;display:none;align-items:center;justify-content:center}
+    .app-banner{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;background:#fff1cc;color:#5c4400;font:500 14px 'Tajawal',sans-serif;border-bottom:1px solid #e5d49a}
+    .app-banner span{flex:1;min-width:160px}
+    .app-banner span::before{content:'⭐ '}
+    .app-banner a{background:#0E3B3C;color:#fff;border-radius:999px;padding:5px 14px;text-decoration:none;font-weight:700}
+    .app-banner button{background:none;border:0;font-size:18px;cursor:pointer;color:inherit;padding:0 4px}
     .app-toast{display:none;position:fixed;top:66px;right:12px;left:12px;max-width:420px;margin:0 auto;
       background:#0E3B3C;color:#fff;border:1px solid #D8B565;border-radius:14px;padding:12px 16px;z-index:100;
       box-shadow:0 8px 24px rgba(0,0,0,.25);cursor:pointer;font:500 15px 'Tajawal',sans-serif}
@@ -226,6 +231,29 @@ async function logout() {
     };
     actions.insertBefore(bell, out);
   }
+
+  // لافتة تجديد العضوية المميزة: قبل 3 أيام من الانتهاء أو خلال 14 يوماً بعده (تُغلق لبقية اليوم)
+  (async function membershipBanner() {
+    try {
+      if (here === 'premium.html') return;
+      const { data } = await sb.rpc('my_membership');
+      if (!data) return;
+      const until = new Date(data), ms = until - Date.now(), c = Math.ceil(ms / 864e5);
+      if (c > 3 || ms < -14 * 864e5) return;
+      const key = 'mb_' + me + '_' + until.toISOString().slice(0, 10) + '_' + new Date().toDateString();
+      try { if (localStorage.getItem(key)) return; } catch (e) {}
+      const text = ms <= 0 ? 'انتهت عضويتك المميزة. جدّدها لتستعيد الشارة والحدّ الأعلى.'
+        : c <= 1 ? 'تنتهي عضويتك المميزة خلال 24 ساعة.'
+        : c === 2 ? 'تنتهي عضويتك المميزة خلال يومين.' : 'تنتهي عضويتك المميزة خلال 3 أيام.';
+      const bn = document.createElement('div'); bn.className = 'app-banner';
+      const sp = document.createElement('span'); sp.textContent = text;
+      const go = document.createElement('a'); go.href = 'premium.html'; go.textContent = 'جدّد الآن';
+      const x = document.createElement('button'); x.type = 'button'; x.textContent = '×'; x.setAttribute('aria-label', 'Close');
+      x.onclick = () => { bn.remove(); try { localStorage.setItem(key, '1'); } catch (e) {} };
+      bn.append(sp, go, x);
+      top.insertAdjacentElement('afterend', bn);
+    } catch (e) {}
+  })();
 
   document.addEventListener('visibilitychange', () => { if (!document.hidden) poll(); });
   poll();
