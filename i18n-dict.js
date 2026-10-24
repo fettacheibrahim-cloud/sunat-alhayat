@@ -1416,6 +1416,102 @@ window.I18N_DICT = {
 "Notifications activées ✓",
 "Notifications enabled ✓"
 ],
+"سنة الحياة - تثبيت التطبيق": [
+"Sunat Al-Hayat - Installer l'application",
+"Sunat Al-Hayat - Install the app"
+],
+"سنة الحياة - لا يوجد اتصال": [
+"Sunat Al-Hayat - Hors ligne",
+"Sunat Al-Hayat - Offline"
+],
+"تثبيت التطبيق": [
+"Installer l'application",
+"Install the app"
+],
+"ثبّت «سنة الحياة» على هاتفك فيظهر برمز على الشاشة الرئيسية ويفتح كتطبيق بملء الشاشة، بلا متجر وبلا تحميل كبير.": [
+"Installez « Sunat Al-Hayat » sur votre téléphone : une icône apparaît sur l'écran d'accueil et l'application s'ouvre en plein écran, sans boutique ni gros téléchargement.",
+"Install “Sunat Al-Hayat” on your phone: an icon appears on the home screen and it opens full screen like an app, with no store and no big download."
+],
+"📲 تثبيت الآن": [
+"📲 Installer maintenant",
+"📲 Install now"
+],
+"التطبيق مثبّت على جهازك ✓": [
+"L'application est installée sur votre appareil ✓",
+"The app is installed on your device ✓"
+],
+"أندرويد (Chrome)": [
+"Android (Chrome)",
+"Android (Chrome)"
+],
+"افتح الموقع في متصفح Chrome.": [
+"Ouvrez le site dans Chrome.",
+"Open the site in Chrome."
+],
+"اضغط زر القائمة ⋮ أعلى المتصفح.": [
+"Touchez le bouton de menu ⋮ en haut du navigateur.",
+"Tap the menu button ⋮ at the top of the browser."
+],
+"اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».": [
+"Choisissez « Installer l'application » ou « Ajouter à l'écran d'accueil ».",
+"Choose “Install app” or “Add to Home screen”."
+],
+"اضغط «تثبيت»، فيظهر الرمز على شاشتك.": [
+"Touchez « Installer » : l'icône apparaît sur votre écran.",
+"Tap “Install” and the icon appears on your screen."
+],
+"آيفون (Safari)": [
+"iPhone (Safari)",
+"iPhone (Safari)"
+],
+"افتح الموقع في متصفح Safari (لا يعمل التثبيت من المتصفحات الأخرى).": [
+"Ouvrez le site dans Safari (l'installation ne fonctionne pas depuis les autres navigateurs).",
+"Open the site in Safari (installing doesn't work from other browsers)."
+],
+"اضغط زر المشاركة أسفل الشاشة.": [
+"Touchez le bouton Partager en bas de l'écran.",
+"Tap the Share button at the bottom of the screen."
+],
+"اختر «إضافة إلى الشاشة الرئيسية».": [
+"Choisissez « Sur l'écran d'accueil ».",
+"Choose “Add to Home Screen”."
+],
+"اضغط «إضافة».": [
+"Touchez « Ajouter ».",
+"Tap “Add”."
+],
+"الحاسوب": [
+"Ordinateur",
+"Computer"
+],
+"في Chrome أو Edge تجد أيقونة التثبيت في شريط العنوان.": [
+"Dans Chrome ou Edge, l'icône d'installation se trouve dans la barre d'adresse.",
+"In Chrome or Edge, you'll find the install icon in the address bar."
+],
+"أسماء الأزرار قد تختلف قليلاً حسب إصدار المتصفح ولغته. يعمل التطبيق عبر الإنترنت، وتظهر تنبيهات الرسائل والاهتمامات أثناء فتحه.": [
+"Le nom des boutons peut varier selon la version et la langue du navigateur. L'application fonctionne avec Internet et les alertes de messages et d'intérêts s'affichent pendant qu'elle est ouverte.",
+"Button names may differ slightly depending on your browser version and language. The app works online, and message and interest alerts appear while it is open."
+],
+"لا يوجد اتصال بالإنترنت": [
+"Pas de connexion Internet",
+"No internet connection"
+],
+"تحقق من اتصالك ثم أعد المحاولة.": [
+"Vérifiez votre connexion puis réessayez.",
+"Check your connection and try again."
+],
+"إعادة المحاولة": [
+"Réessayer",
+"Try again"
+],
+"لتثبيت التطبيق: اضغط زر المشاركة ثم «إضافة إلى الشاشة الرئيسية».": [
+"Pour installer l'application : touchez Partager puis « Sur l'écran d'accueil ».",
+"To install the app: tap Share then “Add to Home Screen”."
+],
+"كيف؟": [
+"Comment ?",
+"How?"
+],
 "شهر واحد": [
 "1 mois",
 "1 month"
