@@ -76,6 +76,8 @@
     [/^هل تريد حظر (.+)؟ لن تظهر لك المحادثة بعد الآن\.$/, function (m) { return L('Voulez-vous bloquer ' + m[1] + ' ? La conversation ne s\'affichera plus.', 'Do you want to block ' + m[1] + '? The chat will no longer be shown to you.'); }],
     [/^(🔔 )?رسالة جديدة من (.+?)(?: و(\d+) آخرين)?$/, function (m) { return (m[1] || '') + L('Nouveau message de ', 'New message from ') + m[2] + (m[3] ? L(' et ' + m[3] + ' autres', ' and ' + m[3] + ' others') : ''); }],
     [/^(🔔 )?وصلك اهتمام جديد 💌$/, function (m) { return (m[1] || '') + L('Vous avez reçu un nouvel intérêt 💌', 'You received a new interest 💌'); }],
+    [/^وفّر (\d+) درهماً$/, function (m) { return L('Économisez ' + m[1] + ' MAD', 'Save ' + m[1] + ' MAD'); }],
+    [/^(\d+) درهماً$/, function (m) { return m[1] + ' MAD'; }],
     [/^ينتهي في (.+)$/, function (m) { return L('Expire le ', 'Expires on ') + m[1]; }]
   ];
 
