@@ -232,6 +232,35 @@ async function logout() {
     actions.insertBefore(bell, out);
   }
 
+  // زر «تثبيت» (أندرويد/حاسوب) ولافتة إرشاد لآيفون
+  const isStandalone = () => (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone;
+  if (!isStandalone()) {
+    const inst = document.createElement('button');
+    inst.textContent = '📲 تثبيت'; inst.style.display = 'none';
+    inst.onclick = async () => {
+      const e = window.__bip; if (!e) return;
+      e.prompt();
+      try { await e.userChoice; } catch (x) {}
+      window.__bip = null; inst.style.display = 'none';
+    };
+    const showInst = () => { if (window.__bip && !isStandalone()) inst.style.display = ''; };
+    actions.insertBefore(inst, out);
+    showInst(); window.addEventListener('bip', showInst);
+    window.addEventListener('appinstalled', () => { inst.style.display = 'none'; });
+
+    const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    let iosSeen = false; try { iosSeen = !!localStorage.getItem('ios_tip'); } catch (e) {}
+    if (ios && !iosSeen && here !== 'install.html') {
+      const bn = document.createElement('div'); bn.className = 'app-banner';
+      const sp = document.createElement('span'); sp.textContent = 'لتثبيت التطبيق: اضغط زر المشاركة ثم «إضافة إلى الشاشة الرئيسية».';
+      const go = document.createElement('a'); go.href = 'install.html'; go.textContent = 'كيف؟';
+      const x = document.createElement('button'); x.type = 'button'; x.textContent = '×'; x.setAttribute('aria-label', 'Close');
+      x.onclick = () => { bn.remove(); try { localStorage.setItem('ios_tip', '1'); } catch (e) {} };
+      bn.append(sp, go, x);
+      top.insertAdjacentElement('afterend', bn);
+    }
+  }
+
   // لافتة تجديد العضوية المميزة: قبل 3 أيام من الانتهاء أو خلال 14 يوماً بعده (تُغلق لبقية اليوم)
   (async function membershipBanner() {
     try {
