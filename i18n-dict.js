@@ -1416,6 +1416,50 @@ window.I18N_DICT = {
 "Notifications activées ✓",
 "Notifications enabled ✓"
 ],
+"شهر واحد": [
+"1 mois",
+"1 month"
+],
+"3 أشهر": [
+"3 mois",
+"3 months"
+],
+"سنة كاملة": [
+"1 an",
+"1 year"
+],
+"اختر مدة الاشتراك": [
+"Choisissez la durée de l'abonnement",
+"Choose the subscription length"
+],
+"اضغط الزر أدناه لمراسلتنا مع الباقة التي اخترتها.": [
+"Touchez le bouton ci-dessous pour nous écrire avec la formule choisie.",
+"Tap the button below to message us with the plan you chose."
+],
+"الأكثر طلباً": [
+"Le plus demandé",
+"Most popular"
+],
+"تنتهي عضويتك المميزة خلال 24 ساعة.": [
+"Votre abonnement Premium expire dans moins de 24 h.",
+"Your Premium membership ends within 24 hours."
+],
+"تنتهي عضويتك المميزة خلال يومين.": [
+"Votre abonnement Premium expire dans 2 jours.",
+"Your Premium membership ends in 2 days."
+],
+"تنتهي عضويتك المميزة خلال 3 أيام.": [
+"Votre abonnement Premium expire dans 3 jours.",
+"Your Premium membership ends in 3 days."
+],
+"انتهت عضويتك المميزة. جدّدها لتستعيد الشارة والحدّ الأعلى.": [
+"Votre abonnement Premium a expiré. Renouvelez-le pour retrouver le badge et la limite plus élevée.",
+"Your Premium membership has ended. Renew it to get your badge and higher limit back."
+],
+"جدّد الآن": [
+"Renouveler",
+"Renew now"
+],
 "أعزب/عزباء": [
 "Célibataire",
 "Single"
