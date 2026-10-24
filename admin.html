@@ -35,12 +35,13 @@
       <button data-s="approved">مقبولون</button>
       <button data-s="suspended">موقوفون</button>
       <button data-s="reports">البلاغات</button>
+      <button data-s="revenue">💰 الأرباح</button>
     </div>
     <div id="list"></div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js?v=10"></script>
+  <script src="app.js?v=11"></script>
   <script>
     const $ = id => document.getElementById(id);
     const mAr = { never_married:'أعزب/عزباء', divorced:'مطلّق/ة', widowed:'أرمل/ة' };
@@ -69,11 +70,18 @@
       loadAll(); return true;
     }
 
-    async function setPremium(id, days) {
+    // أسعار الباقات بالدرهم (طابقها مع PLANS في premium.html)
+    const PLAN_PRICES = { 30: 50, 90: 120, 365: 400 };
+
+    async function setPremium(id, days, amount) {
       if (days === 0 && !confirm('إلغاء العضوية المميزة لهذا العضو؟')) return;
-      const { error } = await sb.rpc('admin_set_premium', { target: id, days });
-      if (error) { alert('خطأ: ' + error.message + '\nتأكد من تشغيل premium.sql'); return; }
-      loadList();
+      if (days > 0) {
+        const msg = amount > 0 ? 'تأكيد استلام ' + amount + ' درهماً وتفعيل ' + days + ' يوماً؟' : 'تفعيل ' + days + ' يوماً كهدية (بدون مبلغ)؟';
+        if (!confirm(msg)) return;
+      }
+      const { error } = await sb.rpc('admin_set_premium', { target: id, days, amount: amount || 0 });
+      if (error) { alert('خطأ: ' + error.message + '\nتأكد من تشغيل premium2.sql'); return; }
+      loadAll();
     }
 
     async function closeReport(id) {
@@ -109,8 +117,10 @@
             d.appendChild(ps);
           }
           a.append(
-            btn('⭐ +30 يوماً', () => setPremium(p.id, 30)),
-            btn('⭐ +365 يوماً', () => setPremium(p.id, 365))
+            btn('⭐ شهر (' + PLAN_PRICES[30] + ')', () => setPremium(p.id, 30, PLAN_PRICES[30])),
+            btn('⭐ 3 أشهر (' + PLAN_PRICES[90] + ')', () => setPremium(p.id, 90, PLAN_PRICES[90])),
+            btn('⭐ سنة (' + PLAN_PRICES[365] + ')', () => setPremium(p.id, 365, PLAN_PRICES[365])),
+            btn('🎁 هدية 30 يوماً', () => setPremium(p.id, 30, 0))
           );
           if (prem[p.id]) a.append(btn('إلغاء المميز', () => setPremium(p.id, 0), true));
           a.append(btn('إيقاف', () => setStatus(p.id, 'suspended'), true));
@@ -158,7 +168,42 @@
       $('s_reports').textContent = await c(sb.from('reports').select('*', { count: 'exact', head: true }).eq('status', 'open'));
     }
 
-    function loadList() { return cur === 'reports' ? loadReports() : loadMembers(); }
+    async function loadRevenue() {
+      const list = $('list'); list.innerHTML = 'جاري التحميل…';
+      const [mm, pp] = await Promise.all([
+        sb.from('memberships').select('user_id,premium_until'),
+        sb.from('premium_payments').select('*').order('created_at', { ascending: false }).limit(500)
+      ]);
+      if (mm.error || pp.error) { list.textContent = 'خطأ: ' + (mm.error || pp.error).message + ' — شغّل premium2.sql'; return; }
+      const now = Date.now(), wk = now + 7 * 864e5, mo = new Date(); mo.setDate(1); mo.setHours(0, 0, 0, 0);
+      const active = mm.data.filter(x => new Date(x.premium_until) > now);
+      const soon = active.filter(x => new Date(x.premium_until) <= wk).sort((a, b) => new Date(a.premium_until) - new Date(b.premium_until));
+      const sum = f => pp.data.filter(f).reduce((t, x) => t + Number(x.amount), 0);
+      const revMonth = sum(x => new Date(x.created_at) >= mo), revTotal = sum(() => true);
+
+      const ids = [...new Set([...soon.map(x => x.user_id), ...pp.data.slice(0, 20).map(x => x.user_id)])];
+      const names = {};
+      if (ids.length) { const { data } = await sb.from('profiles').select('id,first_name').in('id', ids); (data || []).forEach(p => names[p.id] = p.first_name); }
+
+      list.innerHTML = '';
+      const st = document.createElement('div'); st.className = 'stats';
+      [[active.length, 'مميزون الآن'], [soon.length, 'ينتهون خلال 7 أيام'], [revMonth, 'درهم هذا الشهر'], [revTotal, 'درهم إجمالاً']].forEach(([n, l]) => {
+        const d = document.createElement('div'); d.className = 'stat';
+        const b = document.createElement('b'); b.textContent = n; const s = document.createElement('span'); s.textContent = l;
+        d.append(b, s); st.appendChild(d);
+      });
+      list.appendChild(st);
+
+      function section(title, rows, empty) {
+        const h = document.createElement('h3'); h.textContent = title; list.appendChild(h);
+        if (!rows.length) { const p = document.createElement('p'); p.style.color = '#666'; p.textContent = empty; list.appendChild(p); return; }
+        rows.forEach(r => { const d = document.createElement('div'); d.className = 'm'; const b = document.createElement('b'); b.textContent = r[0]; const s = document.createElement('small'); s.textContent = r[1]; d.append(b, s); list.appendChild(d); });
+      }
+      section('تنتهي عضويتهم قريباً (راسلهم للتجديد)', soon.map(x => [names[x.user_id] || 'عضو', 'تنتهي في ' + new Date(x.premium_until).toLocaleDateString('en-GB')]), 'لا أحد خلال الأيام السبعة القادمة');
+      section('آخر العمليات', pp.data.slice(0, 20).map(x => [(names[x.user_id] || 'عضو') + ' — ' + Number(x.amount) + ' درهم', x.days + ' يوماً · ' + new Date(x.created_at).toLocaleDateString('en-GB')]), 'لا توجد عمليات بعد');
+    }
+
+    function loadList() { return cur === 'reports' ? loadReports() : cur === 'revenue' ? loadRevenue() : loadMembers(); }
     function loadAll() { loadStats(); loadList(); }
 
     $('tabs').onclick = e => {
