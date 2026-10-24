@@ -31,7 +31,8 @@
         <div class="body">
           <div><label for="f_min">العمر من</label><input id="f_min" type="number" inputmode="numeric" min="18" max="99" placeholder="18"></div>
           <div><label for="f_max">العمر إلى</label><input id="f_max" type="number" inputmode="numeric" min="18" max="99" placeholder="60"></div>
-          <div class="full"><label for="f_city">المدينة أو البلد</label><input id="f_city" placeholder="مثال: الدار البيضاء"></div>
+          <div class="full"><label for="f_country">الدولة</label><select id="f_country"><option value="">كل الدول</option></select></div>
+          <div class="full"><label for="f_city">المدينة</label><input id="f_city" placeholder="مثال: الدار البيضاء"></div>
           <div>
             <label for="f_mar">الحالة الاجتماعية</label>
             <select id="f_mar"><option value="">الكل</option><option value="never_married">أعزب / عزباء</option><option value="divorced">مطلّق / مطلّقة</option><option value="widowed">أرمل / أرملة</option></select>
@@ -64,7 +65,7 @@
   <script src="compat.js?v=1"></script>
   <script>
     const $ = id => document.getElementById(id);
-    const F_IDS = ['f_min', 'f_max', 'f_city', 'f_mar', 'f_edu', 'f_rel', 'f_sort'];
+    const F_IDS = ['f_min', 'f_max', 'f_country', 'f_city', 'f_mar', 'f_edu', 'f_rel', 'f_sort'];
     const F_KEY = 'browse_filters';
     let me = null, mine = null, all = [];
     const sentTo = new Set(), favs = new Set(), vipSet = new Set();
@@ -148,6 +149,17 @@
       return c;
     }
 
+    const cKey = c => (c || '').trim().toLowerCase();
+    // قائمة الدول من واقع الأعضاء المتاحين، الأكثر عدداً أولاً
+    function fillCountries() {
+      const seen = {};
+      all.forEach(p => { const k = cKey(p.country); if (!k) return; (seen[k] = seen[k] || { name: p.country.trim(), n: 0 }).n++; });
+      const sel = $('f_country');
+      Object.keys(seen).sort((a, b) => seen[b].n - seen[a].n).forEach(k => {
+        const o = document.createElement('option'); o.value = k; o.textContent = seen[k].name + ' (' + seen[k].n + ')'; sel.appendChild(o);
+      });
+    }
+
     function loadFilters() {
       try {
         const o = JSON.parse(localStorage.getItem(F_KEY) || '{}');
@@ -165,6 +177,7 @@
     function render() {
       const min = parseInt($('f_min').value, 10), max = parseInt($('f_max').value, 10);
       const city = $('f_city').value.trim().toLowerCase();
+      const ctry = $('f_country').value;
       const mar = $('f_mar').value, edu = $('f_edu').value, rel = $('f_rel').value;
 
       let list = all.filter(p => {
@@ -172,6 +185,7 @@
         if (!isNaN(min) && (a == null || a < min)) return false;
         if (!isNaN(max) && (a == null || a > max)) return false;
         if (city && !(((p.city || '') + ' ' + (p.country || '')).toLowerCase().includes(city))) return false;
+        if (ctry && cKey(p.country) !== ctry) return false;
         if (mar && p.marital_status !== mar) return false;
         if (edu && p.education !== edu) return false;
         if (rel && p.religiosity !== rel) return false;
@@ -238,6 +252,7 @@
       loadQuota();
 
       $('tools').style.display = 'block';
+      fillCountries();
       loadFilters();
       if (activeCount() > 0) $('flt').open = true;
       F_IDS.forEach(i => $(i).addEventListener('input', () => { saveFilters(); render(); }));
