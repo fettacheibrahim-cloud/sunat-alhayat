@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>سنة الحياة - تثبيت التطبيق</title>
+  <meta name="theme-color" content="#0E3B3C">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="style.css?v=10">
+  <style>
+    .st{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin:12px 0}
+    .st h2{margin:0 0 6px;font-size:1.2rem}
+    .st ol{margin:0;padding:0 20px 0 0;line-height:2}
+    .hero{text-align:center}
+    .hero img{width:96px;height:96px;border-radius:22px;box-shadow:var(--shadow2)}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="hero">
+      <img src="icon-192.png" alt="" width="96" height="96">
+      <h1>تثبيت التطبيق</h1>
+      <p style="color:var(--muted)">ثبّت «سنة الحياة» على هاتفك فيظهر برمز على الشاشة الرئيسية ويفتح كتطبيق بملء الشاشة، بلا متجر وبلا تحميل كبير.</p>
+      <button id="installNow" class="btn gold" type="button" style="display:none">📲 تثبيت الآن</button>
+      <p id="done" class="msg ok" style="display:none">التطبيق مثبّت على جهازك ✓</p>
+    </div>
+
+    <div class="st">
+      <h2>أندرويد (Chrome)</h2>
+      <ol>
+        <li>افتح الموقع في متصفح Chrome.</li>
+        <li>اضغط زر القائمة ⋮ أعلى المتصفح.</li>
+        <li>اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».</li>
+        <li>اضغط «تثبيت»، فيظهر الرمز على شاشتك.</li>
+      </ol>
+    </div>
+
+    <div class="st">
+      <h2>آيفون (Safari)</h2>
+      <ol>
+        <li>افتح الموقع في متصفح Safari (لا يعمل التثبيت من المتصفحات الأخرى).</li>
+        <li>اضغط زر المشاركة أسفل الشاشة.</li>
+        <li>اختر «إضافة إلى الشاشة الرئيسية».</li>
+        <li>اضغط «إضافة».</li>
+      </ol>
+    </div>
+
+    <div class="st">
+      <h2>الحاسوب</h2>
+      <p style="margin:0">في Chrome أو Edge تجد أيقونة التثبيت في شريط العنوان.</p>
+    </div>
+
+    <p style="font-size:13px;color:var(--muted)">أسماء الأزرار قد تختلف قليلاً حسب إصدار المتصفح ولغته. يعمل التطبيق عبر الإنترنت، وتظهر تنبيهات الرسائل والاهتمامات أثناء فتحه.</p>
+    <p style="text-align:center"><a class="btn ghost" href="index.html">الرئيسية</a></p>
+  </main>
+
+  <script src="i18n-dict.js?v=3"></script>
+  <script src="i18n.js?v=3"></script>
+  <script>
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
+    var btn = document.getElementById('installNow');
+    function standalone() { return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone; }
+    if (standalone()) document.getElementById('done').style.display = 'block';
+    function offer() { if (window.__bip && !standalone()) btn.style.display = 'inline-flex'; }
+    offer(); window.addEventListener('bip', offer);
+    btn.onclick = async function () {
+      var e = window.__bip; if (!e) return;
+      e.prompt();
+      try { await e.userChoice; } catch (x) {}
+      window.__bip = null; btn.style.display = 'none';
+    };
+    window.addEventListener('appinstalled', function () { btn.style.display = 'none'; document.getElementById('done').style.display = 'block'; });
+  </script>
+</body>
+</html>
