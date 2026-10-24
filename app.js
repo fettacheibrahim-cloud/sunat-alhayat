@@ -76,6 +76,10 @@ async function logout() {
   out.onclick = logout;
   const actions = document.createElement('div');
   actions.style.cssText = 'display:flex;gap:8px;align-items:center';
+  if (window.i18nSwitcher) {
+    const fl = document.querySelector('.lang-float'); if (fl) fl.remove();
+    actions.appendChild(window.i18nSwitcher());
+  }
   actions.appendChild(out);
   top.appendChild(actions);
 
@@ -133,7 +137,7 @@ async function logout() {
     try {
       const reg = navigator.serviceWorker && await navigator.serviceWorker.getRegistration();
       if (reg) {
-        await reg.showNotification('سنة الحياة', { body: text, tag: href, dir: 'rtl', lang: 'ar', data: { url: href } });
+        await reg.showNotification('سنة الحياة', { body: text, tag: href, dir: document.documentElement.dir || 'rtl', lang: document.documentElement.lang || 'ar', data: { url: href } });
         return;
       }
     } catch (e) {}
@@ -141,6 +145,7 @@ async function logout() {
   }
 
   function alertUser(text, href) {
+    if (window.i18nT) text = window.i18nT(text);
     if (document.hidden) systemNotify(text, href);
     else { toast(text, href); beep(); }
   }
