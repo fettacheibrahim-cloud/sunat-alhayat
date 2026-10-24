@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" id="htmlTag">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title id="pageTitle">سنة الحياة - موقع الزواج الجاد</title>
+  <title>سنة الحياة - موقع الزواج الجاد</title>
   <meta name="description" content="موقع للتعارف بنيّة الزواج، بخصوصية وجدية واحترام.">
   <meta name="theme-color" content="#0E3B3C">
   <meta property="og:type" content="website">
   <meta property="og:title" content="سنة الحياة - موقع الزواج الجاد">
+  <meta property="og:description" content="موقع للتعارف بنيّة الزواج، بخصوصية وجدية واحترام.">
   <meta property="og:image" content="https://fettacheibrahim-cloud.github.io/sunat-alhayat/icon-512.png">
+  <meta property="og:locale" content="ar_AR">
   <link rel="icon" type="image/svg+xml" href="icon.svg">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="manifest" href="manifest.webmanifest">
@@ -29,8 +31,8 @@
     .orn{color:var(--gold2);letter-spacing:8px;font-size:18px}
     .verse{max-width:640px;margin:34px auto 0;padding:26px 22px;border:1px solid rgba(216,181,101,.5);
       border-radius:20px;background:rgba(255,255,255,.06)}
-    .verse .ar-text{font:400 1.55rem/2.1 'Amiri',serif;color:#fff;margin:0;direction:rtl}
-    .verse .en-text{font-size:15px;line-height:1.7;color:#e9dfc4;margin:14px 0 0;direction:ltr;font-style:italic}
+    .verse .ar{font:400 1.55rem/2.1 'Amiri',serif;color:#fff;margin:0}
+    .verse .en{font-size:15px;line-height:1.7;color:#e9dfc4;margin:14px 0 0;direction:ltr;font-style:italic}
     .verse .ref{color:var(--gold2);font-size:14px;margin-top:10px}
     section{max-width:720px;margin:0 auto;padding:44px 20px}
     section h2{text-align:center}
@@ -46,132 +48,66 @@
     .trust small{display:block;font-weight:400;color:var(--muted);margin-top:4px}
     .cta{text-align:center}
     footer{text-align:center;padding:26px 20px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
-    
-    /* نظام إظهار وإخفاء اللغات */
-    [data-lang] { display: none; }
-    body.ar [data-lang="ar"] { display: block; }
-    body.ar [data-lang="ar-flex"] { display: flex; }
-    body.ar [data-lang="ar-inline"] { display: inline; }
-    body.en [data-lang="en"] { display: block; }
-    body.en [data-lang="en-flex"] { display: flex; }
-    body.en [data-lang="en-inline"] { display: inline; }
-
-    @media(max-width:600px){.hero h1{font-size:2.1rem}.trust{grid-template-columns:1fr}}
+    @media(max-width:600px){.hero h1{font-size:2.1rem}.verse .ar{font-size:1.3rem}.trust{grid-template-columns:1fr}}
   </style>
 </head>
-<body class="ar" id="bodyTag">
+<body>
   <header class="top">
     <a class="brand" href="index.html">سنة <span>الحياة</span></a>
     <div style="display:flex;gap:8px;align-items:center">
-      <!-- زر تبديل اللغة الفوري -->
-      <button class="btn ghost" type="button" onclick="switchLanguage()">🌐 <span data-lang="ar">English</span><span data-lang="en">العربية</span></button>
-      <button id="install" class="btn ghost" type="button" style="display:none"><span data-lang="ar">📲 تثبيت</span><span data-lang="en">📲 Install</span></button>
-      <a class="btn" href="auth.html"><span data-lang="ar">دخول</span><span data-lang="en">Login</span></a>
+      <button id="install" class="btn ghost" type="button" style="display:none">📲 تثبيت</button>
+      <a class="btn" href="auth.html">دخول</a>
     </div>
   </header>
 
   <div class="hero">
     <div class="orn">✦ ✦ ✦</div>
-    <h1 data-lang="ar">سنة الحياة</h1>
-    <h1 data-lang="en">Sunat Al-Hayat</h1>
-    <p class="sub" data-lang="ar">موقع جاد للتعارف بنيّة الزواج، على أساس من الاحترام والخصوصية والمودّة.</p>
-    <p class="sub" data-lang="en">A serious matrimonial platform built on respect, privacy, and mutual affection.</p>
-    <a class="btn gold" href="auth.html"><span data-lang="ar">ابدأ رحلتك</span><span data-lang="en">Get Started</span></a>
+    <h1>سنة الحياة</h1>
+    <p class="sub">موقع جاد للتعارف بنيّة الزواج، على أساس من الاحترام والخصوصية والمودّة.</p>
+    <a class="btn gold" href="auth.html">ابدأ رحلتك</a>
 
     <div class="verse">
-      <p class="ar-text">﴿ وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَٰلِكَ لَآيَاتٍ لِّقَوْمٍ يَتَفَكَّرُونَ ﴾</p>
-      <p class="ref"><span data-lang="ar">سورة الروم — الآية 21</span><span data-lang="en">Surah Ar-Rum — Verse 21</span></p>
-      <p class="en-text">"And of His signs is that He created for you from yourselves mates that you may find tranquility in them; and He placed between you affection and mercy. Indeed in that are signs for a people who give thought." (Quran 30:21)</p>
+      <p class="ar">﴿ وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَٰلِكَ لَآيَاتٍ لِّقَوْمٍ يَتَفَكَّرُونَ ﴾</p>
+      <p class="ref">سورة الروم — الآية 21</p>
+      <p class="en">"And of His signs is that He created for you from yourselves mates that you may find tranquility in them; and He placed between you affection and mercy. Indeed in that are signs for a people who give thought." (Quran 30:21)</p>
     </div>
   </div>
 
   <section>
-    <h2 data-lang="ar">كيف يعمل الموقع؟</h2>
-    <h2 data-lang="en">How It Works</h2>
+    <h2>كيف يعمل الموقع؟</h2>
     <div class="steps">
-      <div class="step"><div class="num">1</div><div>
-        <b data-lang="ar">أنشئ حسابك وملفك</b><b data-lang="en">Create Your Profile</b>
-        <p data-lang="ar">سجّل بريدك وأكمل بياناتك الأساسية بصدق.</p><p data-lang="en">Sign up with your email and complete your basic details honestly.</p>
-      </div></div>
-      <div class="step"><div class="num">2</div><div>
-        <b data-lang="ar">تحقق ومراجعة</b><b data-lang="en">Verification & Review</b>
-        <p data-lang="ar">يُفحص كل ملف آلياً، وتراجع الإدارة ما يحتاج مراجعة، لضمان الجدية.</p><p data-lang="en">Profiles are automatically checked and manually reviewed to ensure seriousness.</p>
-      </div></div>
-      <div class="step"><div class="num">3</div><div>
-        <b data-lang="ar">تصفّح وأبدِ اهتمامك</b><b data-lang="en">Browse & Express Interest</b>
-        <p data-lang="ar">تعرض الصفحة أعضاء مقبولين، وتُبدي اهتماماً بمن يناسبك.</p><p data-lang="en">View verified members and send interest to matches that suit you.</p>
-      </div></div>
-      <div class="step"><div class="num">4</div><div>
-        <b data-lang="ar">تحدّثا باحترام</b><b data-lang="en">Respectful Chat</b>
-        <p data-lang="ar">عند قبول الاهتمام تُفتح محادثة بين الطرفين فقط.</p><p data-lang="en">Once interest is accepted, a private chat opens between both parties.</p>
-      </div></div>
+      <div class="step"><div class="num">1</div><div><b>أنشئ حسابك وملفك</b><p>سجّل بريدك وأكمل بياناتك الأساسية بصدق.</p></div></div>
+      <div class="step"><div class="num">2</div><div><b>تحقق ومراجعة</b><p>يُفحص كل ملف آلياً، وتراجع الإدارة ما يحتاج مراجعة، لضمان الجدية.</p></div></div>
+      <div class="step"><div class="num">3</div><div><b>تصفّح وأبدِ اهتمامك</b><p>تعرض الصفحة أعضاء مقبولين، وتُبدي اهتماماً بمن يناسبك.</p></div></div>
+      <div class="step"><div class="num">4</div><div><b>تحدّثا باحترام</b><p>عند قبول الاهتمام تُفتح محادثة بين الطرفين فقط.</p></div></div>
     </div>
   </section>
 
   <section style="padding-top:0">
-    <h2 data-lang="ar">خصوصيتك أولاً</h2>
-    <h2 data-lang="en">Your Privacy First</h2>
+    <h2>خصوصيتك أولاً</h2>
     <div class="trust">
-      <div>🔒 <span data-lang="ar">محادثات خاصة</span><span data-lang="en">Private Chats</span><small><span data-lang="ar">بين الطرفين فقط</span><span data-lang="en">Strictly between both parties</span></small></div>
-      <div>✅ <span data-lang="ar">ملفات مراجَعة</span><span data-lang="en">Reviewed Profiles</span><small><span data-lang="ar">قبل أن تظهر</span><span data-lang="en">Before appearing publicly</span></small></div>
-      <div>🚫 <span data-lang="ar">حظر وإبلاغ</span><span data-lang="en">Block & Report</span><small><span data-lang="ar">لحمايتك دائماً</span><span data-lang="en">To protect you at all times</span></small></div>
-      <div>🤝 <span data-lang="ar">بنيّة الزواج</span><span data-lang="en">Marriage Minded</span><small><span data-lang="ar">موقع جاد لا للتسلية</span><span data-lang="en">A serious site, not for casual dating</span></small></div>
+      <div>🔒 محادثات خاصة<small>بين الطرفين فقط</small></div>
+      <div>✅ ملفات مراجَعة<small>قبل أن تظهر</small></div>
+      <div>🚫 حظر وإبلاغ<small>لحمايتك دائماً</small></div>
+      <div>🤝 بنيّة الزواج<small>موقع جاد لا للتسلية</small></div>
     </div>
   </section>
 
   <section class="cta" style="padding-top:0">
     <div class="card">
-      <h2 data-lang="ar">ابدأ الآن</h2>
-      <h2 data-lang="en">Start Now</h2>
-      <p style="color:var(--muted)" data-lang="ar">التسجيل مجاني ولا يستغرق دقيقة.</p>
-      <p style="color:var(--muted)" data-lang="en">Free registration and takes less than a minute.</p>
-      <a class="btn" href="auth.html"><span data-lang="ar">إنشاء حساب</span><span data-lang="en">Create Account</span></a>
+      <h2>ابدأ الآن</h2>
+      <p style="color:var(--muted)">التسجيل مجاني ولا يستغرق دقيقة.</p>
+      <a class="btn" href="auth.html">إنشاء حساب</a>
     </div>
   </section>
 
-  <footer>
-    <a href="faq.html"><span data-lang="ar">الأسئلة الشائعة</span><span data-lang="en">FAQ</span></a> · 
-    <a href="contact.html"><span data-lang="ar">اتصل بنا</span><span data-lang="en">Contact Us</span></a> · 
-    <a href="legal.html#privacy"><span data-lang="ar">الخصوصية</span><span data-lang="en">Privacy Policy</span></a> · 
-    <a href="legal.html#terms"><span data-lang="ar">الشروط</span><span data-lang="en">Terms of Service</span></a>
-    <br><span data-lang="ar">© سنة الحياة — جميع الحقوق محفوظة</span><span data-lang="en">© Sunat Al-Hayat — All Rights Reserved</span>
-  </footer>
+  <footer><a href="faq.html">الأسئلة الشائعة</a> · <a href="contact.html">اتصل بنا</a> · <a href="legal.html#privacy">الخصوصية</a> · <a href="legal.html#terms">الشروط</a><br>© سنة الحياة — جميع الحقوق محفوظة</footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="i18n-dict.js?v=1"></script>
+  <script src="i18n.js?v=1"></script>
   <script src="app.js?v=10"></script>
   <script>
-    // دالة تبديل اللغة لحظياً وحفظ الاختيار في المتصفح
-    function switchLanguage() {
-      var body = document.getElementById('bodyTag');
-      var html = document.getElementById('htmlTag');
-      if (body.classList.contains('ar')) {
-        body.classList.remove('ar');
-        body.classList.add('en');
-        html.setAttribute('lang', 'en');
-        html.setAttribute('dir', 'ltr');
-        localStorage.setItem('site_lang', 'en');
-      } else {
-        body.classList.remove('en');
-        body.classList.add('ar');
-        html.setAttribute('lang', 'ar');
-        html.setAttribute('dir', 'rtl');
-        localStorage.setItem('site_lang', 'ar');
-      }
-    }
-
-    // استرجاع اللغة المخزنة عند فتح الموقع
-    window.addEventListener('DOMContentLoaded', function() {
-      var savedLang = localStorage.getItem('site_lang');
-      if (savedLang === 'en') {
-        var body = document.getElementById('bodyTag');
-        var html = document.getElementById('htmlTag');
-        body.classList.remove('ar');
-        body.classList.add('en');
-        html.setAttribute('lang', 'en');
-        html.setAttribute('dir', 'ltr');
-      }
-    });
-
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
     var deferredPrompt = null;
     var installBtn = document.getElementById('install');
@@ -189,19 +125,14 @@
     };
     window.addEventListener('appinstalled', function () { installBtn.style.display = 'none'; });
 
-    // العضو مسجّل الدخول: نخفي «دخول / إنشاء حساب» ونظهر شريط حسابه
-    if (typeof getSession === 'function') {
-      getSession().then(function (s) {
-        if (!s) return;
-        var top = document.querySelector('.top'); if (top) top.style.display = 'none';
-        var go = document.querySelector('.hero a.btn.gold');
-        if (go) { 
-          go.href = 'browse.html'; 
-          go.innerHTML = '<span data-lang="ar">تصفّح الأعضاء</span><span data-lang="en">Browse Members</span>'; 
-        }
-        var cta = document.querySelector('section.cta'); if (cta) cta.style.display = 'none';
-      }).catch(function () {});
-    }
+    // العضو مسجّل الدخول: نخفي «دخول / إنشاء حساب» ونظهر شريط حسابه (يضيفه app.js)
+    getSession().then(function (s) {
+      if (!s) return;
+      var top = document.querySelector('.top'); if (top) top.style.display = 'none';
+      var go = document.querySelector('.hero a.btn.gold');
+      if (go) { go.href = 'browse.html'; go.textContent = 'تصفّح الأعضاء'; }
+      var cta = document.querySelector('section.cta'); if (cta) cta.style.display = 'none';
+    }).catch(function () {});
   </script>
 </body>
 </html>
