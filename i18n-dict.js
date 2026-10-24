@@ -1535,5 +1535,13 @@ window.I18N_DICT = {
 "اللغة": [
 "Langue",
 "Language"
+],
+"الدولة": [
+"Pays",
+"Country"
+],
+"كل الدول": [
+"Tous les pays",
+"All countries"
 ]
 };
