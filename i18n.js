@@ -8,6 +8,13 @@
   if (!LANGS[lang]) lang = 'ar';
   window.I18N_LANG = lang;
 
+  // نحفظ حدث «beforeinstallprompt» مبكراً ليستعمله زر التثبيت في أي صفحة
+  window.__bip = null;
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault(); window.__bip = e; window.dispatchEvent(new Event('bip'));
+  });
+  window.addEventListener('appinstalled', function () { window.__bip = null; });
+
   var root = document.documentElement;
   root.setAttribute('lang', lang);
   root.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
