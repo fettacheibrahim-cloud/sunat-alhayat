@@ -2,8 +2,8 @@
 // ويعرض إشعارات النظام ويفتح الصفحة المناسبة عند الضغط عليها.
 // الاستراتيجية «الشبكة أولاً»: يُجلب دائماً أحدث ملف، ولا يُستعمل المخزَّن إلا عند انقطاع الاتصال،
 // فلا تبقى نسخ قديمة من الموقع بعد أي تحديث.
-const CACHE = 'sunat-v2';
-const CORE = ['offline.html', 'style.css', 'i18n.js', 'i18n-dict.js', 'icon-192.png', 'icon.svg'];
+const CACHE = 'sunat-v3';
+const CORE = ['offline.html', 'style.css', 'i18n.js', 'i18n-dict.js', 'icon.svg'];
 
 self.addEventListener('install', e => {
   e.waitUntil(
