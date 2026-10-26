@@ -85,7 +85,8 @@
     [/^(🔔 )?وصلك اهتمام جديد 💌$/, function (m) { return (m[1] || '') + L('Vous avez reçu un nouvel intérêt 💌', 'You received a new interest 💌'); }],
     [/^وفّر (\d+) درهماً$/, function (m) { return L('Économisez ' + m[1] + ' MAD', 'Save ' + m[1] + ' MAD'); }],
     [/^(\d+) درهماً$/, function (m) { return m[1] + ' MAD'; }],
-    [/^ينتهي في (.+)$/, function (m) { return L('Expire le ', 'Expires on ') + m[1]; }]
+    [/^ينتهي في (.+)$/, function (m) { return L('Expire le ', 'Expires on ') + m[1]; }],
+    [/^✓ حسابك موثّق حتى (.+)$/, function (m) { return L('✓ Votre compte est vérifié jusqu\'au ', '✓ Your account is verified until ') + m[1]; }]
   ];
 
   // استبدالات داخل النص (للأرقام والوحدات) — لا تُطبَّق على نصوص الأعضاء
