@@ -46,6 +46,10 @@
             <select id="f_rel"><option value="">الكل</option><option value="practicing">ملتزم/ة</option><option value="moderate">متوسّط</option><option value="learning">في طريق الالتزام</option></select>
           </div>
           <div>
+            <label for="f_vf">التوثيق</label>
+            <select id="f_vf"><option value="">الكل</option><option value="1">الموثّقون فقط ✓</option></select>
+          </div>
+          <div>
             <label for="f_sort">الترتيب</label>
             <select id="f_sort"><option value="">الأحدث</option><option value="compat">الأكثر توافقاً</option></select>
           </div>
@@ -59,16 +63,16 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="i18n-dict.js?v=1"></script>
-  <script src="i18n.js?v=1"></script>
-  <script src="app.js?v=10"></script>
+  <script src="i18n-dict.js?v=3"></script>
+  <script src="i18n.js?v=3"></script>
+  <script src="app.js?v=12"></script>
   <script src="compat.js?v=1"></script>
   <script>
     const $ = id => document.getElementById(id);
-    const F_IDS = ['f_min', 'f_max', 'f_country', 'f_city', 'f_mar', 'f_edu', 'f_rel', 'f_sort'];
+    const F_IDS = ['f_min', 'f_max', 'f_country', 'f_city', 'f_mar', 'f_edu', 'f_rel', 'f_vf', 'f_sort'];
     const F_KEY = 'browse_filters';
     let me = null, mine = null, all = [];
-    const sentTo = new Set(), favs = new Set(), vipSet = new Set();
+    const sentTo = new Set(), favs = new Set(), vipSet = new Set(), vfSet = new Set();
 
     function el(tag, cls, text) {
       const e = document.createElement(tag);
@@ -126,6 +130,7 @@
       const who = el('div', 'who');
       const nm = el('div', 'nm', p.first_name || 'عضو');
       if (vip) nm.appendChild(el('span', 'vip', '⭐ مميز'));
+      if (vfSet.has(p.id)) nm.appendChild(el('span', 'vf', '✓ موثّق'));
       who.appendChild(nm);
       who.appendChild(el('div', 'meta', [ageOf(p.birth_date) ? ageOf(p.birth_date) + ' سنة' : '', [p.city, p.country].filter(Boolean).join('، ')].filter(Boolean).join(' · ')));
       hd.appendChild(who);
@@ -189,6 +194,7 @@
         if (mar && p.marital_status !== mar) return false;
         if (edu && p.education !== edu) return false;
         if (rel && p.religiosity !== rel) return false;
+        if ($('f_vf').value && !vfSet.has(p.id)) return false;
         return true;
       });
       if ($('f_sort').value === 'compat') {
@@ -218,7 +224,7 @@
       const { data: m } = await sb.from('profiles').select('*').eq('id', me).maybeSingle();
       mine = m;
       if (!mine) { showMsg('msg', 'أكمل ملفك الشخصي أولاً', 'error'); return; }
-      if (mine.status !== 'approved') { showMsg('msg', 'حسابك قيد المراجعة. سيظهر التصفح بعد قبوله.', 'error'); return; }
+      if (mine.status !== 'approved') { showNotApproved('msg', mine, 'حسابك قيد المراجعة. سيظهر التصفح بعد قبوله.'); return; }
 
       const hidden = new Set();
       const { data: ints } = await sb.from('interests').select('from_id,to_id,status')
@@ -244,6 +250,10 @@
       try {
         const v = await sb.rpc('premium_ids');
         (v.data || []).forEach(x => vipSet.add(typeof x === 'string' ? x : (x && (x.premium_ids || Object.values(x)[0]))));
+      } catch (e) {}
+      try {
+        const v = await sb.rpc('verified_ids');
+        (v.data || []).forEach(x => vfSet.add(typeof x === 'string' ? x : (x && (x.verified_ids || Object.values(x)[0]))));
       } catch (e) {}
       all = data.filter(p => !hidden.has(p.id));
       all.forEach(p => { p._c = compat(mine, p); });
