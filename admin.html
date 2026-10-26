@@ -99,6 +99,8 @@
 
     // أسعار الباقات بالدرهم (طابقها مع PLANS في premium.html)
     const PLAN_PRICES = { 30: 50, 90: 120, 365: 400 };
+    // رسوم التوثيق بالدرهم لسنة كاملة (طابقها مع VERIFY في verify.html)
+    const VERIFY = { days: 365, price: 100 };
 
     async function setPremium(id, days, amount) {
       if (days === 0 && !confirm('إلغاء العضوية المميزة لهذا العضو؟')) return;
@@ -111,6 +113,17 @@
       loadAll();
     }
 
+    async function setVerified(id, days, amount) {
+      if (days === 0 && !confirm('إلغاء توثيق هذا العضو؟')) return;
+      if (days > 0) {
+        const msg = amount > 0 ? 'تأكدتَ من صورة التحقق واستلمتَ ' + amount + ' درهماً؟ سيُفعَّل التوثيق ' + days + ' يوماً.' : 'تفعيل التوثيق ' + days + ' يوماً بدون مبلغ؟';
+        if (!confirm(msg)) return;
+      }
+      const { error } = await sb.rpc('admin_set_verified', { target: id, days, amount: amount || 0 });
+      if (error) { alert('خطأ: ' + error.message + '\nتأكد من تشغيل verified.sql'); return; }
+      loadAll();
+    }
+
     async function closeReport(id) {
       const { error } = await sb.from('reports').update({ status: 'reviewed' }).eq('id', id);
       if (error) { alert('خطأ: ' + error.message); return; }
@@ -119,15 +132,17 @@
 
     // يجلب البريد والصور وحالة المميز لمجموعة ملفات دفعة واحدة
     async function enrich(rows) {
-      const ids = rows.map(p => p.id), ex = { email: {}, photo: {}, prem: {} };
+      const ids = rows.map(p => p.id), ex = { email: {}, photo: {}, prem: {}, vf: {} };
       const paths = rows.filter(p => p.photo_path).map(p => p.photo_path);
-      const [em, mm, ph] = await Promise.all([
+      const [em, mm, vv, ph] = await Promise.all([
         ids.length ? sb.rpc('admin_emails', { ids }) : { data: [] },
         sb.from('memberships').select('user_id,premium_until'),
+        sb.from('verified_members').select('user_id,verified_until'),
         paths.length ? sb.storage.from('photos').createSignedUrls(paths, 3600) : { data: [] }
       ]);
       (em.data || []).forEach(x => { ex.email[x.id] = x.email; });
       (mm.data || []).forEach(x => { if (new Date(x.premium_until) > new Date()) ex.prem[x.user_id] = x.premium_until; });
+      (vv.data || []).forEach(x => { if (new Date(x.verified_until) > new Date()) ex.vf[x.user_id] = x.verified_until; });
       const byPath = {}; (ph.data || []).forEach(x => { if (x.signedUrl) byPath[x.path] = x.signedUrl; });
       rows.forEach(p => { if (p.photo_path && byPath[p.photo_path]) ex.photo[p.id] = byPath[p.photo_path]; });
       return ex;
@@ -156,6 +171,7 @@
       if (p.looking_for) add('يبحث عن: ' + p.looking_for);
       if (p.status === 'suspended' && p.reject_reason) add('السبب: ' + p.reject_reason, 'why');
       if (ex.prem[p.id]) add('⭐ مميز حتى ' + dFmt(ex.prem[p.id]));
+      if (ex.vf[p.id]) add('✓ موثّق حتى ' + dFmt(ex.vf[p.id]));
       top.append(av, info); d.appendChild(top);
 
       const a = document.createElement('div'); a.className = 'acts';
@@ -168,6 +184,8 @@
           btn('🎁 هدية 30 يوماً', () => setPremium(p.id, 30, 0))
         );
         if (ex.prem[p.id]) a.append(btn('إلغاء المميز', () => setPremium(p.id, 0), true));
+        a.append(btn('✓ توثيق (' + VERIFY.price + ')', () => setVerified(p.id, VERIFY.days, VERIFY.price)));
+        if (ex.vf[p.id]) a.append(btn('إلغاء التوثيق', () => setVerified(p.id, 0), true));
         a.append(btn('إيقاف', () => rejectWith(p, false), true));
       }
       if (p.status === 'suspended') a.append(btn('إعادة تفعيل', () => setStatus(p.id, 'approved')));
@@ -234,6 +252,7 @@
     const LOG_AR = {
       approve: '✅ قبول حساب', reject: '⛔ رفض حساب', suspend: '⛔ إيقاف حساب', reactivate: '♻️ إعادة تفعيل',
       premium: '⭐ تفعيل مميز حتى', premium_cancel: '⭐ إلغاء العضوية المميزة',
+      verify: '✓ توثيق حتى', verify_cancel: '✓ إلغاء التوثيق',
       report_reviewed: '🚩 إغلاق بلاغ', status: 'تغيير حالة'
     };
 
@@ -296,7 +315,7 @@
         rows.forEach(r => { const d = document.createElement('div'); d.className = 'm'; const b = document.createElement('b'); b.textContent = r[0]; const s = document.createElement('small'); s.textContent = r[1]; d.append(b, s); list.appendChild(d); });
       }
       section('تنتهي عضويتهم قريباً (راسلهم للتجديد)', soon.map(x => [names[x.user_id] || 'عضو', 'تنتهي في ' + dFmt(x.premium_until)]), 'لا أحد خلال الأيام السبعة القادمة');
-      section('آخر العمليات', pp.data.slice(0, 20).map(x => [(names[x.user_id] || 'عضو') + ' — ' + Number(x.amount) + ' درهم', x.days + ' يوماً · ' + dFmt(x.created_at)]), 'لا توجد عمليات بعد');
+      section('آخر العمليات', pp.data.slice(0, 20).map(x => [(names[x.user_id] || 'عضو') + ' — ' + Number(x.amount) + ' درهم' + (x.kind === 'verify' ? ' (توثيق ✓)' : ''), x.days + ' يوماً · ' + dFmt(x.created_at)]), 'لا توجد عمليات بعد');
     }
 
     function loadList() {
