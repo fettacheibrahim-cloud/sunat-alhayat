@@ -26,6 +26,9 @@
     <h1>ملفي الشخصي</h1>
     <p id="email" style="color:var(--muted)"></p>
     <p>حالة الحساب: <span id="st" class="st">...</span></p>
+    <p id="pushBox" style="display:none"><button type="button" id="pushTest" class="btn ghost sm">🔔 جرّب إشعاراً الآن</button></p>
+    <p id="vfLink" style="display:none"><a href="verify.html">✓ وثّق حسابك لتحصل على شارة «موثّق»</a></p>
+    <div id="why" class="msg error" style="display:none"></div>
     <p id="msg" style="display:none"></p>
 
     <div class="ph">
@@ -78,9 +81,9 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="i18n-dict.js?v=1"></script>
-  <script src="i18n.js?v=1"></script>
-  <script src="app.js?v=10"></script>
+  <script src="i18n-dict.js?v=3"></script>
+  <script src="i18n.js?v=3"></script>
+  <script src="app.js?v=12"></script>
   <script>
     const $ = id => document.getElementById(id);
     const fields = ['first_name','gender','birth_date','country','city','marital_status','education','occupation','height_cm','religiosity','prayer','smoking','wants_children','bio','looking_for'];
@@ -88,7 +91,23 @@
     let uid = null, exists = false, photoPath = null;
 
     function msg(t, type) { const e = $('msg'); e.textContent = t; e.className = 'msg ' + type; e.style.display = 'block'; window.scrollTo(0, 0); }
-    function setStatus(s) { $('st').textContent = stAr[s] || 'لم يُنشأ بعد'; $('st').className = 'st ' + (s || ''); }
+    function setStatus(s, reason) {
+      $('st').textContent = stAr[s] || 'لم يُنشأ بعد'; $('st').className = 'st ' + (s || '');
+      $('vfLink').style.display = s === 'approved' ? 'block' : 'none';
+      const w = $('why'); w.textContent = '';
+      if (s === 'suspended') {
+        w.appendChild(document.createTextNode('تم إيقاف حسابك أو رفضه.'));
+        if (reason) {
+          w.appendChild(document.createElement('br'));
+          w.appendChild(document.createTextNode('السبب:')); w.appendChild(document.createTextNode(' '));
+          const r = document.createElement('span'); r.className = 'ugc'; r.textContent = reason; w.appendChild(r);
+        }
+        w.appendChild(document.createElement('br'));
+        w.appendChild(document.createTextNode('عدّل ملفك ثم راسلنا ليُعاد فحصه.')); w.appendChild(document.createTextNode(' '));
+        const a = document.createElement('a'); a.href = 'contact.html'; a.textContent = 'اتصل بنا'; w.appendChild(a);
+        w.style.display = 'block';
+      } else w.style.display = 'none';
+    }
     function isAdult(d) {
       const b = new Date(d), t = new Date();
       let a = t.getFullYear() - b.getFullYear();
@@ -214,7 +233,7 @@
         exists = true;
         fields.forEach(k => { if (data[k] != null) $(k).value = data[k]; });
         $('photo_visible_to_matches').checked = !!data.photo_visible_to_matches;
-        photoPath = data.photo_path; setStatus(data.status);
+        photoPath = data.photo_path; setStatus(data.status, data.reject_reason);
       } else setStatus(null);
       enablePhoto(); showPhoto();
     })();
@@ -232,12 +251,25 @@
       btn.disabled = false;
       if (res.error) { msg('خطأ: ' + res.error.message, 'error'); return; }
       if (!exists) { exists = true; enablePhoto(); }
-      const st = await sb.from('profiles').select('status').eq('id', uid).maybeSingle();
+      let st = await sb.from('profiles').select('status,reject_reason').eq('id', uid).maybeSingle();
+      if (st.error) st = await sb.from('profiles').select('status').eq('id', uid).maybeSingle();
       const status = st.data ? st.data.status : 'pending';
-      setStatus(status);
+      setStatus(status, st.data && st.data.reject_reason);
       if (status === 'approved') msg('تم الحفظ ✓ — حسابك مقبول، يمكنك الآن تصفّح الأعضاء.', 'ok');
       else if (status === 'pending') msg('تم الحفظ ✓ — ملفك قيد المراجعة اليدوية. للقبول الفوري: أكمل كل الحقول، واكتب نبذة (30 حرفاً فأكثر) دون أرقام هاتف أو روابط أو حسابات تواصل.', 'ok');
       else msg('تم الحفظ ✓', 'ok');
+    };
+
+    // زر اختبار الإشعارات: يظهر بعد منح إذن الإشعارات
+    if ('Notification' in window && 'PushManager' in window && Notification.permission === 'granted') $('pushBox').style.display = 'block';
+    $('pushTest').onclick = async () => {
+      const b = $('pushTest'); b.disabled = true;
+      const ok = window.ensurePush ? await window.ensurePush() : false;
+      if (!ok) { msg('تعذّر ربط هذا الجهاز بالإشعارات. تأكد من منح الإذن وأن الموقع مثبّت أو مفتوح في Chrome.', 'error'); b.disabled = false; return; }
+      const { error } = await sb.rpc('send_test_push');
+      if (error) msg('خطأ: ' + error.message + ' — تأكد من تشغيل ملف push.sql', 'error');
+      else msg('أُرسل إشعار تجريبي، سيصلك خلال ثوانٍ. إن لم يصل فأغلق التطبيق وانتظر قليلاً.', 'ok');
+      setTimeout(() => { b.disabled = false; }, 8000);
     };
 
     $('out').onclick = logout;
