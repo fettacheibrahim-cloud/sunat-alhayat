@@ -3,6 +3,9 @@ const SUPABASE_KEY = 'sb_publishable_kPVlHG491QyXLsYhvM7GOw_gJyVphsX';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 window.sb = sb;
 
+// المفتاح العام لإشعارات الهاتف (VAPID). المفتاح الخاص يبقى في أسرار Supabase فقط
+const VAPID_PUBLIC = 'BHzS68u1WQunIPwMWFySXp4MOfdRXcRsW3B1A_JjcYGpm-VHltpBYEou0XajASSq7b2iPigjVkWR_dxuCNHZ22g';
+
 (function () {
   const l = document.createElement('link');
   l.rel = 'stylesheet';
@@ -18,12 +21,41 @@ function showMsg(target, text, type) {
   el.style.display = 'block';
 }
 
+// رسالة «الحساب غير مقبول بعد»: قيد المراجعة، أو موقوف/مرفوض مع سبب الإدارة إن وُجد
+function showNotApproved(target, mine, pendingText) {
+  const el = typeof target === 'string' ? document.getElementById(target) : target;
+  if (!el) return;
+  if (!mine || mine.status !== 'suspended') { showMsg(el, pendingText, 'error'); return; }
+  el.textContent = '';
+  el.className = 'msg error';
+  el.appendChild(document.createTextNode('تم إيقاف حسابك أو رفضه.'));
+  if (mine.reject_reason) {
+    el.appendChild(document.createElement('br'));
+    el.appendChild(document.createTextNode('السبب:'));
+    el.appendChild(document.createTextNode(' '));
+    const r = document.createElement('span'); r.className = 'ugc'; r.textContent = mine.reject_reason;
+    el.appendChild(r);
+  }
+  el.appendChild(document.createElement('br'));
+  el.appendChild(document.createTextNode('عدّل ملفك ثم راسلنا ليُعاد فحصه.'));
+  el.appendChild(document.createTextNode(' '));
+  const a = document.createElement('a'); a.href = 'contact.html'; a.textContent = 'اتصل بنا';
+  el.appendChild(a);
+  el.style.display = 'block';
+}
+
 async function getSession() {
   const { data } = await sb.auth.getSession();
   return data.session;
 }
 
 async function logout() {
+  // نزيل اشتراك هذا الجهاز من حسابي حتى لا تصل إشعاراتي لمن يستعمل الجهاز بعدي
+  try {
+    const reg = 'serviceWorker' in navigator ? await navigator.serviceWorker.getRegistration() : null;
+    const sub = reg && reg.pushManager ? await reg.pushManager.getSubscription() : null;
+    if (sub) { await sb.rpc('delete_push_subscription', { p_endpoint: sub.endpoint }); localStorage.removeItem('push_sig'); }
+  } catch (e) {}
   await sb.auth.signOut();
   location.href = 'auth.html';
 }
@@ -60,6 +92,7 @@ async function logout() {
     .app-bar a.on{color:#0E3B3C;font-weight:700;border-top-color:#B8903F;background:#FAF7F0}
     .app-badge{position:absolute;top:3px;left:calc(50% + 6px);background:#C0392B;color:#fff;border-radius:999px;
       min-width:18px;height:18px;padding:0 5px;font:700 11px 'Tajawal',sans-serif;display:none;align-items:center;justify-content:center}
+    .vf{display:inline-block;margin-inline-start:6px;padding:1px 9px;border-radius:999px;background:#e3f0ff;color:#0b5cad;font:700 12px 'Tajawal',sans-serif;vertical-align:middle;white-space:nowrap}
     .app-banner{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;background:#fff1cc;color:#5c4400;font:500 14px 'Tajawal',sans-serif;border-bottom:1px solid #e5d49a}
     .app-banner span{flex:1;min-width:160px}
     .app-banner span::before{content:'⭐ '}
@@ -107,6 +140,31 @@ async function logout() {
   let prevUnread = null, prevInterests = null, lastTotal = null, toastTimer = null;
 
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+
+  // اشتراك الهاتف في الإشعارات (يعمل بعد منح الإذن). نحفظه في الخادم ليصلك تنبيه والتطبيق مغلق
+  const b64u = s => { const p = '='.repeat((4 - s.length % 4) % 4), r = atob((s + p).replace(/-/g, '+').replace(/_/g, '/')); return Uint8Array.from(r, c => c.charCodeAt(0)); };
+  async function ensurePush() {
+    try {
+      if (!VAPID_PUBLIC || !('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window) || Notification.permission !== 'granted') return false;
+      const reg = await navigator.serviceWorker.ready;
+      let sub = await reg.pushManager.getSubscription();
+      if (!sub) {
+        try { sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64u(VAPID_PUBLIC) }); }
+        catch (e) { return false; }
+      }
+      const j = sub.toJSON();
+      if (!j.keys) return false;
+      const lang = window.I18N_LANG || 'ar';
+      const sig = [j.endpoint, me, lang].join('|');
+      let saved = ''; try { saved = localStorage.getItem('push_sig') || ''; } catch (e) {}
+      if (saved === sig) return true;
+      const { error } = await sb.rpc('save_push_subscription', { p_endpoint: j.endpoint, p_p256dh: j.keys.p256dh, p_auth: j.keys.auth, p_lang: lang });
+      if (error) return false;
+      try { localStorage.setItem('push_sig', sig); } catch (e) {}
+      return true;
+    } catch (e) { return false; }
+  }
+  window.ensurePush = ensurePush;
 
   function setBadge(href, n) {
     const a = bar.querySelector('a[href="' + href + '"]');
@@ -227,7 +285,7 @@ async function logout() {
     bell.onclick = async () => {
       const p = await Notification.requestPermission();
       if (p !== 'default') bell.remove();
-      if (p === 'granted') toast('تم تفعيل الإشعارات ✓', here);
+      if (p === 'granted') { toast('تم تفعيل الإشعارات ✓', here); ensurePush(); }
     };
     actions.insertBefore(bell, out);
   }
@@ -285,6 +343,7 @@ async function logout() {
   })();
 
   document.addEventListener('visibilitychange', () => { if (!document.hidden) poll(); });
+  ensurePush();
   poll();
   setInterval(poll, 15000);
 })();
