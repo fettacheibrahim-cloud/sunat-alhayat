@@ -40,6 +40,24 @@ self.addEventListener('fetch', e => {
   );
 });
 
+// إشعار من الخادم (Web Push) حتى والتطبيق مغلق. إن كان الموقع مفتوحاً أمامك فالتنبيه داخل الصفحة يكفي.
+self.addEventListener('push', e => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch (err) {}
+  e.waitUntil((async () => {
+    const wins = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    if (wins.some(w => w.visibilityState === 'visible' && w.focused)) return;
+    await self.registration.showNotification(d.title || 'سنة الحياة', {
+      body: d.body || '',
+      tag: d.tag || undefined,
+      renotify: !!d.tag,
+      dir: d.dir || 'rtl',
+      lang: d.lang || 'ar',
+      data: { url: d.url || 'browse.html' }
+    });
+  })());
+});
+
 self.addEventListener('notificationclick', e => {
   e.notification.close();
   const url = (e.notification.data && e.notification.data.url) || 'messages.html';
