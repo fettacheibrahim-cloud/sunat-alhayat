@@ -33,9 +33,9 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="i18n-dict.js?v=1"></script>
-  <script src="i18n.js?v=1"></script>
-  <script src="app.js?v=10"></script>
+  <script src="i18n-dict.js?v=3"></script>
+  <script src="i18n.js?v=3"></script>
+  <script src="app.js?v=12"></script>
   <script src="compat.js?v=1"></script>
   <script>
     const $ = id => document.getElementById(id);
@@ -45,7 +45,7 @@
 
     function sec(title, body) { const s = el('div', 'sec'); s.appendChild(el('h3', '', title)); s.appendChild(body); return s; }
 
-    async function show(p, mine, vip) {
+    async function show(p, mine, vip, vf) {
       const box = $('box'); box.innerHTML = ''; box.style.display = 'block';
 
       const top = el('div', 'top');
@@ -63,6 +63,7 @@
       top.appendChild(av);
       const nm = el('h1', '', p.first_name || 'عضو');
       if (vip) nm.appendChild(el('span', 'vip', '⭐ مميز'));
+      if (vf) nm.appendChild(el('span', 'vf', '✓ موثّق'));
       top.appendChild(nm);
       const a = ageOf(p.birth_date);
       top.appendChild(el('div', 'meta', [a ? a + ' سنة' : '', [p.city, p.country].filter(Boolean).join('، ')].filter(Boolean).join(' · ')));
@@ -135,7 +136,7 @@
 
       const { data: mine } = await sb.from('profiles').select('*').eq('id', me).maybeSingle();
       if (!mine) { showMsg('msg', 'أكمل ملفك الشخصي أولاً.', 'error'); return; }
-      if (mine.status !== 'approved') { showMsg('msg', 'حسابك قيد المراجعة. ستظهر الملفات بعد قبوله.', 'error'); return; }
+      if (mine.status !== 'approved') { showNotApproved('msg', mine, 'حسابك قيد المراجعة. ستظهر الملفات بعد قبوله.'); return; }
 
       const { data: p } = await sb.from('profiles').select('*').eq('id', id).eq('status', 'approved').maybeSingle();
       if (!p || p.id === me) { showMsg('msg', 'هذا الملف غير متاح.', 'error'); return; }
@@ -144,15 +145,17 @@
         .or('blocker_id.eq.' + me + ',blocked_id.eq.' + me);
       if ((bl || []).some(b => b.blocker_id === id || b.blocked_id === id)) { showMsg('msg', 'هذا الملف غير متاح.', 'error'); return; }
 
-      const [ints, fv, vp] = await Promise.all([
+      const [ints, fv, vp, vv] = await Promise.all([
         sb.from('interests').select('id').eq('from_id', me).eq('to_id', id).limit(1),
         sb.from('favorites').select('target_id').eq('user_id', me).eq('target_id', id).limit(1),
-        sb.rpc('premium_ids')
+        sb.rpc('premium_ids'),
+        sb.rpc('verified_ids')
       ]);
       sent = !!(ints.data && ints.data.length);
       fav = !!(fv.data && fv.data.length);
       const vip = (vp.data || []).some(x => (typeof x === 'string' ? x : Object.values(x || {})[0]) === id);
-      show(p, mine, vip);
+      const vf = ((vv && vv.data) || []).some(x => (typeof x === 'string' ? x : Object.values(x || {})[0]) === id);
+      show(p, mine, vip, vf);
     })();
   </script>
 </body>
