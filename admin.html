@@ -13,11 +13,23 @@
     .tabs{display:flex;gap:6px;margin:12px 0;flex-wrap:wrap}
     .tabs button{padding:8px 16px;border-radius:999px;border:1px solid var(--green);background:#fff;color:var(--green);font:inherit;cursor:pointer}
     .tabs button.on{background:var(--green);color:#fff}
+    .srch{width:100%;box-sizing:border-box;padding:11px 16px;border:1px solid var(--line);border-radius:999px;font:inherit;background:#fff;margin-top:6px}
     .m{padding:14px;margin:8px 0;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 12px rgba(14,59,60,.05)}
+    .m .top{display:flex;gap:12px;align-items:flex-start}
+    .m .av{flex:none;width:56px;height:56px;border-radius:50%;background:var(--sand);color:var(--green);display:flex;align-items:center;justify-content:center;font:700 22px 'Amiri',serif;overflow:hidden}
+    .m .av img{width:100%;height:100%;object-fit:cover}
+    .m .info{min-width:0;flex:1}
     .m .acts{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
     .m .acts button{padding:6px 14px;border-radius:999px;border:1px solid var(--green);background:var(--green);color:#fff;font:inherit;cursor:pointer}
     .m .acts button.no{background:#fff;color:var(--err);border-color:var(--err)}
-    .m small{color:var(--muted);display:block;margin-top:4px}
+    .m small{color:var(--muted);display:block;margin-top:4px;overflow-wrap:anywhere}
+    .m small.why{color:#9b1c1c}
+    .tag{display:inline-block;font-size:12px;padding:1px 10px;border-radius:999px;background:#eee;margin-inline-start:6px;font-weight:500}
+    .tag.approved{background:#dff3e3;color:#1f6b33}
+    .tag.suspended{background:#fbdcdc;color:#9b1c1c}
+    .tag.pending{background:#fff1cc;color:#5c4400}
+    .lg{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;margin:6px 0;background:#fff;border:1px solid var(--line);border-radius:12px;font-size:14px}
+    .lg small{margin:0;white-space:nowrap}
   </style>
 </head>
 <body>
@@ -30,23 +42,26 @@
       <div class="stat"><b id="s_msgs">-</b><span>رسائل</span></div>
       <div class="stat"><b id="s_reports">-</b><span>بلاغات</span></div>
     </div>
+    <input id="q" class="srch" type="search" placeholder="🔍 ابحث بالاسم أو المدينة أو البلد أو البريد" autocomplete="off">
     <div class="tabs" id="tabs">
       <button data-s="pending" class="on">قيد المراجعة</button>
       <button data-s="approved">مقبولون</button>
       <button data-s="suspended">موقوفون</button>
       <button data-s="reports">البلاغات</button>
       <button data-s="revenue">💰 الأرباح</button>
+      <button data-s="log">📜 السجل</button>
     </div>
     <div id="list"></div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js?v=11"></script>
+  <script src="app.js?v=12"></script>
   <script>
     const $ = id => document.getElementById(id);
     const mAr = { never_married:'أعزب/عزباء', divorced:'مطلّق/ة', widowed:'أرمل/ة' };
     const gAr = { male:'ذكر', female:'أنثى' };
-    let cur = 'pending';
+    const stAr = { pending:'قيد المراجعة', approved:'مقبول', suspended:'موقوف' };
+    let cur = 'pending', searching = false;
 
     function age(d) {
       if (!d) return '';
@@ -55,6 +70,7 @@
       if (t.getMonth() < b.getMonth() || (t.getMonth() === b.getMonth() && t.getDate() < b.getDate())) a--;
       return a;
     }
+    const dFmt = d => new Date(d).toLocaleDateString('en-GB');
 
     function btn(text, fn, no) {
       const b = document.createElement('button');
@@ -64,10 +80,21 @@
       return b;
     }
 
-    async function setStatus(id, status) {
-      const { error } = await sb.from('profiles').update({ status }).eq('id', id);
-      if (error) { alert('خطأ: ' + error.message); return false; }
+    async function setStatus(id, status, reason) {
+      const { error } = await sb.from('profiles').update({ status, reject_reason: reason || null }).eq('id', id);
+      if (error) {
+        alert('خطأ: ' + error.message + (/reject_reason/.test(error.message) ? '\nشغّل ملف admin2.sql أولاً' : ''));
+        return false;
+      }
       loadAll(); return true;
+    }
+
+    // رفض/إيقاف مع سبب يراه العضو في ملفه
+    async function rejectWith(p, pendingStage) {
+      const hint = pendingStage ? 'الملف غير مكتمل أو النبذة قصيرة، عدّلها ثم راسلنا' : '';
+      const r = prompt((pendingStage ? 'سبب الرفض' : 'سبب الإيقاف') + ' (يظهر للعضو في ملفه، اتركه فارغاً لعدم إظهار سبب):', hint);
+      if (r === null) return;
+      return setStatus(p.id, 'suspended', r.trim().slice(0, 300));
     }
 
     // أسعار الباقات بالدرهم (طابقها مع PLANS في premium.html)
@@ -90,45 +117,89 @@
       loadAll();
     }
 
-    async function loadMembers() {
-      const list = $('list'); list.innerHTML = '';
-      const { data, error } = await sb.from('profiles').select('*').eq('status', cur).order('created_at', { ascending: false });
-      if (error) { list.textContent = 'خطأ: ' + error.message; return; }
-      if (!data.length) { list.innerHTML = '<p style="color:#666">لا توجد حسابات في هذه القائمة</p>'; return; }
-      const prem = {};
-      if (cur === 'approved') {
-        const mm = await sb.from('memberships').select('user_id,premium_until');
-        (mm.data || []).forEach(x => { if (new Date(x.premium_until) > new Date()) prem[x.user_id] = x.premium_until; });
+    // يجلب البريد والصور وحالة المميز لمجموعة ملفات دفعة واحدة
+    async function enrich(rows) {
+      const ids = rows.map(p => p.id), ex = { email: {}, photo: {}, prem: {} };
+      const paths = rows.filter(p => p.photo_path).map(p => p.photo_path);
+      const [em, mm, ph] = await Promise.all([
+        ids.length ? sb.rpc('admin_emails', { ids }) : { data: [] },
+        sb.from('memberships').select('user_id,premium_until'),
+        paths.length ? sb.storage.from('photos').createSignedUrls(paths, 3600) : { data: [] }
+      ]);
+      (em.data || []).forEach(x => { ex.email[x.id] = x.email; });
+      (mm.data || []).forEach(x => { if (new Date(x.premium_until) > new Date()) ex.prem[x.user_id] = x.premium_until; });
+      const byPath = {}; (ph.data || []).forEach(x => { if (x.signedUrl) byPath[x.path] = x.signedUrl; });
+      rows.forEach(p => { if (p.photo_path && byPath[p.photo_path]) ex.photo[p.id] = byPath[p.photo_path]; });
+      return ex;
+    }
+
+    function card(p, ex, showStatus) {
+      const d = document.createElement('div'); d.className = 'm';
+      const top = document.createElement('div'); top.className = 'top';
+      const av = document.createElement('div'); av.className = 'av';
+      av.textContent = (p.first_name || '؟').charAt(0).toUpperCase();
+      if (ex.photo[p.id]) {
+        const im = new Image(); im.alt = '';
+        im.onload = () => { av.textContent = ''; av.appendChild(im); };
+        im.src = ex.photo[p.id];
       }
-      data.forEach(p => {
-        const d = document.createElement('div'); d.className = 'm';
-        const n = document.createElement('b');
-        n.textContent = (p.first_name || 'بدون اسم') + ' — ' + (gAr[p.gender] || '') + '، ' + age(p.birth_date) + ' سنة';
-        const s = document.createElement('small');
-        s.textContent = [p.city, p.country, mAr[p.marital_status]].filter(Boolean).join(' · ');
-        d.append(n, s);
-        if (p.bio) { const b = document.createElement('small'); b.textContent = p.bio; d.appendChild(b); }
-        const a = document.createElement('div'); a.className = 'acts';
-        if (cur === 'pending') a.append(btn('قبول', () => setStatus(p.id, 'approved')), btn('رفض', () => setStatus(p.id, 'suspended'), true));
-        if (cur === 'approved') {
-          if (prem[p.id]) {
-            const ps = document.createElement('small');
-            ps.textContent = '⭐ مميز حتى ' + new Date(prem[p.id]).toLocaleDateString('en-GB');
-            d.appendChild(ps);
-          }
-          a.append(
-            btn('⭐ شهر (' + PLAN_PRICES[30] + ')', () => setPremium(p.id, 30, PLAN_PRICES[30])),
-            btn('⭐ 3 أشهر (' + PLAN_PRICES[90] + ')', () => setPremium(p.id, 90, PLAN_PRICES[90])),
-            btn('⭐ سنة (' + PLAN_PRICES[365] + ')', () => setPremium(p.id, 365, PLAN_PRICES[365])),
-            btn('🎁 هدية 30 يوماً', () => setPremium(p.id, 30, 0))
-          );
-          if (prem[p.id]) a.append(btn('إلغاء المميز', () => setPremium(p.id, 0), true));
-          a.append(btn('إيقاف', () => setStatus(p.id, 'suspended'), true));
-        }
-        if (cur === 'suspended') a.append(btn('إعادة تفعيل', () => setStatus(p.id, 'approved')));
-        d.appendChild(a);
-        list.appendChild(d);
-      });
+      const info = document.createElement('div'); info.className = 'info';
+      const n = document.createElement('b');
+      n.textContent = (p.first_name || 'بدون اسم') + ' — ' + (gAr[p.gender] || '') + '، ' + age(p.birth_date) + ' سنة';
+      if (showStatus) { const t = document.createElement('span'); t.className = 'tag ' + p.status; t.textContent = stAr[p.status] || p.status; n.appendChild(t); }
+      info.appendChild(n);
+      const add = (txt, cls) => { if (!txt) return; const s = document.createElement('small'); if (cls) s.className = cls; s.textContent = txt; info.appendChild(s); };
+      add([p.city, p.country, mAr[p.marital_status]].filter(Boolean).join(' · '));
+      add(ex.email[p.id] ? '✉️ ' + ex.email[p.id] : '');
+      add(p.created_at ? 'انضم في ' + dFmt(p.created_at) : '');
+      add(p.bio);
+      if (p.looking_for) add('يبحث عن: ' + p.looking_for);
+      if (p.status === 'suspended' && p.reject_reason) add('السبب: ' + p.reject_reason, 'why');
+      if (ex.prem[p.id]) add('⭐ مميز حتى ' + dFmt(ex.prem[p.id]));
+      top.append(av, info); d.appendChild(top);
+
+      const a = document.createElement('div'); a.className = 'acts';
+      if (p.status === 'pending') a.append(btn('قبول', () => setStatus(p.id, 'approved')), btn('رفض', () => rejectWith(p, true), true));
+      if (p.status === 'approved') {
+        a.append(
+          btn('⭐ شهر (' + PLAN_PRICES[30] + ')', () => setPremium(p.id, 30, PLAN_PRICES[30])),
+          btn('⭐ 3 أشهر (' + PLAN_PRICES[90] + ')', () => setPremium(p.id, 90, PLAN_PRICES[90])),
+          btn('⭐ سنة (' + PLAN_PRICES[365] + ')', () => setPremium(p.id, 365, PLAN_PRICES[365])),
+          btn('🎁 هدية 30 يوماً', () => setPremium(p.id, 30, 0))
+        );
+        if (ex.prem[p.id]) a.append(btn('إلغاء المميز', () => setPremium(p.id, 0), true));
+        a.append(btn('إيقاف', () => rejectWith(p, false), true));
+      }
+      if (p.status === 'suspended') a.append(btn('إعادة تفعيل', () => setStatus(p.id, 'approved')));
+      d.appendChild(a);
+      return d;
+    }
+
+    async function renderRows(rows, showStatus, emptyText) {
+      const list = $('list'); list.innerHTML = '';
+      if (!rows.length) { list.innerHTML = '<p style="color:#666"></p>'; list.firstChild.textContent = emptyText; return; }
+      const ex = await enrich(rows);
+      list.innerHTML = '';
+      rows.forEach(p => list.appendChild(card(p, ex, showStatus)));
+    }
+
+    async function loadMembers() {
+      $('list').textContent = 'جاري التحميل…';
+      const { data, error } = await sb.from('profiles').select('*').eq('status', cur).order('created_at', { ascending: false });
+      if (error) { $('list').textContent = 'خطأ: ' + error.message; return; }
+      await renderRows(data, false, 'لا توجد حسابات في هذه القائمة');
+    }
+
+    async function loadSearch(q) {
+      $('list').textContent = 'جاري البحث…';
+      const f = await sb.rpc('admin_search', { q });
+      if (f.error) { $('list').textContent = 'خطأ: ' + f.error.message + ' — شغّل admin2.sql'; return; }
+      const ids = (f.data || []).map(x => x.id);
+      if (!ids.length) { await renderRows([], true, 'لا نتائج لـ «' + q + '»'); return; }
+      const { data, error } = await sb.from('profiles').select('*').in('id', ids);
+      if (error) { $('list').textContent = 'خطأ: ' + error.message; return; }
+      data.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
+      await renderRows(data, true, '');
     }
 
     async function loadReports() {
@@ -151,12 +222,37 @@
         a.append(
           btn('إيقاف الحساب', async () => {
             if (!confirm('إيقاف حساب ' + (names[r.reported_id] || '') + '؟')) return;
-            if (await setStatus(r.reported_id, 'suspended')) closeReport(r.id);
+            if (await setStatus(r.reported_id, 'suspended', 'مخالفة شروط الاستخدام')) closeReport(r.id);
           }, true),
           btn('إغلاق البلاغ', () => closeReport(r.id))
         );
         d.appendChild(a);
         list.appendChild(d);
+      });
+    }
+
+    const LOG_AR = {
+      approve: '✅ قبول حساب', reject: '⛔ رفض حساب', suspend: '⛔ إيقاف حساب', reactivate: '♻️ إعادة تفعيل',
+      premium: '⭐ تفعيل مميز حتى', premium_cancel: '⭐ إلغاء العضوية المميزة',
+      report_reviewed: '🚩 إغلاق بلاغ', status: 'تغيير حالة'
+    };
+
+    async function loadLog() {
+      const list = $('list'); list.textContent = 'جاري التحميل…';
+      const { data, error } = await sb.from('admin_log').select('*').order('created_at', { ascending: false }).limit(100);
+      if (error) { list.textContent = 'خطأ: ' + error.message + ' — شغّل admin2.sql'; return; }
+      if (!data.length) { list.innerHTML = '<p style="color:#666">لا توجد إجراءات مسجّلة بعد</p>'; return; }
+      const ids = [...new Set(data.map(x => x.target_id).filter(Boolean))];
+      const names = {};
+      if (ids.length) { const { data: ps } = await sb.from('profiles').select('id,first_name').in('id', ids); (ps || []).forEach(p => names[p.id] = p.first_name); }
+      list.innerHTML = '';
+      data.forEach(x => {
+        const d = document.createElement('div'); d.className = 'lg';
+        const t = document.createElement('span');
+        t.textContent = (LOG_AR[x.action] || x.action) + ' — ' + (names[x.target_id] || 'عضو محذوف') + (x.details ? ' (' + x.details + ')' : '');
+        const s = document.createElement('small');
+        s.textContent = new Date(x.created_at).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' });
+        d.append(t, s); list.appendChild(d);
       });
     }
 
@@ -199,18 +295,33 @@
         if (!rows.length) { const p = document.createElement('p'); p.style.color = '#666'; p.textContent = empty; list.appendChild(p); return; }
         rows.forEach(r => { const d = document.createElement('div'); d.className = 'm'; const b = document.createElement('b'); b.textContent = r[0]; const s = document.createElement('small'); s.textContent = r[1]; d.append(b, s); list.appendChild(d); });
       }
-      section('تنتهي عضويتهم قريباً (راسلهم للتجديد)', soon.map(x => [names[x.user_id] || 'عضو', 'تنتهي في ' + new Date(x.premium_until).toLocaleDateString('en-GB')]), 'لا أحد خلال الأيام السبعة القادمة');
-      section('آخر العمليات', pp.data.slice(0, 20).map(x => [(names[x.user_id] || 'عضو') + ' — ' + Number(x.amount) + ' درهم', x.days + ' يوماً · ' + new Date(x.created_at).toLocaleDateString('en-GB')]), 'لا توجد عمليات بعد');
+      section('تنتهي عضويتهم قريباً (راسلهم للتجديد)', soon.map(x => [names[x.user_id] || 'عضو', 'تنتهي في ' + dFmt(x.premium_until)]), 'لا أحد خلال الأيام السبعة القادمة');
+      section('آخر العمليات', pp.data.slice(0, 20).map(x => [(names[x.user_id] || 'عضو') + ' — ' + Number(x.amount) + ' درهم', x.days + ' يوماً · ' + dFmt(x.created_at)]), 'لا توجد عمليات بعد');
     }
 
-    function loadList() { return cur === 'reports' ? loadReports() : cur === 'revenue' ? loadRevenue() : loadMembers(); }
+    function loadList() {
+      if (searching) { const q = $('q').value.trim(); if (q.length >= 2) return loadSearch(q); }
+      return cur === 'reports' ? loadReports() : cur === 'revenue' ? loadRevenue() : cur === 'log' ? loadLog() : loadMembers();
+    }
     function loadAll() { loadStats(); loadList(); }
 
     $('tabs').onclick = e => {
       if (e.target.tagName !== 'BUTTON') return;
-      cur = e.target.dataset.s;
+      cur = e.target.dataset.s; searching = false; $('q').value = '';
       document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b === e.target));
       loadList();
+    };
+
+    let qTimer = null;
+    $('q').oninput = () => {
+      clearTimeout(qTimer);
+      qTimer = setTimeout(() => {
+        const q = $('q').value.trim();
+        searching = q.length >= 2;
+        if (searching) document.querySelectorAll('#tabs button').forEach(b => b.classList.remove('on'));
+        else document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.s === cur));
+        if (searching || q.length === 0) loadList();
+      }, 350);
     };
 
     (async () => {
