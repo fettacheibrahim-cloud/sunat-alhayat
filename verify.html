@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>سنة الحياة - توثيق الحساب</title>
+  <link rel="stylesheet" href="style.css?v=10">
+  <style>
+    .hero{display:flex;align-items:center;gap:12px;background:var(--sand);border-radius:16px;padding:14px;margin:12px 0}
+    .hero .vf{font-size:15px;padding:4px 14px;margin:0}
+    .hero p{margin:0}
+    .st{background:#e3f0ff;color:#0b5cad;border-radius:16px;padding:14px;margin:12px 0;font-weight:700}
+    .steps{counter-reset:s;list-style:none;padding:0;margin:14px 0}
+    .steps li{counter-increment:s;position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 52px 12px 14px;margin:8px 0;line-height:1.8}
+    .steps li::before{content:counter(s);position:absolute;inset-inline-start:auto;right:12px;top:12px;width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+    [dir=ltr] .steps li{padding:12px 14px 12px 52px}
+    [dir=ltr] .steps li::before{right:auto;left:12px}
+    .price{font:700 1.6rem 'Amiri',serif;color:var(--gold);text-align:center;margin:10px 0}
+    .price small{display:block;font:500 13px 'Tajawal',sans-serif;color:var(--muted)}
+    .note{font-size:13px;color:var(--muted);line-height:1.8;margin-top:12px}
+  </style>
+</head>
+<body>
+  <main class="card" style="max-width:600px;margin:20px auto;padding:22px">
+    <h1>توثيق الحساب ✓</h1>
+    <p id="msg" style="display:none"></p>
+
+    <div class="hero">
+      <span class="vf">✓ موثّق</span>
+      <p>شارة تظهر بجانب اسمك في التصفح وفي ملفك، تُطمئن الآخرين بأن صاحب الحساب شخص حقيقي.</p>
+    </div>
+
+    <div id="state" class="st" style="display:none"></div>
+
+    <h2 style="font-size:1.2rem">كيف يتم التوثيق؟</h2>
+    <ol class="steps">
+      <li>اكتب على ورقة: «سنة الحياة» واسمك وتاريخ اليوم.</li>
+      <li>صوّر نفسك وأنت تحمل الورقة بوضوح، ويظهر وجهك كاملاً.</li>
+      <li>اضغط الزر أدناه وأرسل الصورة لنا عبر واتساب.</li>
+      <li>نقارنها بصور ملفك ونرسل لك طريقة الدفع، ثم تُفعَّل الشارة خلال وقت قصير.</li>
+    </ol>
+
+    <div class="price"><span id="price">100</span> درهماً<small>للتوثيق سنة كاملة</small></div>
+    <a id="contactBtn" class="btn gold" href="contact.html" style="display:block;text-align:center">أرسل صورة التحقق عبر واتساب</a>
+
+    <p class="note">نستعمل صورة التحقق للمقارنة فقط، ولا تظهر لأي عضو، ونحذفها بعد انتهاء التحقق. لا نطلب منك بطاقة هوية ولا بيانات بنكية.</p>
+    <p class="note"><a href="premium.html">العضوية المميزة</a> · <a href="profile.html">ملفي</a></p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="i18n-dict.js?v=3"></script>
+  <script src="i18n.js?v=3"></script>
+  <script src="app.js?v=12"></script>
+  <script>
+    // ===== أدخل بياناتك هنا (وطابق السعر مع VERIFY في admin.html) =====
+    const WHATSAPP = '212615959425';
+    const VERIFY = { days: 365, price: 100 };
+    // =====================================================================
+
+    const $ = id => document.getElementById(id);
+    let email = '';
+    function dateAr(d) { return new Date(d).toLocaleDateString({ ar: 'ar-MA-u-nu-latn', fr: 'fr-FR', en: 'en-GB' }[window.I18N_LANG || 'ar'], { year: 'numeric', month: 'long', day: 'numeric' }); }
+
+    function waLink() {
+      const t = 'السلام عليكم، أرغب في توثيق حسابي في «سنة الحياة» (' + VERIFY.price + ' درهماً لسنة). بريدي: ' + email + '. أرفقت صورة التحقق.';
+      return 'https://wa.me/' + encodeURIComponent(WHATSAPP) + '?text=' + encodeURIComponent(t);
+    }
+
+    (async () => {
+      const s = await getSession();
+      if (!s) { location.href = 'auth.html'; return; }
+      email = s.user.email || '';
+      $('price').textContent = VERIFY.price;
+      const b = $('contactBtn'); b.href = waLink(); b.target = '_blank'; b.rel = 'noopener';
+
+      const { data: prof } = await sb.from('profiles').select('status').eq('id', s.user.id).maybeSingle();
+      if (!prof || prof.status !== 'approved') {
+        showMsg('msg', 'يُتاح التوثيق بعد قبول حسابك.', 'error');
+        b.style.display = 'none';
+        return;
+      }
+      const r = await sb.rpc('my_verification');
+      if (r.error) return;
+      const until = r.data ? new Date(r.data) : null;
+      if (until && until > new Date()) {
+        const st = $('state'); st.style.display = 'block';
+        st.textContent = '';
+        st.append('✓ حسابك موثّق حتى ' + dateAr(until));
+        b.textContent = 'تجديد التوثيق';
+      }
+    })();
+  </script>
+</body>
+</html>
