@@ -1679,5 +1679,33 @@ window.I18N_DICT = {
 "تجديد التوثيق": [
 "Renouveler la vérification",
 "Renew verification"
+],
+"من هدي النبي ﷺ في الزواج": [
+"Les enseignements du Prophète ﷺ sur le mariage",
+"The Prophet’s ﷺ guidance on marriage"
+],
+"«يا معشر الشباب، من استطاع منكم الباءة فليتزوج، فإنه أغض للبصر وأحصن للفرج»": [
+"« Ô jeunes gens ! Que celui d'entre vous qui en a les moyens se marie, car le mariage préserve le regard et protège la chasteté. »",
+"“O young people! Whoever among you is able to marry, let him marry, for it lowers the gaze and protects chastity.”"
+],
+"«إذا جاءكم من ترضون دينه وخلقه فزوجوه، إلا تفعلوا تكن فتنة في الأرض وفساد عريض»": [
+"« Si vient à vous quelqu'un dont vous agréez la religion et le caractère, mariez-le ; sinon, il y aura une grande discorde et une grande corruption sur terre. »",
+"“If someone whose religion and character you are pleased with comes to you, marry him; if you do not, there will be great trial and corruption on earth.”"
+],
+"«تنكح المرأة لأربع: لمالها ولحسبها ولجمالها ولدينها، فاظفر بذات الدين تربت يداك»": [
+"« On épouse une femme pour quatre raisons : sa richesse, sa lignée, sa beauté et sa religion. Choisis celle qui a la religion, tu seras gagnant. »",
+"“A woman is married for four things: her wealth, her lineage, her beauty and her religion. So choose the one with religion, and you will prosper.”"
+],
+"«خيركم خيركم لأهله، وأنا خيركم لأهلي»": [
+"« Le meilleur d'entre vous est le meilleur envers sa famille, et je suis le meilleur d'entre vous envers ma famille. »",
+"“The best of you is the best to his family, and I am the best of you to my family.”"
+],
+"متفق عليه": [
+"Rapporté par al-Boukhari et Mouslim",
+"Agreed upon (al-Bukhari and Muslim)"
+],
+"رواه الترمذي": [
+"Rapporté par at-Tirmidhi",
+"Narrated by at-Tirmidhi"
 ]
 };
