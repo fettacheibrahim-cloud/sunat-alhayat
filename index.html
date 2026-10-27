@@ -51,6 +51,18 @@
     .trust{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
     .trust div{background:var(--sand);border-radius:16px;padding:16px;text-align:center;font-weight:700;color:var(--green)}
     .trust small{display:block;font-weight:400;color:var(--muted);margin-top:4px}
+    .hadith{max-width:640px;margin:22px auto 0;position:relative}
+    .hd{background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px 22px 20px;text-align:center;
+      box-shadow:0 6px 18px rgba(14,59,60,.06);margin-bottom:14px;border-top:3px solid var(--gold)}
+    .hd .q{font:400 1.45rem/2.1 'Amiri',serif;color:var(--green);margin:0}
+    .hd .src{color:var(--gold);font-size:14px;margin:10px 0 0;font-weight:700}
+    .hadith.js{min-height:210px}
+    .hadith.js .hd{position:absolute;inset:0 0 auto 0;margin:0;opacity:0;visibility:hidden;transition:opacity .6s}
+    .hadith.js .hd.on{opacity:1;visibility:visible;position:relative}
+    .dots{display:none;justify-content:center;gap:8px;margin-top:14px}
+    .hadith.js+.dots{display:flex}
+    .dots button{width:10px;height:10px;border-radius:50%;border:0;padding:0;background:var(--line);cursor:pointer}
+    .dots button.on{background:var(--gold);width:22px;border-radius:6px}
     .cta{text-align:center}
     footer{text-align:center;padding:26px 20px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
     @media(max-width:600px){.hero h1{font-size:2.1rem}.verse .ar{font-size:1.3rem}.trust{grid-template-columns:1fr}}
@@ -89,6 +101,17 @@
   </section>
 
   <section style="padding-top:0">
+    <h2>من هدي النبي ﷺ في الزواج</h2>
+    <div class="hadith" id="hadith">
+      <div class="hd"><p class="q">«يا معشر الشباب، من استطاع منكم الباءة فليتزوج، فإنه أغض للبصر وأحصن للفرج»</p><p class="src">متفق عليه</p></div>
+      <div class="hd"><p class="q">«إذا جاءكم من ترضون دينه وخلقه فزوجوه، إلا تفعلوا تكن فتنة في الأرض وفساد عريض»</p><p class="src">رواه الترمذي</p></div>
+      <div class="hd"><p class="q">«تنكح المرأة لأربع: لمالها ولحسبها ولجمالها ولدينها، فاظفر بذات الدين تربت يداك»</p><p class="src">متفق عليه</p></div>
+      <div class="hd"><p class="q">«خيركم خيركم لأهله، وأنا خيركم لأهلي»</p><p class="src">رواه الترمذي</p></div>
+    </div>
+    <div class="dots" id="dots"></div>
+  </section>
+
+  <section style="padding-top:0">
     <h2>خصوصيتك أولاً</h2>
     <div class="trust">
       <div>🔒 محادثات خاصة<small>بين الطرفين فقط</small></div>
@@ -113,6 +136,31 @@
   <script src="i18n.js?v=3"></script>
   <script src="app.js?v=12"></script>
   <script>
+
+    // أحاديث متناوبة: تتبدّل كل 8 ثوانٍ، وتُظهر النقاطُ الموضعَ ويمكن الضغط عليها
+    (function () {
+      var box = document.getElementById('hadith'), dots = document.getElementById('dots');
+      if (!box || !dots) return;
+      var items = box.querySelectorAll('.hd'); if (items.length < 2) return;
+      box.className += ' js';
+      var cur = Math.floor(Math.random() * items.length), timer = null, btns = [];
+      function show(i) {
+        cur = i;
+        for (var k = 0; k < items.length; k++) {
+          items[k].className = 'hd' + (k === i ? ' on' : '');
+          btns[k].className = k === i ? 'on' : '';
+        }
+      }
+      function reset() { clearInterval(timer); timer = setInterval(function () { show((cur + 1) % items.length); }, 8000); }
+      for (var j = 0; j < items.length; j++) {
+        (function (n) {
+          var b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', String(n + 1));
+          b.onclick = function () { show(n); reset(); };
+          dots.appendChild(b); btns.push(b);
+        })(j);
+      }
+      show(cur); reset();
+    })();
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
     var deferredPrompt = null;
     var installBtn = document.getElementById('install');
