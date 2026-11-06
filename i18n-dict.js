@@ -1707,5 +1707,41 @@ window.I18N_DICT = {
 "رواه الترمذي": [
 "Rapporté par at-Tirmidhi",
 "Narrated by at-Tirmidhi"
+],
+"🛡 نصائح الأمان": [
+"🛡 Conseils de sécurité",
+"🛡 Safety tips"
+],
+"🛡 لسلامتك وثقتك": [
+"🛡 Pour votre sécurité et votre confiance",
+"🛡 For your safety and trust"
+],
+"لا ترسل مالاً ولا بيانات بنكية لأي شخص مهما كان السبب.": [
+"N'envoyez jamais d'argent ni de données bancaires, quelle que soit la raison.",
+"Never send money or banking details to anyone, whatever the reason."
+],
+"لا تشارك رقم هاتفك أو عنوانك قبل أن تتعرّف جيداً على الطرف الآخر.": [
+"Ne partagez pas votre numéro de téléphone ni votre adresse avant de bien connaître l'autre personne.",
+"Do not share your phone number or address before you know the other person well."
+],
+"اجعل اللقاء الأول في مكان عام وبحضور وليّك أو أحد أهلك.": [
+"Faites la première rencontre dans un lieu public, en présence de votre tuteur (wali) ou d'un proche.",
+"Make the first meeting in a public place, with your guardian (wali) or a family member present."
+],
+"إن شعرت بالريبة أو طُلب منك ما يُزعجك فاضغط «إبلاغ» أو «حظر» فوراً.": [
+"Si quelque chose vous semble suspect ou gênant, appuyez immédiatement sur « Signaler » ou « Bloquer ».",
+"If something feels suspicious or uncomfortable, tap “Report” or “Block” right away."
+],
+"فهمت": [
+"Compris",
+"Got it"
+],
+"تنبيه: رسالتك تتضمّن رقماً أو رابطاً أو وسيلة تواصل خارجية. لسلامتك لا تشارك بيانات الاتصال قبل أن تتعرّف جيداً وبحضور الأهل. هل تريد الإرسال؟": [
+"Attention : votre message contient un numéro, un lien ou un moyen de contact externe. Pour votre sécurité, ne partagez pas vos coordonnées avant de bien connaître la personne et en présence de la famille. Voulez-vous l'envoyer ?",
+"Warning: your message contains a number, a link or an external contact method. For your safety, do not share contact details before you know the person well and with family present. Send anyway?"
+],
+"تنبيه: لا ترسل مالاً ولا بيانات بنكية لأي شخص عبر الموقع. هل تريد إرسال الرسالة رغم ذلك؟": [
+"Attention : n'envoyez jamais d'argent ni de données bancaires à quiconque via le site. Voulez-vous envoyer le message malgré tout ?",
+"Warning: never send money or banking details to anyone through the site. Send the message anyway?"
 ]
 };
