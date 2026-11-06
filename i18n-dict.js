@@ -124,1295 +124,1295 @@ window.I18N_DICT = {
 "Créer un compte",
 "Create an account"
 ],
-"تثبيت التطبيق": [
-"Installer l'application",
-"Install the app"
-],
 "الأسئلة الشائعة": [
+"Questions fréquentes",
+"FAQ"
+],
+"اتصل بنا": [
 "Contact",
 "Contact us"
 ],
-"اتصل بنا": [
+"الخصوصية": [
 "Confidentialité",
 "Privacy"
 ],
-"الخصوصية": [
+"الشروط": [
 "Conditions",
 "Terms"
 ],
-"الشروط": [
+"© سنة الحياة — جميع الحقوق محفوظة": [
 "© Sunat Al-Hayat — Tous droits réservés",
 "© Sunat Al-Hayat — All rights reserved"
 ],
-"© سنة الحياة — جميع الحقوق محفوظة": [
+"تصفّح الأعضاء": [
 "Parcourir les membres",
 "Browse members"
 ],
-"تصفّح الأعضاء": [
+"سنة الحياة - الدخول": [
 "Sunat Al-Hayat - Connexion",
 "Sunat Al-Hayat - Log in"
 ],
-"سنة الحياة - الدخول": [
+"تسجيل الدخول": [
 "Connexion",
 "Log in"
 ],
-"تسجيل الدخول": [
+"البريد الإلكتروني": [
 "Adresse e-mail",
 "Email address"
 ],
-"البريد الإلكتروني": [
+"كلمة المرور": [
 "Mot de passe",
 "Password"
 ],
-"كلمة المرور": [
+"نسيت كلمة المرور؟": [
 "Mot de passe oublié ?",
 "Forgot your password?"
 ],
-"نسيت كلمة المرور؟": [
+"أوافق على": [
 "J'accepte les",
 "I agree to the"
 ],
-"أوافق على": [
+"الشروط والأحكام": [
 "conditions générales",
 "Terms and Conditions"
 ],
-"الشروط والأحكام": [
+"و": [
 "et la",
 "and the"
 ],
-"و": [
+"سياسة الخصوصية": [
 "politique de confidentialité",
 "Privacy Policy"
 ],
-"سياسة الخصوصية": [
+"، وأؤكد أن عمري 18 سنة فأكثر.": [
 ", et je confirme avoir 18 ans ou plus.",
 ", and I confirm I am 18 or older."
 ],
-"، وأؤكد أن عمري 18 سنة فأكثر.": [
+"ليس لديك حساب؟ سجّل الآن": [
 "Pas de compte ? Inscrivez-vous",
 "No account? Sign up"
 ],
-"ليس لديك حساب؟ سجّل الآن": [
+"تسجيل": [
 "S'inscrire",
 "Sign up"
 ],
-"تسجيل": [
+"لديك حساب؟ ادخل": [
 "Déjà un compte ? Connectez-vous",
 "Already have an account? Log in"
 ],
-"لديك حساب؟ ادخل": [
+"اكتب بريدك الإلكتروني أولاً ثم اضغط «نسيت كلمة المرور».": [
 "Saisissez d'abord votre e-mail, puis cliquez sur « Mot de passe oublié ».",
 "Enter your email first, then click “Forgot your password?”."
 ],
-"اكتب بريدك الإلكتروني أولاً ثم اضغط «نسيت كلمة المرور».": [
+"تعذّر الإرسال:": [
 "Échec de l'envoi :",
 "Could not send:"
 ],
-"تعذّر الإرسال:": [
+"إن كان البريد مسجّلاً لدينا فقد أرسلنا إليه رابط تغيير كلمة المرور. (انظر في المزعج أيضاً)": [
 "Si cette adresse est enregistrée chez nous, nous lui avons envoyé un lien pour changer le mot de passe. (Vérifiez aussi les spams)",
 "If this email is registered with us, we have sent it a link to reset your password. (Check your spam folder too)"
 ],
-"إن كان البريد مسجّلاً لدينا فقد أرسلنا إليه رابط تغيير كلمة المرور. (انظر في المزعج أيضاً)": [
+"لم يتم تأكيد بريدك بعد. افتح رسالة التأكيد في بريدك.": [
 "Votre e-mail n'est pas encore confirmé. Ouvrez le message de confirmation dans votre boîte mail.",
 "Your email is not confirmed yet. Open the confirmation message in your inbox."
 ],
-"لم يتم تأكيد بريدك بعد. افتح رسالة التأكيد في بريدك.": [
+"البريد أو كلمة المرور غير صحيحة.": [
 "E-mail ou mot de passe incorrect.",
 "Incorrect email or password."
 ],
-"البريد أو كلمة المرور غير صحيحة.": [
+"يجب الموافقة على الشروط وسياسة الخصوصية للتسجيل.": [
 "Vous devez accepter les conditions et la politique de confidentialité pour vous inscrire.",
 "You must accept the terms and the privacy policy to sign up."
 ],
-"يجب الموافقة على الشروط وسياسة الخصوصية للتسجيل.": [
+"تم إنشاء حسابك. أرسلنا رسالة تأكيد إلى بريدك، افتحها واضغط الرابط ثم ادخل. (انظر في المزعج إن لم تجدها)": [
 "Votre compte a été créé. Nous avons envoyé un message de confirmation à votre e-mail : ouvrez-le, cliquez sur le lien, puis connectez-vous. (Vérifiez les spams si vous ne le trouvez pas)",
 "Your account has been created. We sent a confirmation message to your email: open it, click the link, then log in. (Check your spam folder if you can't find it)"
 ],
-"تم إنشاء حسابك. أرسلنا رسالة تأكيد إلى بريدك، افتحها واضغط الرابط ثم ادخل. (انظر في المزعج إن لم تجدها)": [
+"سنة الحياة - التصفح": [
 "Sunat Al-Hayat - Parcourir",
 "Sunat Al-Hayat - Browse"
 ],
-"سنة الحياة - التصفح": [
+"🔍 التصفح": [
 "🔍 Parcourir",
 "🔍 Browse"
 ],
-"🔍 التصفح": [
+"❤️ المفضلة": [
 "❤️ Favoris",
 "❤️ Favorites"
 ],
-"❤️ المفضلة": [
+"🔎 تصفية وترتيب": [
 "🔎 Filtrer et trier",
 "🔎 Filter and sort"
 ],
-"🔎 تصفية وترتيب": [
+"العمر من": [
 "Âge de",
 "Age from"
 ],
-"العمر من": [
+"العمر إلى": [
 "Âge à",
 "Age to"
 ],
-"العمر إلى": [
+"المدينة أو البلد": [
 "Ville ou pays",
 "City or country"
 ],
-"الدولة": [
-"Pays",
-"Country"
+"مثال: الدار البيضاء": [
+"Exemple : Casablanca",
+"Example: Casablanca"
 ],
-"كل الدول": [
-"Tous les pays",
-"All countries"
+"الحالة الاجتماعية": [
+"Situation familiale",
+"Marital status"
 ],
-"المدينة": [
+"الكل": [
 "Tous",
 "All"
 ],
-"مثال: الدار البيضاء": [
+"أعزب / عزباء": [
 "Célibataire",
 "Single"
 ],
-"الحالة الاجتماعية": [
+"مطلّق / مطلّقة": [
 "Divorcé(e)",
 "Divorced"
 ],
-"الكل": [
+"أرمل / أرملة": [
 "Veuf / Veuve",
 "Widowed"
 ],
-"أعزب / عزباء": [
+"المستوى الدراسي": [
 "Niveau d'études",
 "Education"
 ],
-"مطلّق / مطلّقة": [
+"ثانوي": [
 "Secondaire",
 "Secondary"
 ],
-"أرمل / أرملة": [
+"دبلوم": [
 "Diplôme",
 "Diploma"
 ],
-"المستوى الدراسي": [
+"إجازة / بكالوريوس": [
 "Licence / Bachelor",
 "Bachelor's degree"
 ],
-"ثانوي": [
+"دراسات عليا": [
 "Études supérieures",
 "Postgraduate"
 ],
-"دبلوم": [
+"درجة الالتزام": [
 "Niveau de pratique religieuse",
 "Religious practice"
-],
-"إجازة / بكالوريوس": [
-"Pratiquant(e)",
-"Practicing"
-],
-"دراسات عليا": [
-"Modéré",
-"Moderate"
-],
-"درجة الالتزام": [
-"En chemin vers la pratique",
-"Growing in practice"
 ],
 "ملتزم/ة": [
 "Pratiquant(e)",
 "Practicing"
 ],
 "متوسّط": [
+"Modéré",
+"Moderate"
+],
+"في طريق الالتزام": [
+"En chemin vers la pratique",
+"Growing in practice"
+],
+"الترتيب": [
+"Tri",
+"Sort"
+],
+"الأحدث": [
 "Plus récents",
 "Newest"
 ],
-"في طريق الالتزام": [
+"الأكثر توافقاً": [
 "Les plus compatibles",
 "Most compatible"
 ],
-"التوثيق": [
-"Vérification",
-"Verification"
+"مسح الفلاتر": [
+"Effacer les filtres",
+"Clear filters"
 ],
-"الموثّقون فقط ✓": [
-"Comptes vérifiés uniquement ✓",
-"Verified members only ✓"
+"اهتماماتك في آخر 7 أيام:": [
+"Vos intérêts ces 7 derniers jours :",
+"Your interests in the last 7 days:"
 ],
-"الترتيب": [
+"من": [
 "sur",
 "of"
 ],
-"الأحدث": [
+"⭐ عضويتك المميزة": [
 "⭐ Votre abonnement Premium",
 "⭐ Your Premium membership"
 ],
-"الأكثر توافقاً": [
+"زد الحد بالعضوية المميزة": [
 "Augmentez la limite avec Premium",
 "Raise your limit with Premium"
 ],
-"مسح الفلاتر": [
+"تعذّر الحفظ:": [
 "Échec de l'enregistrement :",
 "Could not save:"
 ],
-"اهتماماتك في آخر 7 أيام:": [
+"وصلت إلى الحد الأسبوعي للاهتمامات. هل تريد معرفة العضوية المميزة التي ترفع الحد؟": [
 "Vous avez atteint la limite hebdomadaire d'intérêts. Voulez-vous découvrir l'abonnement Premium qui relève cette limite ?",
 "You have reached the weekly limit of interests. Would you like to see the Premium membership that raises the limit?"
 ],
-"من": [
+"خطأ:": [
 "Erreur :",
 "Error:"
 ],
-"⭐ عضويتك المميزة": [
+"تم إرسال الاهتمام ✓": [
 "Intérêt envoyé ✓",
 "Interest sent ✓"
 ],
-"تعذّر الحفظ:": [
+"عضو": [
 "Membre",
 "Member"
 ],
-"وصلت إلى الحد الأسبوعي للاهتمامات. هل تريد معرفة العضوية المميزة التي ترفع الحد؟": [
+"⭐ مميز": [
 "⭐ Premium",
 "⭐ Premium"
 ],
-"تم إرسال الاهتمام ✓": [
+"٪ توافق": [
 "% de compatibilité",
 "% match"
 ],
-"؟": [
+"عرض الملف": [
 "Voir le profil",
 "View profile"
 ],
-"عضو": [
+"تم الإرسال ✓": [
 "Envoyé ✓",
 "Sent ✓"
 ],
-"⭐ مميز": [
+"اهتمام 💌": [
 "Intérêt 💌",
 "Interest 💌"
 ],
-"✓ موثّق": [
-"✓ Vérifié",
-"✓ Verified"
+"حفظ في المفضلة": [
+"Enregistrer dans les favoris",
+"Save to favorites"
 ],
-"،": [
+"عدد النتائج:": [
 "Nombre de résultats :",
 "Results:"
 ],
-"٪ توافق": [
+"لا توجد نتائج مطابقة": [
 "Aucun résultat correspondant",
 "No matching results"
 ],
-"عرض الملف": [
+"لا يوجد أعضاء متاحون حالياً": [
 "Aucun membre disponible pour le moment",
 "No members available right now"
 ],
-"تم الإرسال ✓": [
+"جرّب تخفيف الفلاتر.": [
 "Essayez d'assouplir les filtres.",
 "Try loosening the filters."
 ],
-"اهتمام 💌": [
+"عُد لاحقاً، يصل أعضاء جدد باستمرار.": [
 "Revenez plus tard : de nouveaux membres arrivent régulièrement.",
 "Come back later: new members join regularly."
 ],
-"حفظ في المفضلة": [
+"أكمل ملفك الشخصي أولاً": [
 "Complétez d'abord votre profil",
 "Complete your profile first"
 ],
-"عدد النتائج:": [
+"حسابك قيد المراجعة. سيظهر التصفح بعد قبوله.": [
 "Votre compte est en cours de vérification. La navigation sera disponible après son acceptation.",
 "Your account is under review. Browsing will be available once it is accepted."
 ],
-"لا توجد نتائج مطابقة": [
+"سنة الحياة - ملف عضو": [
 "Sunat Al-Hayat - Profil d'un membre",
 "Sunat Al-Hayat - Member profile"
 ],
-"لا يوجد أعضاء متاحون حالياً": [
+"← رجوع": [
 "← Retour",
 "← Back"
 ],
-"جرّب تخفيف الفلاتر.": [
+"نسبة التوافق التقريبية": [
 "Compatibilité approximative",
 "Approximate compatibility"
 ],
-"أكمل ملفك الشخصي أولاً": [
+"نقاط التقاء:": [
 "Points communs :",
 "Common ground:"
 ],
-"حسابك قيد المراجعة. سيظهر التصفح بعد قبوله.": [
+"تقدير مبني على بيانات الملفين فقط، وليس حكماً نهائياً.": [
 "Estimation basée uniquement sur les données des deux profils, pas un jugement définitif.",
 "An estimate based only on the data of the two profiles, not a final verdict."
 ],
-"سنة الحياة - ملف عضو": [
+"لا تتوفر بيانات كافية لحساب التوافق. أكمل ملفك (القيم ونمط الحياة) لتظهر النسبة.": [
 "Données insuffisantes pour calculer la compatibilité. Complétez votre profil (valeurs et mode de vie) pour afficher le pourcentage.",
 "Not enough data to calculate compatibility. Complete your profile (values and lifestyle) to see the percentage."
 ],
-"← رجوع": [
+"نبذة": [
 "À propos",
 "About"
 ],
-"نسبة التوافق التقريبية": [
+"ما الذي يبحث عنه": [
 "Ce qu'il/elle recherche",
 "What they are looking for"
 ],
-"٪": [
+"المهنة": [
 "Profession",
 "Occupation"
 ],
-"نقاط التقاء:": [
+"الطول": [
 "Taille",
 "Height"
 ],
-"لا تتوفر بيانات كافية لحساب التوافق. أكمل ملفك (القيم ونمط الحياة) لتظهر النسبة.": [
+"الالتزام": [
 "Pratique religieuse",
 "Religious practice"
 ],
-"نبذة": [
+"الصلاة": [
 "Prière",
 "Prayer"
 ],
-"ما الذي يبحث عنه": [
+"التدخين": [
 "Tabac",
 "Smoking"
 ],
-"المهنة": [
+"الأطفال": [
 "Enfants",
 "Children"
 ],
-"الطول": [
+"تفاصيل": [
 "Détails",
 "Details"
 ],
-"سم": [
+"إبداء اهتمام 💌": [
 "Exprimer mon intérêt 💌",
 "Show interest 💌"
 ],
-"الالتزام": [
+"رابط غير صحيح.": [
 "Lien incorrect.",
 "Invalid link."
 ],
-"الصلاة": [
+"أكمل ملفك الشخصي أولاً.": [
 "Complétez d'abord votre profil.",
 "Complete your profile first."
 ],
-"التدخين": [
+"حسابك قيد المراجعة. ستظهر الملفات بعد قبوله.": [
 "Votre compte est en cours de vérification. Les profils seront visibles après son acceptation.",
 "Your account is under review. Profiles will be visible once it is accepted."
 ],
-"الأطفال": [
+"هذا الملف غير متاح.": [
 "Ce profil n'est pas disponible.",
 "This profile is not available."
 ],
-"تفاصيل": [
+"سنة الحياة - المفضلة": [
 "Sunat Al-Hayat - Favoris",
 "Sunat Al-Hayat - Favorites"
 ],
-"إبداء اهتمام 💌": [
+"المفضلة": [
 "Favoris",
 "Favorites"
 ],
-"رابط غير صحيح.": [
+"قائمتك خاصة بك، ولا يعلم الأعضاء أنك حفظتهم.": [
 "Votre liste est privée : les membres ne savent pas que vous les avez enregistrés.",
 "Your list is private: members don't know you saved them."
 ],
-"أكمل ملفك الشخصي أولاً.": [
+"لا يوجد أعضاء في المفضلة بعد": [
 "Aucun membre dans vos favoris pour l'instant",
 "No members in your favorites yet"
 ],
-"حسابك قيد المراجعة. ستظهر الملفات بعد قبوله.": [
+"اضغط 🤍 على أي ملف في التصفح لتجده هنا.": [
 "Touchez 🤍 sur un profil dans la navigation pour le retrouver ici.",
 "Tap 🤍 on a profile while browsing to find it here."
 ],
-"هذا الملف غير متاح.": [
+"إزالة من المفضلة": [
 "Retirer des favoris",
 "Remove from favorites"
 ],
-"سنة الحياة - المفضلة": [
+"تظهر المفضلة بعد قبول حسابك.": [
 "Les favoris apparaissent une fois votre compte accepté.",
 "Favorites appear once your account is accepted."
 ],
-"المفضلة": [
+"— تأكد من تشغيل ملف social.sql": [
 "— vérifiez que le fichier social.sql a bien été exécuté",
 "— make sure the file social.sql has been run"
 ],
-"قائمتك خاصة بك، ولا يعلم الأعضاء أنك حفظتهم.": [
+"سنة الحياة - الاهتمامات": [
 "Sunat Al-Hayat - Intérêts",
 "Sunat Al-Hayat - Interests"
 ],
-"لا يوجد أعضاء في المفضلة بعد": [
+"الاهتمامات": [
 "Intérêts",
 "Interests"
 ],
-"اضغط 🤍 على أي ملف في التصفح لتجده هنا.": [
+"الواردة": [
 "Reçus",
 "Received"
 ],
-"إزالة من المفضلة": [
+"المرسلة": [
 "Envoyés",
 "Sent"
 ],
-"تظهر المفضلة بعد قبول حسابك.": [
+"بانتظار الرد": [
 "En attente de réponse",
 "Waiting for a reply"
 ],
-"— تأكد من تشغيل ملف social.sql": [
+"مقبول": [
 "Accepté",
 "Accepted"
 ],
-"سنة الحياة - الاهتمامات": [
+"مرفوض": [
 "Refusé",
 "Declined"
 ],
-"الاهتمامات": [
+"قبول": [
 "Accepter",
 "Accept"
 ],
-"الواردة": [
+"رفض": [
 "Refuser",
 "Decline"
 ],
-"المرسلة": [
+"محادثة 💬": [
 "Discuter 💬",
 "Chat 💬"
 ],
-"بانتظار الرد": [
+"لا توجد اهتمامات واردة": [
 "Aucun intérêt reçu",
 "No interests received"
 ],
-"مقبول": [
+"عندما يُبدي أحد اهتمامه بك سيظهر هنا.": [
 "Quand quelqu'un s'intéressera à vous, il apparaîtra ici.",
 "When someone shows interest in you, it will appear here."
 ],
-"مرفوض": [
+"لم ترسل أي اهتمام بعد": [
 "Vous n'avez encore envoyé aucun intérêt",
 "You haven't sent any interest yet"
 ],
-"قبول": [
+"تصفّح الأعضاء وأبدِ اهتمامك بمن يناسبك.": [
 "Parcourez les membres et exprimez votre intérêt pour ceux qui vous conviennent.",
 "Browse members and show interest in those who suit you."
 ],
-"رفض": [
+"سنة الحياة - المحادثات": [
 "Sunat Al-Hayat - Conversations",
 "Sunat Al-Hayat - Chats"
 ],
-"محادثة 💬": [
+"المحادثات": [
 "Conversations",
 "Chats"
 ],
-"لا توجد اهتمامات واردة": [
+"→ رجوع": [
 "← Retour",
 "← Back"
 ],
-"عندما يُبدي أحد اهتمامه بك سيظهر هنا.": [
+"إبلاغ": [
 "Signaler",
 "Report"
 ],
-"لم ترسل أي اهتمام بعد": [
+"حظر": [
 "Bloquer",
 "Block"
 ],
-"تصفّح الأعضاء وأبدِ اهتمامك بمن يناسبك.": [
+"سبب الإبلاغ": [
 "Motif du signalement",
 "Reason for report"
 ],
-"سنة الحياة - المحادثات": [
+"إساءة أو ألفاظ غير لائقة": [
 "Insultes ou propos inappropriés",
 "Abuse or inappropriate language"
 ],
-"المحادثات": [
+"انتحال شخصية أو معلومات كاذبة": [
 "Usurpation d'identité ou fausses informations",
 "Impersonation or false information"
 ],
-"→ رجوع": [
+"طلب مال أو احتيال": [
 "Demande d'argent ou arnaque",
 "Request for money or scam"
 ],
-"إبلاغ": [
+"تحرّش أو إزعاج": [
 "Harcèlement ou gêne",
 "Harassment or annoyance"
 ],
-"حظر": [
+"سبب آخر": [
 "Autre motif",
 "Other reason"
 ],
-"سبب الإبلاغ": [
+"تفاصيل (اختياري)": [
 "Détails (facultatif)",
 "Details (optional)"
 ],
-"إساءة أو ألفاظ غير لائقة": [
+"إرسال البلاغ": [
 "Envoyer le signalement",
 "Send report"
 ],
-"انتحال شخصية أو معلومات كاذبة": [
+"إلغاء": [
 "Annuler",
 "Cancel"
 ],
-"طلب مال أو احتيال": [
+"🖼 المعرض": [
 "🖼 Galerie",
 "🖼 Gallery"
 ],
-"تحرّش أو إزعاج": [
+"📁 الملفات": [
 "📁 Fichiers",
 "📁 Files"
 ],
-"سبب آخر": [
+"📸 الكاميرا": [
 "📸 Appareil photo",
 "📸 Camera"
 ],
-"تفاصيل (اختياري)": [
+"إرسال صورة": [
 "Envoyer une photo",
 "Send a photo"
 ],
-"إرسال البلاغ": [
+"اكتب رسالة...": [
 "Écrivez un message...",
 "Type a message..."
 ],
-"إلغاء": [
+"تسجيل رسالة صوتية": [
 "Enregistrer un message vocal",
 "Record a voice message"
 ],
-"🖼 المعرض": [
+"إرسال": [
 "Envoyer",
 "Send"
 ],
-"📁 الملفات": [
+"جارٍ التسجيل…": [
 "Enregistrement…",
 "Recording…"
 ],
-"📸 الكاميرا": [
+"🗑 إلغاء": [
 "🗑 Annuler",
 "🗑 Cancel"
 ],
-"إرسال صورة": [
+"إرسال ➤": [
 "Envoyer ➤",
 "Send ➤"
 ],
-"اكتب رسالة...": [
+"إغلاق": [
 "Fermer",
 "Close"
 ],
-"تسجيل رسالة صوتية": [
+"لا توجد محادثات بعد. تُفتح المحادثة عندما يقبل أحد الطرفين اهتمام الآخر.": [
 "Aucune conversation pour l'instant. Une conversation s'ouvre quand l'un des deux accepte l'intérêt de l'autre.",
 "No chats yet. A chat opens when one of you accepts the other's interest."
 ],
-"إرسال": [
+"أنت:": [
 "Vous :",
 "You:"
 ],
-"جارٍ التسجيل…": [
+"ابدأ المحادثة": [
 "Commencer la conversation",
 "Start the conversation"
 ],
-"🗑 إلغاء": [
+"تشغيل": [
 "Lecture",
 "Play"
 ],
-"إرسال ➤": [
+"تعذّر": [
 "Échec",
 "Failed"
 ],
-"إغلاق": [
+"صورة": [
 "Photo",
 "Photo"
 ],
-"لا توجد محادثات بعد. تُفتح المحادثة عندما يقبل أحد الطرفين اهتمام الآخر.": [
+"تعذّر تحميل الصورة": [
 "Impossible de charger la photo",
 "Could not load the photo"
 ],
-"أنت:": [
+"ابدأ المحادثة بالسلام والاحترام 🌿": [
 "Commencez la conversation par le salut et le respect 🌿",
 "Start the conversation with a greeting and respect 🌿"
 ],
-"ابدأ المحادثة": [
+"هل تريد حظر": [
 "Voulez-vous bloquer",
 "Do you want to block"
 ],
-"تشغيل": [
+"؟ لن تظهر لك المحادثة بعد الآن.": [
 "? La conversation ne s'affichera plus.",
 "? The chat will no longer be shown to you."
 ],
-"تعذّر": [
+"تعذّر الحظر:": [
 "Échec du blocage :",
 "Could not block:"
 ],
-"🌐 ترجم": [
-"🌐 Traduire",
-"🌐 Translate"
+"تعذّر إرسال البلاغ:": [
+"Échec de l'envoi du signalement :",
+"Could not send the report:"
 ],
-"ترجمة آلية": [
-"Traduction automatique",
-"Automatic translation"
+"تم إرسال البلاغ للإدارة. شكراً لك.": [
+"Le signalement a été transmis à l'équipe. Merci.",
+"The report has been sent to the team. Thank you."
 ],
-"جاري الترجمة…": [
-"Traduction…",
-"Translating…"
+"جاري رفع الصورة…": [
+"Envoi de la photo…",
+"Uploading the photo…"
 ],
-"بلغ حدّ الترجمة المجانية لهذا اليوم، حاول لاحقاً.": [
-"La limite de traduction gratuite du jour est atteinte, réessayez plus tard.",
-"The free translation limit for today has been reached, try again later."
+"جاري إرسال الرسالة الصوتية…": [
+"Envoi du message vocal…",
+"Sending the voice message…"
 ],
-"تعذّرت الترجمة. حاول لاحقاً.": [
-"La traduction a échoué. Réessayez plus tard.",
-"Translation failed. Try again later."
+"📷 صورة": [
+"📷 Photo",
+"📷 Photo"
 ],
-"الرسالة بلغتك أصلاً.": [
-"Le message est déjà dans votre langue.",
-"The message is already in your language."
+"🎤 رسالة صوتية": [
+"🎤 Message vocal",
+"🎤 Voice message"
 ],
-"عرض الأصل": [
-"Voir l'original",
-"Show original"
+"تعذّر تصغير الصورة": [
+"Impossible de réduire la photo",
+"Could not resize the photo"
 ],
-"صورة": [
+"تعذّر قراءة الصورة، جرّب صورة JPG أو PNG": [
 "Impossible de lire la photo, essayez une image JPG ou PNG",
 "Could not read the photo, try a JPG or PNG image"
 ],
-"تعذّر تحميل الصورة": [
+"اختر ملف صورة (JPG أو PNG).": [
 "Choisissez un fichier image (JPG ou PNG).",
 "Choose an image file (JPG or PNG)."
 ],
-"ابدأ المحادثة بالسلام والاحترام 🌿": [
+"الصورة كبيرة جداً (الحد 20 ميغابايت).": [
 "La photo est trop volumineuse (limite 20 Mo).",
 "The photo is too large (limit 20 MB)."
 ],
-"هل تريد حظر": [
+"جاري تجهيز الصورة…": [
 "Préparation de la photo…",
 "Preparing the photo…"
 ],
-"؟ لن تظهر لك المحادثة بعد الآن.": [
+"لم تصل أي صورة من المتصفح. جرّب خيار «الملفات» أو «الكاميرا»، أو افتح الموقع في متصفح آخر.": [
 "Aucune photo n'est arrivée du navigateur. Essayez « Fichiers » ou « Appareil photo », ou ouvrez le site dans un autre navigateur.",
 "No photo came through from the browser. Try “Files” or “Camera”, or open the site in another browser."
 ],
-"تعذّر الحظر:": [
+"متصفحك لا يدعم التسجيل الصوتي. جرّب Chrome أو Safari حديثاً.": [
 "Votre navigateur ne prend pas en charge l'enregistrement vocal. Essayez une version récente de Chrome ou Safari.",
 "Your browser does not support voice recording. Try a recent version of Chrome or Safari."
 ],
-"تعذّر إرسال البلاغ:": [
+"تعذّر الوصول إلى الميكروفون. اسمح للموقع باستعماله من إعدادات المتصفح ثم أعد المحاولة.": [
 "Impossible d'accéder au micro. Autorisez le site à l'utiliser dans les réglages du navigateur, puis réessayez.",
 "Could not access the microphone. Allow the site to use it in your browser settings, then try again."
 ],
-"تم إرسال البلاغ للإدارة. شكراً لك.": [
+"تعذّر بدء التسجيل على هذا المتصفح.": [
 "Impossible de démarrer l'enregistrement sur ce navigateur.",
 "Could not start recording on this browser."
 ],
-"جاري رفع الصورة…": [
+"التسجيل قصير جداً.": [
 "L'enregistrement est trop court.",
 "The recording is too short."
 ],
-"جاري إرسال الرسالة الصوتية…": [
+"سنة الحياة - ملفي": [
 "Sunat Al-Hayat - Mon profil",
 "Sunat Al-Hayat - My profile"
 ],
-"📷 صورة": [
+"ملفي الشخصي": [
 "Mon profil",
 "My profile"
 ],
-"🎤 رسالة صوتية": [
+"حالة الحساب:": [
 "Statut du compte :",
 "Account status:"
 ],
-"تعذّر تصغير الصورة": [
+"حذف": [
 "Supprimer",
 "Delete"
 ],
-"تعذّر قراءة الصورة، جرّب صورة JPG أو PNG": [
+"أظهر صورتي للطرف الآخر بعد قبول الاهتمام": [
 "Afficher ma photo à l'autre personne après l'acceptation de l'intérêt",
 "Show my photo to the other person after the interest is accepted"
 ],
-"اختر ملف صورة (JPG أو PNG).": [
+"الاسم الأول": [
 "Prénom",
 "First name"
 ],
-"الصورة كبيرة جداً (الحد 20 ميغابايت).": [
+"الجنس": [
 "Sexe",
 "Gender"
 ],
-"جاري تجهيز الصورة…": [
+"اختر": [
 "Choisir",
 "Select"
 ],
-"لم تصل أي صورة من المتصفح. جرّب خيار «الملفات» أو «الكاميرا»، أو افتح الموقع في متصفح آخر.": [
+"ذكر": [
 "Homme",
 "Male"
 ],
-"متصفحك لا يدعم التسجيل الصوتي. جرّب Chrome أو Safari حديثاً.": [
+"أنثى": [
 "Femme",
 "Female"
 ],
-"تعذّر الوصول إلى الميكروفون. اسمح للموقع باستعماله من إعدادات المتصفح ثم أعد المحاولة.": [
+"تاريخ الميلاد (18 سنة فأكثر)": [
 "Date de naissance (18 ans ou plus)",
 "Date of birth (18 or older)"
 ],
-"تعذّر بدء التسجيل على هذا المتصفح.": [
+"البلد": [
 "Pays",
 "Country"
 ],
-"التسجيل قصير جداً.": [
+"المدينة": [
 "Ville",
 "City"
 ],
-"سنة الحياة - ملفي": [
+"مثال: معلّم، مهندسة، طالب…": [
 "Exemple : enseignant, ingénieure, étudiant…",
 "Example: teacher, engineer, student…"
 ],
-"ملفي الشخصي": [
+"الطول (سم)": [
 "Taille (cm)",
 "Height (cm)"
 ],
-"حالة الحساب:": [
+"مثال: 175": [
 "Exemple : 175",
 "Example: 175"
 ],
-"🔔 جرّب إشعاراً الآن": [
-"🔔 Tester une notification",
-"🔔 Send a test notification"
-],
-"✓ وثّق حسابك لتحصل على شارة «موثّق»": [
-"✓ Faites vérifier votre compte pour obtenir le badge « Vérifié »",
-"✓ Verify your account to get the “Verified” badge"
-],
-"حذف": [
-"Pratique modérée",
-"Moderately practicing"
-],
-"أظهر صورتي للطرف الآخر بعد قبول الاهتمام": [
-"Régularité de la prière",
-"Prayer regularity"
-],
-"الاسم الأول": [
-"Je la maintiens",
-"I keep to it"
-],
-"الجنس": [
-"Souvent",
-"Mostly"
-],
-"اختر": [
-"Parfois",
-"Sometimes"
-],
-"ذكر": [
-"Rarement",
-"Rarely"
-],
-"أنثى": [
-"Je ne fume pas",
-"I don't smoke"
-],
-"تاريخ الميلاد (18 سنة فأكثر)": [
-"J'ai arrêté",
-"I quit"
-],
-"البلد": [
-"Je fume",
-"I smoke"
-],
-"مثال: معلّم، مهندسة، طالب…": [
-"Souhait d'avoir des enfants",
-"Wish to have children"
-],
-"الطول (سم)": [
-"Oui",
-"Yes"
-],
-"مثال: 175": [
-"Ouvert(e) à l'idée",
-"Open to it"
-],
 "القيم ونمط الحياة": [
-"Non",
-"No"
+"Valeurs et mode de vie",
+"Values and lifestyle"
 ],
 "اختيارية، لكنها ترفع دقة نسبة التوافق وتساعد الطرف الآخر على معرفتك.": [
-"À mon sujet",
-"About me"
+"Facultatif, mais cela améliore la précision de la compatibilité et aide l'autre personne à mieux vous connaître.",
+"Optional, but it makes the compatibility score more accurate and helps the other person get to know you."
 ],
 "متوسّط الالتزام": [
 "Pratique modérée",
 "Moderately practicing"
 ],
 "المحافظة على الصلاة": [
+"Régularité de la prière",
+"Prayer regularity"
+],
+"أحافظ عليها": [
+"Je la maintiens",
+"I keep to it"
+],
+"غالباً": [
+"Souvent",
+"Mostly"
+],
+"أحياناً": [
+"Parfois",
+"Sometimes"
+],
+"نادراً": [
+"Rarement",
+"Rarely"
+],
+"لا أدخّن": [
+"Je ne fume pas",
+"I don't smoke"
+],
+"أقلعت عنه": [
+"J'ai arrêté",
+"I quit"
+],
+"أدخّن": [
+"Je fume",
+"I smoke"
+],
+"الرغبة في الأطفال": [
+"Souhait d'avoir des enfants",
+"Wish to have children"
+],
+"نعم": [
+"Oui",
+"Yes"
+],
+"منفتح/ة على الأمر": [
+"Ouvert(e) à l'idée",
+"Open to it"
+],
+"لا": [
+"Non",
+"No"
+],
+"عنّي": [
+"À mon sujet",
+"About me"
+],
+"نبذة عني": [
+"À propos de moi",
+"About me"
+],
+"ما الذي أبحث عنه": [
 "Ce que je recherche",
 "What I'm looking for"
 ],
-"أحافظ عليها": [
+"حفظ": [
 "Enregistrer",
 "Save"
 ],
-"غالباً": [
+"تسجيل الخروج": [
 "Se déconnecter",
 "Log out"
 ],
-"أحياناً": [
+"حذف حسابي نهائياً": [
 "Supprimer définitivement mon compte",
 "Permanently delete my account"
 ],
-"نادراً": [
+"قيد المراجعة": [
 "En cours de vérification",
 "Under review"
 ],
-"لا أدخّن": [
+"موقوف": [
 "Suspendu",
 "Suspended"
 ],
-"أقلعت عنه": [
+"لم يُنشأ بعد": [
 "Pas encore créé",
 "Not created yet"
 ],
-"أدخّن": [
+"تعذّر تحميل الصورة:": [
 "Impossible de charger la photo :",
 "Could not load the photo:"
 ],
-"الرغبة في الأطفال": [
+"الصورة مرفوعة لكن تعذّر عرضها، تحقق من سياسات التخزين.": [
 "La photo est envoyée mais impossible de l'afficher, vérifiez les règles de stockage.",
 "The photo was uploaded but cannot be shown, check the storage policies."
 ],
-"نعم": [
+"صورة واضحة لوجهك، يتم تصغيرها تلقائياً.": [
 "Une photo nette de votre visage, réduite automatiquement.",
 "A clear photo of your face, resized automatically."
 ],
-"منفتح/ة على الأمر": [
+"احفظ ملفك أولاً ثم أضف الصورة.": [
 "Enregistrez d'abord votre profil, puis ajoutez la photo.",
 "Save your profile first, then add the photo."
 ],
-"لا": [
+"جاري رفع الصورة...": [
 "Envoi de la photo...",
 "Uploading the photo..."
 ],
-"عنّي": [
+"التخزين:": [
 "Stockage :",
 "Storage:"
 ],
-"نبذة عني": [
+"الملف:": [
 "Profil :",
 "Profile:"
 ],
-"ما الذي أبحث عنه": [
+"تم رفع الصورة ✓": [
 "Photo envoyée ✓",
 "Photo uploaded ✓"
 ],
-"حفظ": [
+"تعذّر رفع الصورة:": [
 "Impossible d'envoyer la photo :",
 "Could not upload the photo:"
 ],
-"تسجيل الخروج": [
+"احفظ ملفك الشخصي أولاً (زر حفظ في الأسفل) ثم أضف الصورة": [
 "Enregistrez d'abord votre profil (bouton Enregistrer en bas), puis ajoutez la photo",
 "Save your profile first (Save button below), then add the photo"
 ],
-"حذف حسابي نهائياً": [
+"لم تصل أي صورة من المتصفح. جرّب «الملفات» أو «الكاميرا»، أو افتح الموقع في متصفح آخر.": [
 "Aucune photo n'est arrivée du navigateur. Essayez « Fichiers » ou « Appareil photo », ou ouvrez le site dans un autre navigateur.",
 "No photo came through from the browser. Try “Files” or “Camera”, or open the site in another browser."
 ],
-"قيد المراجعة": [
+"حذف الصورة؟": [
 "Supprimer la photo ?",
 "Delete the photo?"
 ],
-"موقوف": [
+"تم حذف الصورة": [
 "Photo supprimée",
 "Photo deleted"
 ],
-"لم يُنشأ بعد": [
+"تم تحديث خيار الصورة ✓": [
 "Option de photo mise à jour ✓",
 "Photo option updated ✓"
 ],
-"تم إيقاف حسابك أو رفضه.": [
-"Votre compte a été suspendu ou refusé.",
-"Your account was suspended or rejected."
+"يجب أن يكون عمرك 18 سنة فأكثر": [
+"Vous devez avoir 18 ans ou plus",
+"You must be 18 or older"
 ],
-"السبب:": [
-"Motif :",
-"Reason:"
+"تم الحفظ ✓ — حسابك مقبول، يمكنك الآن تصفّح الأعضاء.": [
+"Enregistré ✓ — votre compte est accepté, vous pouvez maintenant parcourir les membres.",
+"Saved ✓ — your account is approved, you can now browse members."
 ],
-"عدّل ملفك ثم راسلنا ليُعاد فحصه.": [
-"Modifiez votre profil, puis écrivez-nous pour qu'il soit réexaminé.",
-"Edit your profile, then contact us so it can be reviewed again."
+"تم الحفظ ✓ — ملفك قيد المراجعة اليدوية. للقبول الفوري: أكمل كل الحقول، واكتب نبذة (30 حرفاً فأكثر) دون أرقام هاتف أو روابط أو حسابات تواصل.": [
+"Enregistré ✓ — votre profil est en vérification manuelle. Pour une acceptation immédiate : remplissez tous les champs et écrivez une présentation (30 caractères minimum) sans numéro de téléphone, lien ni compte de messagerie.",
+"Saved ✓ — your profile is under manual review. For instant approval: fill in all fields and write an introduction (at least 30 characters) with no phone number, link or messaging account."
 ],
-"تعذّر تحميل الصورة:": [
+"تم الحفظ ✓": [
 "Enregistré ✓",
 "Saved ✓"
 ],
-"الصورة مرفوعة لكن تعذّر عرضها، تحقق من سياسات التخزين.": [
+"سيتم حذف حسابك وملفك ومحادثاتك وصورتك نهائياً ولا يمكن التراجع. هل أنت متأكد؟": [
 "Votre compte, votre profil, vos conversations et votre photo seront définitivement supprimés, sans retour possible. Êtes-vous sûr(e) ?",
 "Your account, profile, chats and photo will be permanently deleted and this cannot be undone. Are you sure?"
 ],
-"صورة واضحة لوجهك، يتم تصغيرها تلقائياً.": [
+"للتأكيد اكتب كلمة: حذف": [
 "Pour confirmer, tapez le mot : supprimer",
 "To confirm, type the word: delete"
 ],
-"احفظ ملفك أولاً ثم أضف الصورة.": [
+"لم يتم الحذف.": [
 "Suppression annulée.",
 "Nothing was deleted."
 ],
-"جاري رفع الصورة...": [
+"تم حذف حسابك. نتمنى لك التوفيق.": [
 "Votre compte a été supprimé. Nous vous souhaitons bonne continuation.",
 "Your account has been deleted. We wish you all the best."
 ],
-"التخزين:": [
+"تعذّر حذف الحساب:": [
 "Impossible de supprimer le compte :",
 "Could not delete the account:"
 ],
-"الملف:": [
+"سنة الحياة - العضوية المميزة": [
 "Sunat Al-Hayat - Abonnement Premium",
 "Sunat Al-Hayat - Premium membership"
 ],
-"تم رفع الصورة ✓": [
+"العضوية المميزة ⭐": [
 "Abonnement Premium ⭐",
 "Premium membership ⭐"
 ],
-"تعذّر رفع الصورة:": [
+"جاري التحميل…": [
 "Chargement…",
 "Loading…"
 ],
-"احفظ ملفك الشخصي أولاً (زر حفظ في الأسفل) ثم أضف الصورة": [
+"مجانية": [
 "Gratuit",
 "Free"
 ],
-"لم تصل أي صورة من المتصفح. جرّب «الملفات» أو «الكاميرا»، أو افتح الموقع في متصفح آخر.": [
+"اهتمامات في الأسبوع": [
 "intérêts par semaine",
 "interests per week"
 ],
-"حذف الصورة؟": [
+"محادثة كاملة عند القبول": [
 "Conversation complète après acceptation",
 "Full chat once accepted"
 ],
-"تم حذف الصورة": [
+"مجاناً دائماً": [
 "Gratuit pour toujours",
 "Free forever"
 ],
-"تم تحديث خيار الصورة ✓": [
+"مميزة": [
 "Premium",
 "Premium"
 ],
-"يجب أن يكون عمرك 18 سنة فأكثر": [
+"اهتماماً في الأسبوع": [
 "intérêts par semaine",
 "interests per week"
 ],
-"تم الحفظ ✓ — حسابك مقبول، يمكنك الآن تصفّح الأعضاء.": [
+"شارة «مميز» على ملفك": [
 "Badge « Premium » sur votre profil",
 "“Premium” badge on your profile"
 ],
-"تم الحفظ ✓ — ملفك قيد المراجعة اليدوية. للقبول الفوري: أكمل كل الحقول، واكتب نبذة (30 حرفاً فأكثر) دون أرقام هاتف أو روابط أو حسابات تواصل.": [
+"ظهور ملفك في أعلى نتائج التصفح": [
 "Votre profil en tête des résultats",
 "Your profile at the top of the results"
 ],
-"تم الحفظ ✓": [
+"كيف أشترك؟": [
 "Comment s'abonner ?",
 "How do I subscribe?"
 ],
-"تعذّر ربط هذا الجهاز بالإشعارات. تأكد من منح الإذن وأن الموقع مثبّت أو مفتوح في Chrome.": [
-"Impossible de relier cet appareil aux notifications. Vérifiez que l'autorisation est accordée et que le site est installé ou ouvert dans Chrome.",
-"Couldn't link this device to notifications. Make sure permission is granted and the site is installed or open in Chrome."
+"تواصل معنا عبر الزر أدناه.": [
+"Contactez-nous avec le bouton ci-dessous.",
+"Contact us with the button below."
 ],
-"— شغّل ملف push.sql": [
+"سنرسل لك طريقة الدفع المتاحة.": [
 "Nous vous enverrons le moyen de paiement disponible.",
 "We will send you the available payment method."
 ],
-"أُرسل إشعار تجريبي، سيصلك خلال ثوانٍ. إن لم يصل فأغلق التطبيق وانتظر قليلاً، أو راجع إعداد الدالة.": [
+"بعد التأكد من الدفع تُفعَّل عضويتك خلال وقت قصير، وسترى الشارة هنا.": [
 "Après vérification du paiement, votre abonnement est activé rapidement et vous verrez le badge ici.",
 "Once the payment is confirmed, your membership is activated shortly and you will see the badge here."
 ],
-"سيتم حذف حسابك وملفك ومحادثاتك وصورتك نهائياً ولا يمكن التراجع. هل أنت متأكد؟": [
+"تواصل لتفعيل العضوية": [
 "Contacter pour activer l'abonnement",
 "Contact us to activate"
 ],
-"للتأكيد اكتب كلمة: حذف": [
+"المحادثة والخصوصية والأمان مجانية للجميع، ولا تُحجب خلف الاشتراك.": [
 "Les conversations, la confidentialité et la sécurité sont gratuites pour tous et ne sont jamais derrière un abonnement.",
 "Chat, privacy and safety are free for everyone and never locked behind a subscription."
 ],
-"لم يتم الحذف.": [
+"50 درهماً / شهر": [
 "50 dirhams / mois",
 "50 MAD / month"
 ],
-"تم حذف حسابك. نتمنى لك التوفيق.": [
+"السلام عليكم، أرغب في تفعيل العضوية المميزة في «سنة الحياة». بريدي:": [
 "Bonjour, je souhaite activer l'abonnement Premium sur « Sunat Al-Hayat ». Mon e-mail :",
 "Hello, I would like to activate the Premium membership on “Sunat Al-Hayat”. My email:"
 ],
-"تعذّر حذف الحساب:": [
+"تعذّر تحميل حالة عضويتك. تأكد من تشغيل ملف premium.sql.": [
 "Impossible de charger l'état de votre abonnement. Vérifiez que le fichier premium.sql a été exécuté.",
 "Could not load your membership status. Make sure the file premium.sql has been run."
 ],
-"سنة الحياة - العضوية المميزة": [
+"⭐ عضو مميز": [
 "⭐ Membre Premium",
 "⭐ Premium member"
 ],
-"العضوية المميزة ⭐": [
+"ينتهي في": [
 "Expire le",
 "Expires on"
 ],
-"جاري التحميل…": [
+"تمديد العضوية": [
 "Prolonger l'abonnement",
 "Extend membership"
 ],
-"مجانية": [
+"خطتك الحالية: مجانية": [
 "Votre formule actuelle : gratuite",
 "Your current plan: free"
 ],
-"اهتمامات في الأسبوع": [
+"الاهتمامات في آخر 7 أيام:": [
 "Intérêts ces 7 derniers jours :",
 "Interests in the last 7 days:"
 ],
-"محادثة كاملة عند القبول": [
+"سنة الحياة - اتصل بنا": [
 "Sunat Al-Hayat - Contact",
 "Sunat Al-Hayat - Contact us"
-],
-"مجاناً دائماً": [
-"Accueil",
-"Home"
-],
-"مميزة": [
-"Pour une question, signaler un problème ou faire une suggestion. Nous lisons chaque message. Avant d'envoyer, vous trouverez peut-être votre réponse dans la",
-"For a question, to report a problem or make a suggestion. We read every message. Before sending, you may find your answer in the"
-],
-"اهتماماً في الأسبوع": [
-"Nom",
-"Name"
-],
-"شارة «مميز» على ملفك": [
-"Adresse e-mail (pour pouvoir vous répondre)",
-"Email address (so we can reply)"
-],
-"ظهور ملفك في أعلى نتائج التصفح": [
-"Sujet",
-"Subject"
-],
-"اختر مدة الاشتراك": [
-"Choisissez la durée de l'abonnement",
-"Choose the subscription length"
-],
-"اضغط الزر أدناه لمراسلتنا مع الباقة التي اخترتها.": [
-"Touchez le bouton ci-dessous pour nous écrire avec la formule choisie.",
-"Tap the button below to message us with the plan you chose."
-],
-"سنرسل لك طريقة الدفع المتاحة.": [
-"Signalement d'un membre",
-"Report a member"
-],
-"بعد التأكد من الدفع تُفعَّل عضويتك خلال وقت قصير، وسترى الشارة هنا.": [
-"Demande de modification de données (ex. : le sexe)",
-"Request to change data (e.g. gender)"
-],
-"تواصل لتفعيل العضوية": [
-"Suggestion",
-"Suggestion"
-],
-"المحادثة والخصوصية والأمان مجانية للجميع، ولا تُحجب خلف الاشتراك.": [
-"Autre",
-"Other"
-],
-"✓ هل تريد شارة «موثّق» أيضاً؟ وثّق حسابك": [
-"✓ Vous voulez aussi le badge « Vérifié » ? Faites vérifier votre compte",
-"✓ Want the “Verified” badge too? Verify your account"
-],
-"شهر واحد": [
-"1 mois",
-"1 month"
-],
-"3 أشهر": [
-"3 mois",
-"3 months"
-],
-"سنة كاملة": [
-"1 an",
-"1 year"
-],
-"السلام عليكم، أرغب في تفعيل العضوية المميزة (": [
-"Échec de l'envoi : vérifiez les données (message de 10 caractères minimum) et réessayez.",
-"Could not send: check the details (message of at least 10 characters) and try again."
-],
-"درهماً) في «سنة الحياة». بريدي:": [
-"Sunat Al-Hayat - Questions fréquentes",
-"Sunat Al-Hayat - FAQ"
-],
-"وفّر": [
-"Réponses aux questions les plus fréquentes sur l'inscription, la confidentialité, les conversations et la sécurité sur Sunat Al-Hayat.",
-"Answers to the most common questions about sign-up, privacy, chats and safety on Sunat Al-Hayat."
-],
-"درهماً": [
-"MAD",
-"MAD"
-],
-"الأكثر طلباً": [
-"Le plus demandé",
-"Most popular"
-],
-"تعذّر تحميل حالة عضويتك. تأكد من تشغيل ملف premium.sql.": [
-"Une plateforme de rencontres uniquement en vue d'un mariage sérieux, fondée sur le respect et la discrétion. Ce n'est pas un site de divertissement ni de relations illégitimes.",
-"A platform for getting to know each other only with serious marriage in mind, built on respect and privacy. It is not a site for entertainment or illicit relationships."
-],
-"⭐ عضو مميز": [
-"L'inscription est-elle gratuite ?",
-"Is sign-up free?"
-],
-"ينتهي في": [
-"Oui, l'inscription est gratuite et prend une minute.",
-"Yes, sign-up is free and takes a minute."
-],
-"تمديد العضوية": [
-"Quelles sont les conditions d'adhésion ?",
-"What are the membership conditions?"
-],
-"خطتك الحالية: مجانية": [
-"Avoir 18 ans ou plus, fournir des informations vraies et réelles, et un seul compte par personne.",
-"Be 18 or older, give true and real information, and have one account per person."
-],
-"الاهتمامات في آخر 7 أيام:": [
-"Compte et confidentialité",
-"Account and privacy"
-],
-"سنة الحياة - اتصل بنا": [
-"Pourquoi mon compte est-il « en cours de vérification » ?",
-"Why is my account “under review”?"
 ],
 "الرئيسية": [
 "Accueil",
 "Home"
 ],
 "للاستفسار أو الإبلاغ عن مشكلة أو تقديم اقتراح. نقرأ كل رسالة. وقبل الإرسال قد تجد جوابك في": [
+"Pour une question, signaler un problème ou faire une suggestion. Nous lisons chaque message. Avant d'envoyer, vous trouverez peut-être votre réponse dans la",
+"For a question, to report a problem or make a suggestion. We read every message. Before sending, you may find your answer in the"
+],
+"الاسم": [
+"Nom",
+"Name"
+],
+"البريد الإلكتروني (لنتمكن من الرد عليك)": [
+"Adresse e-mail (pour pouvoir vous répondre)",
+"Email address (so we can reply)"
+],
+"الموضوع": [
+"Sujet",
+"Subject"
+],
+"استفسار عام": [
+"Question générale",
+"General question"
+],
+"مشكلة تقنية": [
+"Problème technique",
+"Technical problem"
+],
+"بلاغ عن عضو": [
+"Signalement d'un membre",
+"Report a member"
+],
+"طلب تعديل بيانات (مثل الجنس)": [
+"Demande de modification de données (ex. : le sexe)",
+"Request to change data (e.g. gender)"
+],
+"اقتراح": [
+"Suggestion",
+"Suggestion"
+],
+"أخرى": [
+"Autre",
+"Other"
+],
+"رسالتك": [
+"Votre message",
+"Your message"
+],
+"الموقع": [
+"Site web",
+"Website"
+],
+"وصلتنا رسالتك ✓ شكراً لتواصلك.": [
+"Votre message nous est bien parvenu ✓ Merci de nous avoir contactés.",
+"We received your message ✓ Thank you for getting in touch."
+],
+"انتظر دقيقة قبل إرسال رسالة أخرى.": [
+"Patientez une minute avant d'envoyer un autre message.",
+"Wait a minute before sending another message."
+],
+"تعذّر الإرسال، تحقق من البيانات (الرسالة 10 أحرف على الأقل) وحاول مرة أخرى.": [
+"Échec de l'envoi : vérifiez les données (message de 10 caractères minimum) et réessayez.",
+"Could not send: check the details (message of at least 10 characters) and try again."
+],
+"سنة الحياة - الأسئلة الشائعة": [
+"Sunat Al-Hayat - Questions fréquentes",
+"Sunat Al-Hayat - FAQ"
+],
+"إجابات عن أكثر الأسئلة شيوعاً حول التسجيل والخصوصية والمحادثات والأمان في موقع سنة الحياة.": [
+"Réponses aux questions les plus fréquentes sur l'inscription, la confidentialité, les conversations et la sécurité sur Sunat Al-Hayat.",
+"Answers to the most common questions about sign-up, privacy, chats and safety on Sunat Al-Hayat."
+],
+"عن الموقع": [
+"À propos du site",
+"About the site"
+],
+"ما هو «سنة الحياة»؟": [
+"Qu'est-ce que « Sunat Al-Hayat » ?",
+"What is “Sunat Al-Hayat”?"
+],
+"منصة للتعارف بنيّة الزواج الجاد فقط، على أساس الاحترام والخصوصية. وليست موقعاً للتسلية أو العلاقات غير المشروعة.": [
+"Une plateforme de rencontres uniquement en vue d'un mariage sérieux, fondée sur le respect et la discrétion. Ce n'est pas un site de divertissement ni de relations illégitimes.",
+"A platform for getting to know each other only with serious marriage in mind, built on respect and privacy. It is not a site for entertainment or illicit relationships."
+],
+"هل التسجيل مجاني؟": [
+"L'inscription est-elle gratuite ?",
+"Is sign-up free?"
+],
+"نعم، التسجيل مجاني ولا يستغرق دقيقة.": [
+"Oui, l'inscription est gratuite et prend une minute.",
+"Yes, sign-up is free and takes a minute."
+],
+"ما شروط العضوية؟": [
+"Quelles sont les conditions d'adhésion ?",
+"What are the membership conditions?"
+],
+"أن يبلغ العضو 18 سنة فأكثر، وأن تكون بياناته صحيحة وحقيقية، وحساب واحد لكل شخص.": [
+"Avoir 18 ans ou plus, fournir des informations vraies et réelles, et un seul compte par personne.",
+"Be 18 or older, give true and real information, and have one account per person."
+],
+"الحساب والخصوصية": [
+"Compte et confidentialité",
+"Account and privacy"
+],
+"لماذا حسابي «قيد المراجعة»؟": [
+"Pourquoi mon compte est-il « en cours de vérification » ?",
+"Why is my account “under review”?"
+],
+"يُفحص كل ملف آلياً عند الحفظ، فإن كان مكتملاً (كل الحقول الأساسية ونبذة لا تقل عن 30 حرفاً، دون أرقام هاتف أو روابط أو حسابات تواصل) يُقبل فوراً. وإلا يبقى قيد المراجعة اليدوية من الإدارة. بعد القبول يمكنك التصفح وإبداء الاهتمام.": [
+"Chaque profil est vérifié automatiquement à l'enregistrement : s'il est complet (tous les champs essentiels et une présentation d'au moins 30 caractères, sans numéro de téléphone, lien ni compte de messagerie), il est accepté immédiatement. Sinon il reste en vérification manuelle par l'équipe. Une fois accepté, vous pouvez parcourir les profils et exprimer votre intérêt.",
+"Every profile is checked automatically when saved: if it is complete (all essential fields and an introduction of at least 30 characters, with no phone numbers, links or messaging accounts) it is approved immediately. Otherwise it stays under manual review by the team. Once approved, you can browse and show interest."
+],
+"من يستطيع رؤية ملفي الشخصي؟": [
 "Qui peut voir mon profil ?",
 "Who can see my profile?"
 ],
-"الاسم": [
+"الأعضاء المقبولون من الجنس الآخر فقط. ولا يظهر بريدك الإلكتروني لأي عضو. والعضو الذي تحظره لا يراك ولا تراه.": [
 "Uniquement les membres acceptés du sexe opposé. Votre e-mail n'est visible par aucun membre. Un membre que vous bloquez ne vous voit plus et vous ne le voyez plus.",
 "Only approved members of the opposite sex. Your email is not shown to any member. A member you block can no longer see you and you can't see them."
 ],
-"البريد الإلكتروني (لنتمكن من الرد عليك)": [
+"كيف أعدّل بياناتي أو أحذف حسابي؟": [
 "Comment modifier mes données ou supprimer mon compte ?",
 "How do I edit my data or delete my account?"
 ],
-"الموضوع": [
+"من صفحة «ملفي» تعدّل بياناتك، وفي أسفلها زر «حذف حسابي نهائياً» الذي يمحو حسابك وملفك ومحادثاتك وصورتك. أما الجنس فلا يمكن تغييره بعد إنشاء الملف، فإن وقع فيه خطأ فراسلنا من صفحة": [
 "Depuis la page « Mon profil » vous modifiez vos données, et en bas se trouve le bouton « Supprimer définitivement mon compte » qui efface votre compte, votre profil, vos conversations et votre photo. Le sexe ne peut pas être modifié une fois le profil créé : en cas d'erreur, écrivez-nous depuis la page",
 "From the “My profile” page you can edit your data, and at the bottom is the “Permanently delete my account” button, which erases your account, profile, chats and photo. Gender cannot be changed once the profile is created: if there is a mistake, write to us from the page"
 ],
-"استفسار عام": [
+"نسيت كلمة المرور، ماذا أفعل؟": [
 "J'ai oublié mon mot de passe, que faire ?",
 "I forgot my password, what should I do?"
 ],
-"مشكلة تقنية": [
+"في صفحة الدخول اكتب بريدك ثم اضغط «نسيت كلمة المرور؟» فتصلك رسالة برابط لتعيين كلمة جديدة. وإن لم تجدها فابحث في البريد المزعج.": [
 "Sur la page de connexion, saisissez votre e-mail puis cliquez sur « Mot de passe oublié ? » : vous recevrez un message avec un lien pour définir un nouveau mot de passe. Vérifiez les spams si vous ne le trouvez pas.",
 "On the log-in page, enter your email then click “Forgot your password?”: you will receive a message with a link to set a new password. Check your spam folder if you can't find it."
 ],
-"بلاغ عن عضو": [
+"التعارف والمحادثات": [
 "Rencontres et conversations",
 "Getting to know each other and chats"
 ],
-"طلب تعديل بيانات (مثل الجنس)": [
+"كيف تبدأ المحادثة مع عضو؟": [
 "Comment démarrer une conversation avec un membre ?",
 "How do I start a chat with a member?"
 ],
-"اقتراح": [
+"تبدي اهتمامك من صفحة «التصفح». وعندما يقبل الطرف الآخر اهتمامك تُفتح محادثة بينكما فقط. ولا يستطيع أحد مراسلتك قبل أن تقبل.": [
 "Vous exprimez votre intérêt depuis la page « Parcourir ». Quand l'autre personne accepte, une conversation s'ouvre entre vous deux uniquement. Personne ne peut vous écrire avant que vous acceptiez.",
 "You show interest from the “Browse” page. When the other person accepts, a chat opens between the two of you only. Nobody can write to you before you accept."
 ],
-"أخرى": [
+"كيف أصل إلى الأعضاء المناسبين لي؟": [
 "Comment trouver les membres qui me conviennent ?",
 "How do I find members who suit me?"
 ],
-"رسالتك": [
+"استعمل «تصفية النتائج» في صفحة التصفح لتحديد العمر والمدينة والحالة الاجتماعية والمستوى الدراسي.": [
 "Utilisez « Filtrer les résultats » sur la page de navigation pour définir l'âge, la ville, la situation familiale et le niveau d'études.",
 "Use “Filter results” on the browse page to set age, city, marital status and education."
 ],
-"الموقع": [
+"كيف أحظر عضواً أو أبلّغ عنه؟": [
 "Comment bloquer un membre ou le signaler ?",
 "How do I block or report a member?"
 ],
-"وصلتنا رسالتك ✓ شكراً لتواصلك.": [
+"من داخل المحادثة اضغط «حظر» أو «إبلاغ» واختر السبب. تصل البلاغات إلى الإدارة وتراجعها، ولها حق إيقاف أي حساب مخالف.": [
 "Depuis la conversation, appuyez sur « Bloquer » ou « Signaler » et choisissez le motif. Les signalements sont examinés par l'équipe, qui peut suspendre tout compte contrevenant.",
 "From the chat, tap “Block” or “Report” and choose the reason. Reports are reviewed by the team, which may suspend any account that breaks the rules."
 ],
-"انتظر دقيقة قبل إرسال رسالة أخرى.": [
+"الأمان": [
 "Sécurité",
 "Safety"
 ],
-"تعذّر الإرسال، تحقق من البيانات (الرسالة 10 أحرف على الأقل) وحاول مرة أخرى.": [
+"هل يمكن أن يطلب مني أحد مالاً؟": [
 "Quelqu'un peut-il me demander de l'argent ?",
 "Can someone ask me for money?"
 ],
-"سنة الحياة - الأسئلة الشائعة": [
+"لا. أي طلب مال أو تحويل أو بيانات بنكية هو احتيال. لا تحوّل أي مبلغ لأحد، وبلّغ عنه فوراً.": [
 "Non. Toute demande d'argent, de virement ou de données bancaires est une arnaque. Ne transférez rien à personne et signalez-le immédiatement.",
 "No. Any request for money, transfers or bank details is a scam. Don't send anything to anyone, and report it immediately."
 ],
-"إجابات عن أكثر الأسئلة شيوعاً حول التسجيل والخصوصية والمحادثات والأمان في موقع سنة الحياة.": [
+"كيف أتعارف بأمان؟": [
 "Comment faire connaissance en toute sécurité ?",
 "How do I get to know someone safely?"
 ],
-"عن الموقع": [
+"تأكد من صدق الطرف الآخر بنفسك ومع أسرتك قبل أي التزام. لا تشارك عنوان سكنك أو أوراقك الرسمية في بداية التعارف، وليكن اللقاء الأول بعلم الأهل وفي مكان عام. والموقع وسيط للتعارف فقط ولا يضمن صحة بيانات الأعضاء.": [
 "Vérifiez la sincérité de l'autre personne par vous-même et avec votre famille avant tout engagement. Ne partagez pas votre adresse ni vos papiers officiels au début, et que la première rencontre se fasse avec l'accord de vos proches et dans un lieu public. Le site n'est qu'un intermédiaire de rencontre et ne garantit pas l'exactitude des données des membres.",
 "Check the other person's sincerity yourself and with your family before any commitment. Don't share your home address or official papers early on, and let the first meeting be with your family's knowledge and in a public place. The site is only a meeting intermediary and does not guarantee the accuracy of members' data."
 ],
-"ما هو «سنة الحياة»؟": [
+"لم تجد جوابك؟": [
 "Vous n'avez pas trouvé votre réponse ?",
 "Didn't find your answer?"
 ],
-"منصة للتعارف بنيّة الزواج الجاد فقط، على أساس الاحترام والخصوصية. وليست موقعاً للتسلية أو العلاقات غير المشروعة.": [
+"راسلنا وسنقرأ رسالتك.": [
 "Écrivez-nous et nous lirons votre message.",
 "Write to us and we will read your message."
 ],
-"هل التسجيل مجاني؟": [
+"سنة الحياة - كلمة مرور جديدة": [
 "Sunat Al-Hayat - Nouveau mot de passe",
 "Sunat Al-Hayat - New password"
 ],
-"نعم، التسجيل مجاني ولا يستغرق دقيقة.": [
+"كلمة مرور جديدة": [
 "Nouveau mot de passe",
 "New password"
 ],
-"ما شروط العضوية؟": [
+"جاري التحقق من الرابط...": [
 "Vérification du lien...",
 "Checking the link..."
 ],
-"أن يبلغ العضو 18 سنة فأكثر، وأن تكون بياناته صحيحة وحقيقية، وحساب واحد لكل شخص.": [
+"كلمة المرور الجديدة (8 أحرف على الأقل)": [
 "Nouveau mot de passe (8 caractères minimum)",
 "New password (at least 8 characters)"
 ],
-"الحساب والخصوصية": [
+"أعد كتابة كلمة المرور": [
 "Saisissez de nouveau le mot de passe",
 "Re-enter the password"
 ],
-"لماذا حسابي «قيد المراجعة»؟": [
+"حفظ كلمة المرور": [
 "Enregistrer le mot de passe",
 "Save password"
 ],
-"يُفحص كل ملف آلياً عند الحفظ، فإن كان مكتملاً (كل الحقول الأساسية ونبذة لا تقل عن 30 حرفاً، دون أرقام هاتف أو روابط أو حسابات تواصل) يُقبل فوراً. وإلا يبقى قيد المراجعة اليدوية من الإدارة. بعد القبول يمكنك التصفح وإبداء الاهتمام.": [
+"العودة لتسجيل الدخول": [
 "Retour à la connexion",
 "Back to log in"
 ],
-"من يستطيع رؤية ملفي الشخصي؟": [
+"الرابط غير صالح أو انتهت صلاحيته. اطلب رابطاً جديداً من صفحة الدخول.": [
 "Le lien est invalide ou a expiré. Demandez un nouveau lien depuis la page de connexion.",
 "The link is invalid or has expired. Request a new link from the log-in page."
 ],
-"الأعضاء المقبولون من الجنس الآخر فقط. ولا يظهر بريدك الإلكتروني لأي عضو. والعضو الذي تحظره لا يراك ولا تراه.": [
+"كلمتا المرور غير متطابقتين.": [
 "Les deux mots de passe ne correspondent pas.",
 "The two passwords do not match."
 ],
-"كيف أعدّل بياناتي أو أحذف حسابي؟": [
+"تم تغيير كلمة المرور ✓ سيتم تحويلك الآن...": [
 "Mot de passe modifié ✓ Vous allez être redirigé...",
 "Password changed ✓ You will be redirected..."
 ],
-"من صفحة «ملفي» تعدّل بياناتك، وفي أسفلها زر «حذف حسابي نهائياً» الذي يمحو حسابك وملفك ومحادثاتك وصورتك. أما الجنس فلا يمكن تغييره بعد إنشاء الملف، فإن وقع فيه خطأ فراسلنا من صفحة": [
+"التصفح": [
 "Parcourir",
 "Browse"
 ],
-"نسيت كلمة المرور، ماذا أفعل؟": [
+"ملفي": [
 "Mon profil",
 "My profile"
 ],
-"في صفحة الدخول اكتب بريدك ثم اضغط «نسيت كلمة المرور؟» فتصلك رسالة برابط لتعيين كلمة جديدة. وإن لم تجدها فابحث في البريد المزعج.": [
+"الإدارة": [
 "Admin",
 "Admin"
 ],
-"كيف تبدأ المحادثة مع عضو؟": [
+"خروج": [
 "Déconnexion",
 "Log out"
 ],
-"كيف أصل إلى الأعضاء المناسبين لي؟": [
+"آخرين": [
 "autres",
 "others"
 ],
-"استعمل «تصفية النتائج» في صفحة التصفح لتحديد العمر والمدينة والحالة الاجتماعية والمستوى الدراسي.": [
+"وصلك اهتمام جديد 💌": [
 "Nouvel intérêt reçu 💌",
 "You received a new interest 💌"
 ],
-"كيف أحظر عضواً أو أبلّغ عنه؟": [
+"🔔 تفعيل": [
 "🔔 Activer",
 "🔔 Enable"
 ],
-"من داخل المحادثة اضغط «حظر» أو «إبلاغ» واختر السبب. تصل البلاغات إلى الإدارة وتراجعها، ولها حق إيقاف أي حساب مخالف.": [
+"تم تفعيل الإشعارات ✓": [
 "Notifications activées ✓",
 "Notifications enabled ✓"
 ],
@@ -1423,6 +1423,10 @@ window.I18N_DICT = {
 "سنة الحياة - لا يوجد اتصال": [
 "Sunat Al-Hayat - Hors ligne",
 "Sunat Al-Hayat - Offline"
+],
+"تثبيت التطبيق": [
+"Installer l'application",
+"Install the app"
 ],
 "ثبّت «سنة الحياة» على هاتفك فيظهر برمز على الشاشة الرئيسية ويفتح كتطبيق بملء الشاشة، بلا متجر وبلا تحميل كبير.": [
 "Installez « Sunat Al-Hayat » sur votre téléphone : une icône apparaît sur l'écran d'accueil et l'application s'ouvre en plein écran, sans boutique ni gros téléchargement.",
@@ -1507,6 +1511,30 @@ window.I18N_DICT = {
 "كيف؟": [
 "Comment ?",
 "How?"
+],
+"شهر واحد": [
+"1 mois",
+"1 month"
+],
+"3 أشهر": [
+"3 mois",
+"3 months"
+],
+"سنة كاملة": [
+"1 an",
+"1 year"
+],
+"اختر مدة الاشتراك": [
+"Choisissez la durée de l'abonnement",
+"Choose the subscription length"
+],
+"اضغط الزر أدناه لمراسلتنا مع الباقة التي اخترتها.": [
+"Touchez le bouton ci-dessous pour nous écrire avec la formule choisie.",
+"Tap the button below to message us with the plan you chose."
+],
+"الأكثر طلباً": [
+"Le plus demandé",
+"Most popular"
 ],
 "تنتهي عضويتك المميزة خلال 24 ساعة.": [
 "Votre abonnement Premium expire dans moins de 24 h.",
@@ -1612,6 +1640,34 @@ window.I18N_DICT = {
 "Traduire",
 "Translate"
 ],
+"🌐 ترجم": [
+"🌐 Traduire",
+"🌐 Translate"
+],
+"عرض الأصل": [
+"Voir l'original",
+"Show original"
+],
+"جاري الترجمة…": [
+"Traduction…",
+"Translating…"
+],
+"ترجمة آلية": [
+"Traduction automatique",
+"Automatic translation"
+],
+"تعذّرت الترجمة. حاول لاحقاً.": [
+"La traduction a échoué. Réessayez plus tard.",
+"Translation failed. Try again later."
+],
+"الرسالة بلغتك أصلاً.": [
+"Le message est déjà dans votre langue.",
+"The message is already in your language."
+],
+"بلغ حدّ الترجمة المجانية لهذا اليوم، حاول لاحقاً.": [
+"La limite de traduction gratuite du jour est atteinte, réessayez plus tard.",
+"The free translation limit for today has been reached, try again later."
+],
 "عند الضغط على «ترجم» يُرسل نص تلك الرسالة وحدها إلى خدمة ترجمة خارجية.": [
 "En touchant « Traduire », le texte de ce seul message est envoyé à un service de traduction externe.",
 "When you tap “Translate”, the text of that one message is sent to an external translation service."
@@ -1620,9 +1676,57 @@ window.I18N_DICT = {
 "Langue",
 "Language"
 ],
+"الدولة": [
+"Pays",
+"Country"
+],
+"كل الدول": [
+"Tous les pays",
+"All countries"
+],
+"التوثيق": [
+"Vérification",
+"Verification"
+],
+"الموثّقون فقط ✓": [
+"Comptes vérifiés uniquement ✓",
+"Verified members only ✓"
+],
+"✓ موثّق": [
+"✓ Vérifié",
+"✓ Verified"
+],
+"🔔 جرّب إشعاراً الآن": [
+"🔔 Tester une notification",
+"🔔 Send a test notification"
+],
+"✓ وثّق حسابك لتحصل على شارة «موثّق»": [
+"✓ Faites vérifier votre compte pour obtenir le badge « Vérifié »",
+"✓ Verify your account to get the “Verified” badge"
+],
+"تم إيقاف حسابك أو رفضه.": [
+"Votre compte a été suspendu ou refusé.",
+"Your account was suspended or rejected."
+],
+"السبب:": [
+"Motif :",
+"Reason:"
+],
+"عدّل ملفك ثم راسلنا ليُعاد فحصه.": [
+"Modifiez votre profil, puis écrivez-nous pour qu'il soit réexaminé.",
+"Edit your profile, then contact us so it can be reviewed again."
+],
+"تعذّر ربط هذا الجهاز بالإشعارات. تأكد من منح الإذن وأن الموقع مثبّت أو مفتوح في Chrome.": [
+"Impossible de relier cet appareil aux notifications. Vérifiez que l'autorisation est accordée et que le site est installé ou ouvert dans Chrome.",
+"Couldn't link this device to notifications. Make sure permission is granted and the site is installed or open in Chrome."
+],
 "أُرسل إشعار تجريبي، سيصلك خلال ثوانٍ. إن لم يصل فأغلق التطبيق وانتظر قليلاً.": [
 "Une notification de test a été envoyée et arrivera dans quelques secondes. Sinon, fermez l'application et patientez un peu.",
 "A test notification was sent and will arrive in a few seconds. If it doesn't, close the app and wait a moment."
+],
+"✓ هل تريد شارة «موثّق» أيضاً؟ وثّق حسابك": [
+"✓ Vous voulez aussi le badge « Vérifié » ? Faites vérifier votre compte",
+"✓ Want the “Verified” badge too? Verify your account"
 ],
 "سنة الحياة - توثيق الحساب": [
 "Sunat Al-Hayat - Vérification du compte",
@@ -1655,6 +1759,10 @@ window.I18N_DICT = {
 "نقارنها بصور ملفك ونرسل لك طريقة الدفع، ثم تُفعَّل الشارة خلال وقت قصير.": [
 "Nous la comparons aux photos de votre profil et vous envoyons le moyen de paiement, puis le badge est activé rapidement.",
 "We compare it with your profile photos and send you the payment method, then the badge is activated shortly after."
+],
+"درهماً": [
+"MAD",
+"MAD"
 ],
 "للتوثيق سنة كاملة": [
 "pour une année de vérification",
