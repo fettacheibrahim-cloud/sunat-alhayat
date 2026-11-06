@@ -77,20 +77,24 @@ async function logout() {
 
   const st = document.createElement('style');
   st.textContent = `
-    body{padding-bottom:84px !important}
-    .app-top{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;
-      padding:12px 18px;background:linear-gradient(135deg,#0E3B3C,#14595A);box-shadow:0 4px 14px rgba(14,59,60,.25)}
+    .app-head{position:sticky;top:0;z-index:50;background:linear-gradient(135deg,#0E3B3C,#14595A);
+      box-shadow:0 6px 20px rgba(14,59,60,.28)}
+    .app-top{display:flex;justify-content:space-between;align-items:center;padding:10px 16px 8px}
     .app-top a.brand{font:700 1.4rem 'Amiri',serif;color:#fff;text-decoration:none}
     .app-top a.brand span{color:#D8B565}
     .app-top button{background:transparent;border:1px solid rgba(255,255,255,.5);color:#fff;
       padding:6px 14px;border-radius:999px;font:500 13px 'Tajawal',sans-serif;cursor:pointer}
-    .app-bar{position:fixed;bottom:0;right:0;left:0;z-index:50;display:flex;background:#fff;
-      border-top:1px solid #E5DCC5;box-shadow:0 -6px 20px rgba(14,59,60,.1);padding-bottom:env(safe-area-inset-bottom)}
-    .app-bar a{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 2px 8px;
-      text-decoration:none;color:#6B6B63;font:500 12px 'Tajawal',sans-serif;border-top:3px solid transparent}
-    .app-bar a i{font-style:normal;font-size:22px;line-height:1}
-    .app-bar a.on{color:#0E3B3C;font-weight:700;border-top-color:#B8903F;background:#FAF7F0}
-    .app-badge{position:absolute;top:3px;left:calc(50% + 6px);background:#C0392B;color:#fff;border-radius:999px;
+    .app-bar{display:flex;gap:6px;padding:4px 10px 10px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+    .app-bar::-webkit-scrollbar{display:none}
+    .app-bar a{position:relative;flex:1 0 auto;display:flex;align-items:center;justify-content:center;gap:4px;
+      padding:8px 7px;border-radius:999px;text-decoration:none;white-space:nowrap;
+      color:rgba(255,255,255,.78);font:500 12.5px 'Tajawal',sans-serif;background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.12);transition:background .2s,color .2s}
+    .app-bar a i{font-style:normal;font-size:15px;line-height:1}
+    .app-bar a:active{background:rgba(255,255,255,.18)}
+    .app-bar a.on{background:#FAF7F0;color:#0E3B3C;font-weight:700;border-color:#D8B565;
+      box-shadow:0 3px 10px rgba(0,0,0,.2)}
+    .app-badge{position:absolute;top:-6px;inset-inline-end:-4px;box-shadow:0 0 0 2px #14595A;background:#C0392B;color:#fff;border-radius:999px;
       min-width:18px;height:18px;padding:0 5px;font:700 11px 'Tajawal',sans-serif;display:none;align-items:center;justify-content:center}
     .vf{display:inline-block;margin-inline-start:6px;padding:1px 9px;border-radius:999px;background:#e3f0ff;color:#0b5cad;font:700 12px 'Tajawal',sans-serif;vertical-align:middle;white-space:nowrap}
     .app-banner{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;background:#fff1cc;color:#5c4400;font:500 14px 'Tajawal',sans-serif;border-bottom:1px solid #e5d49a}
@@ -98,7 +102,7 @@ async function logout() {
     .app-banner span::before{content:'⭐ '}
     .app-banner a{background:#0E3B3C;color:#fff;border-radius:999px;padding:5px 14px;text-decoration:none;font-weight:700}
     .app-banner button{background:none;border:0;font-size:18px;cursor:pointer;color:inherit;padding:0 4px}
-    .app-toast{display:none;position:fixed;top:66px;right:12px;left:12px;max-width:420px;margin:0 auto;
+    .app-toast{display:none;position:fixed;top:122px;right:12px;left:12px;max-width:420px;margin:0 auto;
       background:#0E3B3C;color:#fff;border:1px solid #D8B565;border-radius:14px;padding:12px 16px;z-index:100;
       box-shadow:0 8px 24px rgba(0,0,0,.25);cursor:pointer;font:500 15px 'Tajawal',sans-serif}
   `;
@@ -131,8 +135,12 @@ async function logout() {
     bar.appendChild(a);
   });
 
-  document.body.prepend(top);
-  document.body.appendChild(bar);
+  const head = document.createElement('header');
+  head.className = 'app-head';
+  head.append(top, bar);
+  document.body.prepend(head);
+  const onTab = bar.querySelector('a.on');
+  if (onTab && onTab.scrollIntoView) { try { onTab.scrollIntoView({ inline: 'center', block: 'nearest' }); } catch (e) {} }
 
   // ================= الإشعارات =================
   const baseTitle = document.title;
@@ -315,7 +323,7 @@ async function logout() {
       const x = document.createElement('button'); x.type = 'button'; x.textContent = '×'; x.setAttribute('aria-label', 'Close');
       x.onclick = () => { bn.remove(); try { localStorage.setItem('ios_tip', '1'); } catch (e) {} };
       bn.append(sp, go, x);
-      top.insertAdjacentElement('afterend', bn);
+      head.insertAdjacentElement('afterend', bn);
     }
   }
 
@@ -338,7 +346,7 @@ async function logout() {
       const x = document.createElement('button'); x.type = 'button'; x.textContent = '×'; x.setAttribute('aria-label', 'Close');
       x.onclick = () => { bn.remove(); try { localStorage.setItem(key, '1'); } catch (e) {} };
       bn.append(sp, go, x);
-      top.insertAdjacentElement('afterend', bn);
+      head.insertAdjacentElement('afterend', bn);
     } catch (e) {}
   })();
 
