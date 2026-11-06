@@ -1851,5 +1851,61 @@ window.I18N_DICT = {
 "تنبيه: لا ترسل مالاً ولا بيانات بنكية لأي شخص عبر الموقع. هل تريد إرسال الرسالة رغم ذلك؟": [
 "Attention : n'envoyez jamais d'argent ni de données bancaires à quiconque via le site. Voulez-vous envoyer le message malgré tout ?",
 "Warning: never send money or banking details to anyone through the site. Send the message anyway?"
+],
+"شاهد كيف يعمل الموقع": [
+"Découvrez comment fonctionne le site",
+"See how the site works"
+],
+"موقع جاد للتعارف بنيّة الزواج، بخصوصية واحترام": [
+"Un site sérieux de rencontre en vue du mariage, dans le respect et la confidentialité",
+"A serious site for meeting with the intention of marriage, with privacy and respect"
+],
+"أنشئ حسابك": [
+"Créez votre compte",
+"Create your account"
+],
+"بريدك وبياناتك الأساسية، في دقيقة وبصدق": [
+"Votre e-mail et vos informations de base, en une minute et en toute sincérité",
+"Your email and basic details, in a minute, and honestly"
+],
+"مراجعة وتحقق": [
+"Examen et vérification",
+"Review and verification"
+],
+"كل ملف يُفحص قبل أن يظهر، لضمان الجدية": [
+"Chaque profil est examiné avant d'apparaître, pour garantir le sérieux",
+"Every profile is checked before it appears, to ensure seriousness"
+],
+"أعضاء مقبولون، ونسبة توافق تُبرز نقاط الالتقاء بينكما": [
+"Des membres acceptés, et un taux de compatibilité qui met en avant vos points communs",
+"Approved members, and a compatibility score highlighting what you have in common"
+],
+"محادثة خاصة بين الطرفين فقط، بعد قبول الاهتمام": [
+"Une conversation privée entre les deux personnes seulement, une fois l'intérêt accepté",
+"A private conversation between the two of you only, once the interest is accepted"
+],
+"إبلاغ وحظر، وشارة «موثّق ✓» لمزيد من الثقة": [
+"Signalement et blocage, et un badge « Vérifié ✓ » pour plus de confiance",
+"Report and block, plus a “Verified ✓” badge for more trust"
+],
+"ابدأ رحلتك اليوم": [
+"Commencez votre parcours aujourd'hui",
+"Start your journey today"
+],
+"التسجيل مجاني ولا يستغرق دقيقة": [
+"L'inscription est gratuite et prend moins d'une minute",
+"Sign-up is free and takes under a minute"
+],
+"مجتمع يكبر بصدق": [
+"Une communauté qui grandit en toute sincérité",
+"A community that grows with honesty"
+],
+"عضو مقبول": [
+"membres acceptés",
+"approved members"
+],
+"دولة": [
+"pays",
+"countries"
 ]
 };
