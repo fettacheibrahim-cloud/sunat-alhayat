@@ -63,6 +63,42 @@
     .hadith.js+.dots{display:flex}
     .dots button{width:10px;height:10px;border-radius:50%;border:0;padding:0;background:var(--line);cursor:pointer}
     .dots button.on{background:var(--gold);width:22px;border-radius:6px}
+    .vidwrap{max-width:640px;margin:0 auto}
+    .vid{position:relative;width:100%;height:clamp(260px,64vw,340px);border-radius:22px;overflow:hidden;color:#fff;
+      background:radial-gradient(circle at 20% 15%,#1b6a6b 0%,transparent 55%),linear-gradient(160deg,#0E3B3C,#0a2c2d);
+      box-shadow:0 14px 34px rgba(14,59,60,.28);border:1px solid rgba(216,181,101,.45);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+    .vid::before{content:"";position:absolute;inset:0;opacity:.07;
+      background:repeating-linear-gradient(45deg,#fff 0 1px,transparent 1px 22px),repeating-linear-gradient(-45deg,#fff 0 1px,transparent 1px 22px)}
+    .vid .glow{position:absolute;width:260px;height:260px;border-radius:50%;left:-60px;bottom:-110px;
+      background:radial-gradient(circle,rgba(216,181,101,.35),transparent 65%);animation:vglow 9s ease-in-out infinite alternate}
+    @keyframes vglow{to{transform:translate(70px,-30px) scale(1.25)}}
+    .vsc{position:absolute;inset:0 0 34px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      text-align:center;padding:16px 24px;opacity:0;visibility:hidden;transition:opacity .45s}
+    .vsc.on{opacity:1;visibility:visible}
+    .vsc .ic{font-size:60px;line-height:1;margin-bottom:10px;transform:scale(.3);opacity:0}
+    .vsc.on .ic{animation:vpop .7s cubic-bezier(.2,1.4,.4,1) .05s forwards}
+    .vsc h3{font:700 1.7rem 'Amiri',serif;color:#fff;margin:0 0 6px;transform:translateY(16px);opacity:0}
+    .vsc.on h3{animation:vup .6s ease .35s forwards}
+    .vsc p{color:#e9dfc4;margin:0;max-width:430px;line-height:1.8;font-size:15px;transform:translateY(12px);opacity:0}
+    .vsc.on p{animation:vup .6s ease .65s forwards}
+    .vsc.on .ic.ring{animation:vpop .7s cubic-bezier(.2,1.4,.4,1) .05s forwards,vpulse 2.4s ease-in-out .9s infinite}
+    @keyframes vpop{to{transform:scale(1);opacity:1}}
+    @keyframes vup{to{transform:none;opacity:1}}
+    @keyframes vpulse{50%{transform:scale(1.08)}}
+    .vctl{position:absolute;left:0;right:0;bottom:0;height:34px;display:flex;align-items:center;gap:10px;padding:0 12px;
+      background:linear-gradient(transparent,rgba(0,0,0,.35))}
+    .vctl button{width:26px;height:26px;border:0;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;font-size:12px;cursor:pointer;padding:0;line-height:1}
+    .vseg{flex:1;display:flex;gap:4px;direction:ltr}
+    .vseg i{flex:1;height:4px;border-radius:3px;background:rgba(255,255,255,.25);overflow:hidden;display:block}
+    .vseg i b{display:block;height:100%;width:0;background:var(--gold2,#D8B565)}
+    .vplay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(10,44,45,.55)}
+    .vid.paused .vplay{display:flex}
+    .vplay span{width:68px;height:68px;border-radius:50%;background:var(--gold,#B8903F);display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 6px 20px rgba(0,0,0,.35);padding-inline-start:4px}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-top:20px}
+    .stats div{background:var(--sand);border-radius:16px;padding:18px 10px;text-align:center}
+    .stats b{display:block;font:700 2.3rem 'Amiri',serif;color:var(--green);line-height:1.2}
+    .stats span{color:var(--muted);font-size:14px}
+    @media(prefers-reduced-motion:reduce){.vsc *{animation:none!important;opacity:1!important;transform:none!important}.vid .glow{animation:none}}
     .cta{text-align:center}
     footer{text-align:center;padding:26px 20px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
     @media(max-width:600px){.hero h1{font-size:2.1rem}.verse .ar{font-size:1.3rem}.trust{grid-template-columns:1fr}}
@@ -89,6 +125,24 @@
       <p class="en">"And of His signs is that He created for you from yourselves mates that you may find tranquility in them; and He placed between you affection and mercy. Indeed in that are signs for a people who give thought." (Quran 30:21)</p>
     </div>
   </div>
+
+  <section style="padding-bottom:10px">
+    <h2>شاهد كيف يعمل الموقع</h2>
+    <div class="vidwrap">
+      <div class="vid" id="vid" role="img" aria-label="شرح مرئي للموقع">
+        <div class="glow"></div>
+        <div class="vsc"><div class="ic ring">✦</div><h3>سنة الحياة</h3><p>موقع جاد للتعارف بنيّة الزواج، بخصوصية واحترام</p></div>
+        <div class="vsc"><div class="ic">📝</div><h3>أنشئ حسابك</h3><p>بريدك وبياناتك الأساسية، في دقيقة وبصدق</p></div>
+        <div class="vsc"><div class="ic">✅</div><h3>مراجعة وتحقق</h3><p>كل ملف يُفحص قبل أن يظهر، لضمان الجدية</p></div>
+        <div class="vsc"><div class="ic">🔍</div><h3>تصفّح وأبدِ اهتمامك</h3><p>أعضاء مقبولون، ونسبة توافق تُبرز نقاط الالتقاء بينكما</p></div>
+        <div class="vsc"><div class="ic">💬</div><h3>تحدّثا باحترام</h3><p>محادثة خاصة بين الطرفين فقط، بعد قبول الاهتمام</p></div>
+        <div class="vsc"><div class="ic">🛡</div><h3>خصوصيتك أولاً</h3><p>إبلاغ وحظر، وشارة «موثّق ✓» لمزيد من الثقة</p></div>
+        <div class="vsc"><div class="ic ring">💍</div><h3>ابدأ رحلتك اليوم</h3><p>التسجيل مجاني ولا يستغرق دقيقة</p></div>
+        <div class="vplay"><span>▶</span></div>
+        <div class="vctl"><button id="vbtn" type="button" aria-label="play/pause">❚❚</button><div class="vseg" id="vseg"></div></div>
+      </div>
+    </div>
+  </section>
 
   <section>
     <h2>كيف يعمل الموقع؟</h2>
@@ -118,6 +172,14 @@
       <div>✅ ملفات مراجَعة<small>قبل أن تظهر</small></div>
       <div>🚫 حظر وإبلاغ<small>لحمايتك دائماً</small></div>
       <div>🤝 بنيّة الزواج<small>موقع جاد لا للتسلية</small></div>
+    </div>
+  </section>
+
+  <section id="statsSec" style="display:none;padding-top:0">
+    <h2>مجتمع يكبر بصدق</h2>
+    <div class="stats">
+      <div><b id="stM">0</b><span>عضو مقبول</span></div>
+      <div id="stCBox"><b id="stC">0</b><span>دولة</span></div>
     </div>
   </section>
 
@@ -160,6 +222,64 @@
         })(j);
       }
       show(cur); reset();
+    })();
+
+    // ===== العرض المتحرك: 7 مشاهد، يبدأ عند ظهوره ويتوقف عند الخروج منه، والضغط عليه يوقفه/يشغّله =====
+    (function () {
+      var vid = document.getElementById('vid'); if (!vid) return;
+      var sc = vid.querySelectorAll('.vsc'), seg = document.getElementById('vseg'), btn = document.getElementById('vbtn');
+      var DUR = 4200, TICK = 100, cur = 0, t = 0, timer = null, playing = false, bars = [];
+      for (var k = 0; k < sc.length; k++) { var i = document.createElement('i'), b = document.createElement('b'); i.appendChild(b); seg.appendChild(i); bars.push(b); }
+      function show(n) {
+        cur = n; t = 0;
+        for (var k = 0; k < sc.length; k++) {
+          sc[k].className = 'vsc' + (k === n ? ' on' : '');
+          bars[k].style.width = k < n ? '100%' : '0';
+        }
+      }
+      function tick() {
+        t += TICK; bars[cur].style.width = Math.min(100, t / DUR * 100) + '%';
+        if (t >= DUR) show((cur + 1) % sc.length);
+      }
+      function play() { if (playing) return; playing = true; vid.classList.remove('paused'); btn.textContent = '❚❚'; timer = setInterval(tick, TICK); }
+      function pause() { playing = false; clearInterval(timer); vid.classList.add('paused'); btn.textContent = '▶'; }
+      function toggle() { playing ? pause() : play(); }
+      vid.onclick = toggle;
+      var userPaused = false;
+      vid.addEventListener('click', function () { userPaused = !playing; });
+      var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      show(0);
+      if (still) { pause(); return; }
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (es) {
+          es.forEach(function (e) { if (e.isIntersecting) { if (!userPaused) play(); } else if (playing) { pause(); } });
+        }, { threshold: 0.5 }).observe(vid);
+      } else play();
+      document.addEventListener('visibilitychange', function () { if (document.hidden && playing) pause(); });
+    })();
+
+    // ===== أرقام حقيقية من قاعدة البيانات: لا تظهر إلا حين تصبح مقنعة =====
+    (function () {
+      var MIN_MEMBERS = 30;   // أقل عدد أعضاء مقبولين يظهر معه العدّاد (غيّره كما تشاء)
+      var MIN_COUNTRIES = 2;
+      if (typeof sb === 'undefined' || !sb.rpc) return;
+      function count(el, to) {
+        var from = 0, t0 = null;
+        function step(ts) {
+          if (t0 === null) t0 = ts;
+          var p = Math.min(1, (ts - t0) / 1200);
+          el.textContent = String(Math.round(from + (to - from) * (1 - Math.pow(1 - p, 3))));
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+      Promise.resolve(sb.rpc('public_stats')).then(function (r) {
+        var d = r && r.data; if (!d || !(d.members >= MIN_MEMBERS)) return;
+        document.getElementById('statsSec').style.display = 'block';
+        count(document.getElementById('stM'), d.members);
+        if (d.countries >= MIN_COUNTRIES) count(document.getElementById('stC'), d.countries);
+        else document.getElementById('stCBox').style.display = 'none';
+      }).catch(function () {});
     })();
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
     var deferredPrompt = null;
