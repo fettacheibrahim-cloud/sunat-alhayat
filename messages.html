@@ -47,6 +47,10 @@
     #recT{font-variant-numeric:tabular-nums;direction:ltr;min-width:38px}
     @keyframes bl{50%{opacity:.25}}
     #note{color:var(--muted);font-size:13px;margin:6px 2px 0;min-height:18px}
+    #safety{background:#fff8e6;border:1px solid #e6cf8f;border-radius:16px;padding:14px 16px;margin:10px 0;font-size:14px;line-height:1.9}
+    #safety b{color:var(--green);display:block;margin-bottom:4px}
+    #safety ul{margin:4px 0 10px;padding-inline-start:20px}
+    #safetyBtn{background:none;border:0;padding:6px 2px;margin:4px 0 0;font:inherit;font-size:13px;color:var(--green);cursor:pointer;text-decoration:underline}
     #rep{display:none;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0}
 
     .tr-btn{display:block;background:none;border:0;padding:3px 0 0;font:inherit;font-size:12px;opacity:.8;cursor:pointer;text-decoration:underline;color:inherit}
@@ -71,6 +75,18 @@
         <h2 id="who"></h2>
         <button id="repBtn" class="btn ghost sm">إبلاغ</button>
         <button id="blkBtn" class="btn danger sm">حظر</button>
+      </div>
+
+      <button id="safetyBtn" type="button">🛡 نصائح الأمان</button>
+      <div id="safety" style="display:none">
+        <b>🛡 لسلامتك وثقتك</b>
+        <ul>
+          <li>لا ترسل مالاً ولا بيانات بنكية لأي شخص مهما كان السبب.</li>
+          <li>لا تشارك رقم هاتفك أو عنوانك قبل أن تتعرّف جيداً على الطرف الآخر.</li>
+          <li>اجعل اللقاء الأول في مكان عام وبحضور وليّك أو أحد أهلك.</li>
+          <li>إن شعرت بالريبة أو طُلب منك ما يُزعجك فاضغط «إبلاغ» أو «حظر» فوراً.</li>
+        </ul>
+        <button id="safetyOk" class="btn sm" type="button">فهمت</button>
       </div>
 
       <div id="rep">
@@ -119,9 +135,9 @@
   <div id="lb"><img id="lbImg" alt=""><button id="lbX" aria-label="إغلاق">✕</button></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="i18n-dict.js?v=1"></script>
-  <script src="i18n.js?v=1"></script>
-  <script src="app.js?v=10"></script>
+  <script src="i18n-dict.js?v=3"></script>
+  <script src="i18n.js?v=3"></script>
+  <script src="app.js?v=12"></script>
   <script>
     const $ = id => document.getElementById(id);
     const BUCKET = 'chat-media';
@@ -401,12 +417,31 @@
       setSeen(curOther, lastTs);
     }
 
+    /* ---------- تنبيهات الأمان ---------- */
+    function safetyDone() { try { return localStorage.getItem('safety_ok') === '1'; } catch (e) { return false; } }
+    $('safetyBtn').onclick = () => { const s = $('safety'); s.style.display = s.style.display === 'none' ? 'block' : 'none'; };
+    $('safetyOk').onclick = () => { $('safety').style.display = 'none'; try { localStorage.setItem('safety_ok', '1'); } catch (e) {} };
+
+    // تنبيه لطيف (لا منع) إذا تضمّنت الرسالة رقم هاتف أو رابطاً أو بريداً أو طلب مال
+    function riskOf(s) {
+      const n = String(s).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+      if (/(?:\d[\s.\-]?){8,}/.test(n)) return 'contact';
+      if (/https?:\/\/|www\.|\b[a-z0-9-]+\.(com|net|org|me|ma|io)\b|@[a-z0-9_.]+|واتساب|whatsapp|تلغرام|telegram|تيليجرام/i.test(n)) return 'contact';
+      if (/حوالة|ويسترن|western\s*union|رقم الحساب|بطاقة بنكية|\biban\b|رصيد/i.test(n)) return 'money';
+      return '';
+    }
+    const RISK_MSG = {
+      contact: 'تنبيه: رسالتك تتضمّن رقماً أو رابطاً أو وسيلة تواصل خارجية. لسلامتك لا تشارك بيانات الاتصال قبل أن تتعرّف جيداً وبحضور الأهل. هل تريد الإرسال؟',
+      money: 'تنبيه: لا ترسل مالاً ولا بيانات بنكية لأي شخص عبر الموقع. هل تريد إرسال الرسالة رغم ذلك؟'
+    };
+
     /* ---------- فتح وإغلاق المحادثة ---------- */
     function openChat(ids, other, name) {
       cur = ids; curOther = other; lastTs = ''; rendered.clear();
       $('box').innerHTML = ''; note('');
       $('who').textContent = name;
       $('rep').style.display = 'none';
+      $('safety').style.display = safetyDone() ? 'none' : 'block';
       $('listView').style.display = 'none';
       $('chatView').style.display = 'block';
       loadMsgs();
@@ -456,6 +491,8 @@
       e.preventDefault();
       const body = $('text').value.trim();
       if (!body || sending) return;
+      const risk = riskOf(body);
+      if (risk && !confirm(RISK_MSG[risk])) return;
       sending = true;
       $('text').value = '';
       const { error } = await sb.from('messages').insert({ conversation_id: cur[0], sender_id: me, body });
