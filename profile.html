@@ -4,353 +4,303 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://yepoakpeqonheksryalx.supabase.co; media-src 'self' blob: https://yepoakpeqonheksryalx.supabase.co; connect-src 'self' https://yepoakpeqonheksryalx.supabase.co https://api.mymemory.translated.net; object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'self'">
-  <title>سنة الحياة - الإدارة</title>
+  <title>سنة الحياة - ملفي</title>
   <link rel="stylesheet" href="style.css?v=10">
   <style>
-    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}
-    .stat{background:var(--sand);border:1px solid var(--line);border-radius:14px;padding:10px 4px;text-align:center}
-    .stat b{display:block;font-size:22px;color:var(--green)}
-    .stat span{font-size:11px;color:var(--muted)}
-    .tabs{display:flex;gap:6px;margin:12px 0;flex-wrap:wrap}
-    .tabs button{padding:8px 16px;border-radius:999px;border:1px solid var(--green);background:#fff;color:var(--green);font:inherit;cursor:pointer}
-    .tabs button.on{background:var(--green);color:#fff}
-    .srch{width:100%;box-sizing:border-box;padding:11px 16px;border:1px solid var(--line);border-radius:999px;font:inherit;background:#fff;margin-top:6px}
-    .m{padding:14px;margin:8px 0;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 12px rgba(14,59,60,.05)}
-    .m .top{display:flex;gap:12px;align-items:flex-start}
-    .m .av{flex:none;width:56px;height:56px;border-radius:50%;background:var(--sand);color:var(--green);display:flex;align-items:center;justify-content:center;font:700 22px 'Amiri',serif;overflow:hidden}
-    .m .av img{width:100%;height:100%;object-fit:cover}
-    .m .info{min-width:0;flex:1}
-    .m .acts{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
-    .m .acts button{padding:6px 14px;border-radius:999px;border:1px solid var(--green);background:var(--green);color:#fff;font:inherit;cursor:pointer}
-    .m .acts button.no{background:#fff;color:var(--err);border-color:var(--err)}
-    .m small{color:var(--muted);display:block;margin-top:4px;overflow-wrap:anywhere}
-    .m small.why{color:#9b1c1c}
-    .tag{display:inline-block;font-size:12px;padding:1px 10px;border-radius:999px;background:#eee;margin-inline-start:6px;font-weight:500}
-    .tag.approved{background:#dff3e3;color:#1f6b33}
-    .tag.suspended{background:#fbdcdc;color:#9b1c1c}
-    .tag.pending{background:#fff1cc;color:#5c4400}
-    .lg{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;margin:6px 0;background:#fff;border:1px solid var(--line);border-radius:12px;font-size:14px}
-    .lg small{margin:0;white-space:nowrap}
+    .f label{display:block;margin:12px 0 4px;font-weight:700}
+    .st{display:inline-block;padding:4px 14px;border-radius:999px;font-size:14px;background:#eee}
+    .st.approved{background:#dff3e3;color:#1f6b33}
+    .st.pending{background:#fff1cc;color:#8a6200}
+    .st.suspended{background:#fbdcdc;color:#9b1c1c}
+    .ph{display:flex;align-items:center;gap:16px;margin:14px 0;padding:14px;background:var(--sand);border-radius:16px}
+    #img{width:96px;height:96px;border-radius:50%;object-fit:cover;background:var(--green);color:var(--gold2);display:flex;align-items:center;justify-content:center;font:700 38px 'Amiri',serif;flex:none;overflow:hidden}
+    #img img{width:100%;height:100%;object-fit:cover}
+    .chk{display:flex;align-items:center;gap:10px;margin-top:12px}
+    .chk input{width:auto}
+    .sm{padding:6px 16px;min-height:38px;font-size:14px}
+    .opt{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:#fff;cursor:pointer;font-size:14px;margin:0 0 6px 6px}
+    .opt input[type=file]{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0}
   </style>
 </head>
 <body>
-  <main style="max-width:640px;margin:0 auto;padding:20px 16px">
-    <h1>لوحة الإدارة</h1>
+  <main class="card" style="max-width:600px;margin:20px auto;padding:22px">
+    <h1>ملفي الشخصي</h1>
+    <p id="email" style="color:var(--muted)"></p>
+    <p>حالة الحساب: <span id="st" class="st">...</span></p>
+    <p id="pushBox" style="display:none"><button type="button" id="pushTest" class="btn ghost sm">🔔 جرّب إشعاراً الآن</button></p>
+    <p id="vfLink" style="display:none"><a href="verify.html">✓ وثّق حسابك لتحصل على شارة «موثّق»</a></p>
+    <div id="why" class="msg error" style="display:none"></div>
     <p id="msg" style="display:none"></p>
-    <div class="stats">
-      <div class="stat"><b id="s_pending">-</b><span>قيد المراجعة</span></div>
-      <div class="stat"><b id="s_approved">-</b><span>أعضاء</span></div>
-      <div class="stat"><b id="s_msgs">-</b><span>رسائل</span></div>
-      <div class="stat"><b id="s_reports">-</b><span>بلاغات</span></div>
+
+    <div class="ph">
+      <div id="img">؟</div>
+      <div>
+        <label class="opt">🖼 المعرض<input id="fGallery" type="file" accept="image/*"></label>
+        <label class="opt">📁 الملفات<input id="fFiles" type="file"></label>
+        <label class="opt">📸 الكاميرا<input id="fCam" type="file" accept="image/*" capture="user"></label>
+        <button id="delPhoto" class="btn ghost sm" type="button" style="display:none">حذف</button>
+        <p id="phNote" style="font-size:13px;color:var(--muted);margin:6px 0 0"></p>
+      </div>
     </div>
-    <input id="q" class="srch" type="search" placeholder="🔍 ابحث بالاسم أو المدينة أو البلد أو البريد" autocomplete="off">
-    <div class="tabs" id="tabs">
-      <button data-s="pending" class="on">قيد المراجعة</button>
-      <button data-s="approved">مقبولون</button>
-      <button data-s="suspended">موقوفون</button>
-      <button data-s="reports">البلاغات</button>
-      <button data-s="revenue">💰 الأرباح</button>
-      <button data-s="log">📜 السجل</button>
+    <div class="chk">
+      <input id="photo_visible_to_matches" type="checkbox">
+      <label for="photo_visible_to_matches" style="margin:0;font-weight:500">أظهر صورتي للطرف الآخر بعد قبول الاهتمام</label>
     </div>
-    <div id="list"></div>
+
+    <form id="form" class="f">
+      <label>الاسم الأول</label><input id="first_name" required>
+      <label>الجنس</label>
+      <select id="gender" required><option value="">اختر</option><option value="male">ذكر</option><option value="female">أنثى</option></select>
+      <label>تاريخ الميلاد (18 سنة فأكثر)</label><input id="birth_date" type="date" required>
+      <label>البلد</label><input id="country" list="countries" autocomplete="off"><datalist id="countries"><option value="المغرب"><option value="الجزائر"><option value="تونس"><option value="ليبيا"><option value="مصر"><option value="موريتانيا"><option value="السودان"><option value="السعودية"><option value="الإمارات"><option value="قطر"><option value="الكويت"><option value="البحرين"><option value="عُمان"><option value="اليمن"><option value="العراق"><option value="سوريا"><option value="الأردن"><option value="فلسطين"><option value="لبنان"><option value="تركيا"><option value="فرنسا"><option value="إسبانيا"><option value="إيطاليا"><option value="بلجيكا"><option value="هولندا"><option value="ألمانيا"><option value="بريطانيا"><option value="سويسرا"><option value="السويد"><option value="البرتغال"><option value="أمريكا"><option value="كندا"><option value="أستراليا"></datalist>
+      <label>المدينة</label><input id="city">
+      <label>الحالة الاجتماعية</label>
+      <select id="marital_status"><option value="">اختر</option><option value="never_married">أعزب / عزباء</option><option value="divorced">مطلّق / مطلّقة</option><option value="widowed">أرمل / أرملة</option></select>
+      <label>المستوى الدراسي</label>
+      <select id="education"><option value="">اختر</option><option value="secondary">ثانوي</option><option value="diploma">دبلوم</option><option value="bachelor">إجازة / بكالوريوس</option><option value="postgraduate">دراسات عليا</option></select>
+      <label>المهنة</label><input id="occupation" maxlength="60" placeholder="مثال: معلّم، مهندسة، طالب…">
+      <label>الطول (سم)</label><input id="height_cm" type="number" inputmode="numeric" min="120" max="230" placeholder="مثال: 175">
+
+      <h3 style="margin-top:22px">القيم ونمط الحياة</h3>
+      <p style="margin:0;color:var(--muted);font-size:14px">اختيارية، لكنها ترفع دقة نسبة التوافق وتساعد الطرف الآخر على معرفتك.</p>
+      <label>درجة الالتزام</label>
+      <select id="religiosity"><option value="">اختر</option><option value="practicing">ملتزم/ة</option><option value="moderate">متوسّط الالتزام</option><option value="learning">في طريق الالتزام</option></select>
+      <label>المحافظة على الصلاة</label>
+      <select id="prayer"><option value="">اختر</option><option value="always">أحافظ عليها</option><option value="mostly">غالباً</option><option value="sometimes">أحياناً</option><option value="rarely">نادراً</option></select>
+      <label>التدخين</label>
+      <select id="smoking"><option value="">اختر</option><option value="no">لا أدخّن</option><option value="quit">أقلعت عنه</option><option value="yes">أدخّن</option></select>
+      <label>الرغبة في الأطفال</label>
+      <select id="wants_children"><option value="">اختر</option><option value="yes">نعم</option><option value="open">منفتح/ة على الأمر</option><option value="no">لا</option></select>
+
+      <h3 style="margin-top:22px">عنّي</h3>
+      <label>نبذة عني</label><textarea id="bio" rows="4"></textarea>
+      <label>ما الذي أبحث عنه</label><textarea id="looking_for" rows="3"></textarea>
+      <button id="save" type="submit" class="btn" style="width:100%;margin-top:18px">حفظ</button>
+    </form>
+    <button id="out" class="btn ghost" style="width:100%;margin-top:12px">تسجيل الخروج</button>
+    <button id="delAcc" class="btn ghost" style="width:100%;margin-top:12px;color:var(--err);border-color:var(--err)">حذف حسابي نهائياً</button>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="i18n-dict.js?v=3"></script>
+  <script src="i18n.js?v=3"></script>
   <script src="app.js?v=12"></script>
   <script>
     const $ = id => document.getElementById(id);
-    const mAr = { never_married:'أعزب/عزباء', divorced:'مطلّق/ة', widowed:'أرمل/ة' };
-    const gAr = { male:'ذكر', female:'أنثى' };
+    const fields = ['first_name','gender','birth_date','country','city','marital_status','education','occupation','height_cm','religiosity','prayer','smoking','wants_children','bio','looking_for'];
     const stAr = { pending:'قيد المراجعة', approved:'مقبول', suspended:'موقوف' };
-    let cur = 'pending', searching = false;
+    let uid = null, exists = false, photoPath = null;
 
-    function age(d) {
-      if (!d) return '';
+    function msg(t, type) { const e = $('msg'); e.textContent = t; e.className = 'msg ' + type; e.style.display = 'block'; window.scrollTo(0, 0); }
+    function setStatus(s, reason) {
+      $('st').textContent = stAr[s] || 'لم يُنشأ بعد'; $('st').className = 'st ' + (s || '');
+      $('vfLink').style.display = s === 'approved' ? 'block' : 'none';
+      const w = $('why'); w.textContent = '';
+      if (s === 'suspended') {
+        w.appendChild(document.createTextNode('تم إيقاف حسابك أو رفضه.'));
+        if (reason) {
+          w.appendChild(document.createElement('br'));
+          w.appendChild(document.createTextNode('السبب:')); w.appendChild(document.createTextNode(' '));
+          const r = document.createElement('span'); r.className = 'ugc'; r.textContent = reason; w.appendChild(r);
+        }
+        w.appendChild(document.createElement('br'));
+        w.appendChild(document.createTextNode('عدّل ملفك ثم راسلنا ليُعاد فحصه.')); w.appendChild(document.createTextNode(' '));
+        const a = document.createElement('a'); a.href = 'contact.html'; a.textContent = 'اتصل بنا'; w.appendChild(a);
+        w.style.display = 'block';
+      } else w.style.display = 'none';
+    }
+    function isAdult(d) {
       const b = new Date(d), t = new Date();
       let a = t.getFullYear() - b.getFullYear();
       if (t.getMonth() < b.getMonth() || (t.getMonth() === b.getMonth() && t.getDate() < b.getDate())) a--;
-      return a;
-    }
-    const dFmt = d => new Date(d).toLocaleDateString('en-GB');
-
-    function btn(text, fn, no) {
-      const b = document.createElement('button');
-      b.textContent = text;
-      if (no) b.className = 'no';
-      b.onclick = fn;
-      return b;
+      return a >= 18;
     }
 
-    async function setStatus(id, status, reason) {
-      const { error } = await sb.from('profiles').update({ status, reject_reason: reason || null }).eq('id', id);
+    async function showPhoto() {
+      const box = $('img'); box.innerHTML = '';
+      if (!photoPath) { box.textContent = ($('first_name').value || '؟').charAt(0).toUpperCase(); $('delPhoto').style.display = 'none'; return; }
+      const { data, error } = await sb.storage.from('photos').createSignedUrl(photoPath, 3600);
       if (error) {
-        alert('خطأ: ' + error.message + (/reject_reason/.test(error.message) ? '\nشغّل ملف admin2.sql أولاً' : ''));
-        return false;
+        box.textContent = '!';
+        $('phNote').textContent = 'تعذّر تحميل الصورة: ' + error.message;
+        $('delPhoto').style.display = 'inline-block';
+        return;
       }
-      loadAll(); return true;
+      const i = document.createElement('img');
+      i.onerror = () => { box.textContent = '!'; $('phNote').textContent = 'الصورة مرفوعة لكن تعذّر عرضها، تحقق من سياسات التخزين.'; };
+      i.src = data.signedUrl + (data.signedUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
+      box.appendChild(i);
+      $('delPhoto').style.display = 'inline-block';
     }
 
-    // رفض/إيقاف مع سبب يراه العضو في ملفه
-    async function rejectWith(p, pendingStage) {
-      const hint = pendingStage ? 'الملف غير مكتمل أو النبذة قصيرة، عدّلها ثم راسلنا' : '';
-      const r = prompt((pendingStage ? 'سبب الرفض' : 'سبب الإيقاف') + ' (يظهر للعضو في ملفه، اتركه فارغاً لعدم إظهار سبب):', hint);
-      if (r === null) return;
-      return setStatus(p.id, 'suspended', r.trim().slice(0, 300));
+    function enablePhoto() {
+      $('phNote').textContent = exists ? 'صورة واضحة لوجهك، يتم تصغيرها تلقائياً.' : 'احفظ ملفك أولاً ثم أضف الصورة.';
     }
 
-    // أسعار الباقات بالدرهم (طابقها مع PLANS في premium.html)
-    const PLAN_PRICES = { 30: 50, 90: 120, 365: 400 };
-    // رسوم التوثيق بالدرهم لسنة كاملة (طابقها مع VERIFY في verify.html)
-    const VERIFY = { days: 365, price: 100 };
-
-    async function setPremium(id, days, amount) {
-      if (days === 0 && !confirm('إلغاء العضوية المميزة لهذا العضو؟')) return;
-      if (days > 0) {
-        const msg = amount > 0 ? 'تأكيد استلام ' + amount + ' درهماً وتفعيل ' + days + ' يوماً؟' : 'تفعيل ' + days + ' يوماً كهدية (بدون مبلغ)؟';
-        if (!confirm(msg)) return;
-      }
-      const { error } = await sb.rpc('admin_set_premium', { target: id, days, amount: amount || 0 });
-      if (error) { alert('خطأ: ' + error.message + '\nتأكد من تشغيل premium2.sql'); return; }
-      loadAll();
-    }
-
-    async function setVerified(id, days, amount) {
-      if (days === 0 && !confirm('إلغاء توثيق هذا العضو؟')) return;
-      if (days > 0) {
-        const msg = amount > 0 ? 'تأكدتَ من صورة التحقق واستلمتَ ' + amount + ' درهماً؟ سيُفعَّل التوثيق ' + days + ' يوماً.' : 'تفعيل التوثيق ' + days + ' يوماً بدون مبلغ؟';
-        if (!confirm(msg)) return;
-      }
-      const { error } = await sb.rpc('admin_set_verified', { target: id, days, amount: amount || 0 });
-      if (error) { alert('خطأ: ' + error.message + '\nتأكد من تشغيل verified.sql'); return; }
-      loadAll();
-    }
-
-    async function closeReport(id) {
-      const { error } = await sb.from('reports').update({ status: 'reviewed' }).eq('id', id);
-      if (error) { alert('خطأ: ' + error.message); return; }
-      loadAll();
-    }
-
-    // يجلب البريد والصور وحالة المميز لمجموعة ملفات دفعة واحدة
-    async function enrich(rows) {
-      const ids = rows.map(p => p.id), ex = { email: {}, photo: {}, prem: {}, vf: {} };
-      const paths = rows.filter(p => p.photo_path).map(p => p.photo_path);
-      const [em, mm, vv, ph] = await Promise.all([
-        ids.length ? sb.rpc('admin_emails', { ids }) : { data: [] },
-        sb.from('memberships').select('user_id,premium_until'),
-        sb.from('verified_members').select('user_id,verified_until'),
-        paths.length ? sb.storage.from('photos').createSignedUrls(paths, 3600) : { data: [] }
-      ]);
-      (em.data || []).forEach(x => { ex.email[x.id] = x.email; });
-      (mm.data || []).forEach(x => { if (new Date(x.premium_until) > new Date()) ex.prem[x.user_id] = x.premium_until; });
-      (vv.data || []).forEach(x => { if (new Date(x.verified_until) > new Date()) ex.vf[x.user_id] = x.verified_until; });
-      const byPath = {}; (ph.data || []).forEach(x => { if (x.signedUrl) byPath[x.path] = x.signedUrl; });
-      rows.forEach(p => { if (p.photo_path && byPath[p.photo_path]) ex.photo[p.id] = byPath[p.photo_path]; });
-      return ex;
-    }
-
-    function card(p, ex, showStatus) {
-      const d = document.createElement('div'); d.className = 'm';
-      const top = document.createElement('div'); top.className = 'top';
-      const av = document.createElement('div'); av.className = 'av';
-      av.textContent = (p.first_name || '؟').charAt(0).toUpperCase();
-      if (ex.photo[p.id]) {
-        const im = new Image(); im.alt = '';
-        im.onload = () => { av.textContent = ''; av.appendChild(im); };
-        im.src = ex.photo[p.id];
-      }
-      const info = document.createElement('div'); info.className = 'info';
-      const n = document.createElement('b');
-      n.textContent = (p.first_name || 'بدون اسم') + ' — ' + (gAr[p.gender] || '') + '، ' + age(p.birth_date) + ' سنة';
-      if (showStatus) { const t = document.createElement('span'); t.className = 'tag ' + p.status; t.textContent = stAr[p.status] || p.status; n.appendChild(t); }
-      info.appendChild(n);
-      const add = (txt, cls) => { if (!txt) return; const s = document.createElement('small'); if (cls) s.className = cls; s.textContent = txt; info.appendChild(s); };
-      add([p.city, p.country, mAr[p.marital_status]].filter(Boolean).join(' · '));
-      add(ex.email[p.id] ? '✉️ ' + ex.email[p.id] : '');
-      add(p.created_at ? 'انضم في ' + dFmt(p.created_at) : '');
-      add(p.bio);
-      if (p.looking_for) add('يبحث عن: ' + p.looking_for);
-      if (p.status === 'suspended' && p.reject_reason) add('السبب: ' + p.reject_reason, 'why');
-      if (ex.prem[p.id]) add('⭐ مميز حتى ' + dFmt(ex.prem[p.id]));
-      if (ex.vf[p.id]) add('✓ موثّق حتى ' + dFmt(ex.vf[p.id]));
-      top.append(av, info); d.appendChild(top);
-
-      const a = document.createElement('div'); a.className = 'acts';
-      if (p.status === 'pending') a.append(btn('قبول', () => setStatus(p.id, 'approved')), btn('رفض', () => rejectWith(p, true), true));
-      if (p.status === 'approved') {
-        a.append(
-          btn('⭐ شهر (' + PLAN_PRICES[30] + ')', () => setPremium(p.id, 30, PLAN_PRICES[30])),
-          btn('⭐ 3 أشهر (' + PLAN_PRICES[90] + ')', () => setPremium(p.id, 90, PLAN_PRICES[90])),
-          btn('⭐ سنة (' + PLAN_PRICES[365] + ')', () => setPremium(p.id, 365, PLAN_PRICES[365])),
-          btn('🎁 هدية 30 يوماً', () => setPremium(p.id, 30, 0))
-        );
-        if (ex.prem[p.id]) a.append(btn('إلغاء المميز', () => setPremium(p.id, 0), true));
-        a.append(btn('✓ توثيق (' + VERIFY.price + ')', () => setVerified(p.id, VERIFY.days, VERIFY.price)));
-        if (ex.vf[p.id]) a.append(btn('إلغاء التوثيق', () => setVerified(p.id, 0), true));
-        a.append(btn('إيقاف', () => rejectWith(p, false), true));
-      }
-      if (p.status === 'suspended') a.append(btn('إعادة تفعيل', () => setStatus(p.id, 'approved')));
-      d.appendChild(a);
-      return d;
-    }
-
-    async function renderRows(rows, showStatus, emptyText) {
-      const list = $('list'); list.innerHTML = '';
-      if (!rows.length) { list.innerHTML = '<p style="color:#666"></p>'; list.firstChild.textContent = emptyText; return; }
-      const ex = await enrich(rows);
-      list.innerHTML = '';
-      rows.forEach(p => list.appendChild(card(p, ex, showStatus)));
-    }
-
-    async function loadMembers() {
-      $('list').textContent = 'جاري التحميل…';
-      const { data, error } = await sb.from('profiles').select('*').eq('status', cur).order('created_at', { ascending: false });
-      if (error) { $('list').textContent = 'خطأ: ' + error.message; return; }
-      await renderRows(data, false, 'لا توجد حسابات في هذه القائمة');
-    }
-
-    async function loadSearch(q) {
-      $('list').textContent = 'جاري البحث…';
-      const f = await sb.rpc('admin_search', { q });
-      if (f.error) { $('list').textContent = 'خطأ: ' + f.error.message + ' — شغّل admin2.sql'; return; }
-      const ids = (f.data || []).map(x => x.id);
-      if (!ids.length) { await renderRows([], true, 'لا نتائج لـ «' + q + '»'); return; }
-      const { data, error } = await sb.from('profiles').select('*').in('id', ids);
-      if (error) { $('list').textContent = 'خطأ: ' + error.message; return; }
-      data.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
-      await renderRows(data, true, '');
-    }
-
-    async function loadReports() {
-      const list = $('list'); list.innerHTML = '';
-      const { data, error } = await sb.from('reports').select('*').eq('status', 'open').order('created_at', { ascending: false });
-      if (error) { list.textContent = 'خطأ: ' + error.message; return; }
-      if (!data.length) { list.innerHTML = '<p style="color:#666">لا توجد بلاغات مفتوحة</p>'; return; }
-      const ids = [...new Set(data.flatMap(r => [r.reporter_id, r.reported_id]))];
-      const { data: ps } = await sb.from('profiles').select('id,first_name').in('id', ids);
-      const names = {}; (ps || []).forEach(p => names[p.id] = p.first_name);
-
-      data.forEach(r => {
-        const d = document.createElement('div'); d.className = 'm';
-        const n = document.createElement('b');
-        n.textContent = '🚩 ' + (names[r.reported_id] || 'عضو') + ' ← بلاغ من ' + (names[r.reporter_id] || 'عضو');
-        const s = document.createElement('small'); s.textContent = 'السبب: ' + r.reason;
-        d.append(n, s);
-        if (r.details) { const t = document.createElement('small'); t.textContent = 'التفاصيل: ' + r.details; d.appendChild(t); }
-        const a = document.createElement('div'); a.className = 'acts';
-        a.append(
-          btn('إيقاف الحساب', async () => {
-            if (!confirm('إيقاف حساب ' + (names[r.reported_id] || '') + '؟')) return;
-            if (await setStatus(r.reported_id, 'suspended', 'مخالفة شروط الاستخدام')) closeReport(r.id);
-          }, true),
-          btn('إغلاق البلاغ', () => closeReport(r.id))
-        );
-        d.appendChild(a);
-        list.appendChild(d);
+    function resize(file) {
+      return new Promise((resolve, reject) => {
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => {
+          const s = Math.min(1, 800 / Math.max(img.width, img.height));
+          const c = document.createElement('canvas');
+          c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+          URL.revokeObjectURL(url);
+          c.toBlob(b => b ? resolve(b) : reject(new Error('تعذّر تصغير الصورة')), 'image/jpeg', 0.85);
+        };
+        img.onerror = () => reject(new Error('تعذّر قراءة الصورة، جرّب صورة JPG أو PNG'));
+        img.src = url;
       });
     }
 
-    const LOG_AR = {
-      approve: '✅ قبول حساب', reject: '⛔ رفض حساب', suspend: '⛔ إيقاف حساب', reactivate: '♻️ إعادة تفعيل',
-      premium: '⭐ تفعيل مميز حتى', premium_cancel: '⭐ إلغاء العضوية المميزة',
-      verify: '✓ توثيق حتى', verify_cancel: '✓ إلغاء التوثيق',
-      report_reviewed: '🚩 إغلاق بلاغ', status: 'تغيير حالة'
+    const PICKERS = ['fGallery', 'fFiles', 'fCam'];
+    let pickedAt = 0, afterT = null, busy = false;
+
+    async function uploadPhoto(f) {
+      pickedAt = 0;
+      if (busy) return;
+      if (!/^image\//.test(f.type) && !/\.(jpe?g|png|webp|gif|bmp|heic|heif)$/i.test(f.name || '')) { msg('اختر ملف صورة (JPG أو PNG).', 'error'); return; }
+      busy = true;
+      try {
+        msg('جاري رفع الصورة...', 'ok');
+        const blob = await resize(f);
+        const path = uid + '/avatar.jpg';
+        const up = await sb.storage.from('photos').upload(path, blob, { upsert: true, contentType: 'image/jpeg' });
+        if (up.error) throw new Error('التخزين: ' + up.error.message);
+        const r = await sb.from('profiles').update({ photo_path: path }).eq('id', uid);
+        if (r.error) throw new Error('الملف: ' + r.error.message);
+        photoPath = path; await showPhoto(); msg('تم رفع الصورة ✓', 'ok');
+      } catch (err) {
+        msg('تعذّر رفع الصورة: ' + (err && err.message ? err.message : err), 'error');
+      }
+      busy = false;
+    }
+
+    function takeFrom(input) {
+      const f = input.files && input.files[0];
+      if (!f) return false;
+      input.value = '';
+      uploadPhoto(f);
+      return true;
+    }
+    function recheck() { return PICKERS.some(id => takeFrom($(id))); }
+
+    PICKERS.forEach(id => {
+      const el = $(id);
+      ['change', 'input'].forEach(ev => el.addEventListener(ev, () => takeFrom(el)));
+      el.addEventListener('click', e => {
+        if (!exists) { e.preventDefault(); msg('احفظ ملفك الشخصي أولاً (زر حفظ في الأسفل) ثم أضف الصورة', 'error'); return; }
+        pickedAt = Date.now();
+      });
+    });
+
+    // بعض المتصفحات لا تطلق حدث الاختيار؛ نفحص الحقول عند العودة من نافذة الاختيار
+    function afterPicker() {
+      if (!pickedAt || afterT) return;
+      setTimeout(recheck, 400);
+      afterT = setTimeout(() => {
+        afterT = null;
+        recheck();
+        if (pickedAt) {
+          pickedAt = 0;
+          $('phNote').textContent = 'لم تصل أي صورة من المتصفح. جرّب «الملفات» أو «الكاميرا»، أو افتح الموقع في متصفح آخر.';
+        }
+      }, 2500);
+    }
+    window.addEventListener('focus', afterPicker);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) afterPicker(); });
+
+    $('delPhoto').onclick = async () => {
+      if (!confirm('حذف الصورة؟')) return;
+      await sb.storage.from('photos').remove([photoPath]);
+      await sb.from('profiles').update({ photo_path: null }).eq('id', uid);
+      photoPath = null; showPhoto(); msg('تم حذف الصورة', 'ok');
     };
 
-    async function loadLog() {
-      const list = $('list'); list.textContent = 'جاري التحميل…';
-      const { data, error } = await sb.from('admin_log').select('*').order('created_at', { ascending: false }).limit(100);
-      if (error) { list.textContent = 'خطأ: ' + error.message + ' — شغّل admin2.sql'; return; }
-      if (!data.length) { list.innerHTML = '<p style="color:#666">لا توجد إجراءات مسجّلة بعد</p>'; return; }
-      const ids = [...new Set(data.map(x => x.target_id).filter(Boolean))];
-      const names = {};
-      if (ids.length) { const { data: ps } = await sb.from('profiles').select('id,first_name').in('id', ids); (ps || []).forEach(p => names[p.id] = p.first_name); }
-      list.innerHTML = '';
-      data.forEach(x => {
-        const d = document.createElement('div'); d.className = 'lg';
-        const t = document.createElement('span');
-        t.textContent = (LOG_AR[x.action] || x.action) + ' — ' + (names[x.target_id] || 'عضو محذوف') + (x.details ? ' (' + x.details + ')' : '');
-        const s = document.createElement('small');
-        s.textContent = new Date(x.created_at).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' });
-        d.append(t, s); list.appendChild(d);
-      });
-    }
-
-    async function loadStats() {
-      const c = async f => (await f).count ?? 0;
-      $('s_pending').textContent = await c(sb.from('profiles').select('*', { count: 'exact', head: true }).eq('status', 'pending'));
-      $('s_approved').textContent = await c(sb.from('profiles').select('*', { count: 'exact', head: true }).eq('status', 'approved'));
-      $('s_msgs').textContent = await c(sb.from('messages').select('*', { count: 'exact', head: true }));
-      $('s_reports').textContent = await c(sb.from('reports').select('*', { count: 'exact', head: true }).eq('status', 'open'));
-    }
-
-    async function loadRevenue() {
-      const list = $('list'); list.innerHTML = 'جاري التحميل…';
-      const [mm, pp] = await Promise.all([
-        sb.from('memberships').select('user_id,premium_until'),
-        sb.from('premium_payments').select('*').order('created_at', { ascending: false }).limit(500)
-      ]);
-      if (mm.error || pp.error) { list.textContent = 'خطأ: ' + (mm.error || pp.error).message + ' — شغّل premium2.sql'; return; }
-      const now = Date.now(), wk = now + 7 * 864e5, mo = new Date(); mo.setDate(1); mo.setHours(0, 0, 0, 0);
-      const active = mm.data.filter(x => new Date(x.premium_until) > now);
-      const soon = active.filter(x => new Date(x.premium_until) <= wk).sort((a, b) => new Date(a.premium_until) - new Date(b.premium_until));
-      const sum = f => pp.data.filter(f).reduce((t, x) => t + Number(x.amount), 0);
-      const revMonth = sum(x => new Date(x.created_at) >= mo), revTotal = sum(() => true);
-
-      const ids = [...new Set([...soon.map(x => x.user_id), ...pp.data.slice(0, 20).map(x => x.user_id)])];
-      const names = {};
-      if (ids.length) { const { data } = await sb.from('profiles').select('id,first_name').in('id', ids); (data || []).forEach(p => names[p.id] = p.first_name); }
-
-      list.innerHTML = '';
-      const st = document.createElement('div'); st.className = 'stats';
-      [[active.length, 'مميزون الآن'], [soon.length, 'ينتهون خلال 7 أيام'], [revMonth, 'درهم هذا الشهر'], [revTotal, 'درهم إجمالاً']].forEach(([n, l]) => {
-        const d = document.createElement('div'); d.className = 'stat';
-        const b = document.createElement('b'); b.textContent = n; const s = document.createElement('span'); s.textContent = l;
-        d.append(b, s); st.appendChild(d);
-      });
-      list.appendChild(st);
-
-      function section(title, rows, empty) {
-        const h = document.createElement('h3'); h.textContent = title; list.appendChild(h);
-        if (!rows.length) { const p = document.createElement('p'); p.style.color = '#666'; p.textContent = empty; list.appendChild(p); return; }
-        rows.forEach(r => { const d = document.createElement('div'); d.className = 'm'; const b = document.createElement('b'); b.textContent = r[0]; const s = document.createElement('small'); s.textContent = r[1]; d.append(b, s); list.appendChild(d); });
-      }
-      section('تنتهي عضويتهم قريباً (راسلهم للتجديد)', soon.map(x => [names[x.user_id] || 'عضو', 'تنتهي في ' + dFmt(x.premium_until)]), 'لا أحد خلال الأيام السبعة القادمة');
-      section('آخر العمليات', pp.data.slice(0, 20).map(x => [(names[x.user_id] || 'عضو') + ' — ' + Number(x.amount) + ' درهم' + (x.kind === 'verify' ? ' (توثيق ✓)' : ''), x.days + ' يوماً · ' + dFmt(x.created_at)]), 'لا توجد عمليات بعد');
-    }
-
-    function loadList() {
-      if (searching) { const q = $('q').value.trim(); if (q.length >= 2) return loadSearch(q); }
-      return cur === 'reports' ? loadReports() : cur === 'revenue' ? loadRevenue() : cur === 'log' ? loadLog() : loadMembers();
-    }
-    function loadAll() { loadStats(); loadList(); }
-
-    $('tabs').onclick = e => {
-      if (e.target.tagName !== 'BUTTON') return;
-      cur = e.target.dataset.s; searching = false; $('q').value = '';
-      document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b === e.target));
-      loadList();
-    };
-
-    let qTimer = null;
-    $('q').oninput = () => {
-      clearTimeout(qTimer);
-      qTimer = setTimeout(() => {
-        const q = $('q').value.trim();
-        searching = q.length >= 2;
-        if (searching) document.querySelectorAll('#tabs button').forEach(b => b.classList.remove('on'));
-        else document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.s === cur));
-        if (searching || q.length === 0) loadList();
-      }, 350);
+    $('photo_visible_to_matches').onchange = async e => {
+      if (!exists) return;
+      const r = await sb.from('profiles').update({ photo_visible_to_matches: e.target.checked }).eq('id', uid);
+      if (r.error) msg('خطأ: ' + r.error.message, 'error'); else msg('تم تحديث خيار الصورة ✓', 'ok');
     };
 
     (async () => {
       const s = await getSession();
       if (!s) { location.href = 'auth.html'; return; }
-      const { data } = await sb.from('profiles').select('is_admin').eq('id', s.user.id).maybeSingle();
-      if (!data || !data.is_admin) { document.querySelector('main').innerHTML = '<h1>غير مصرّح</h1><p>هذه الصفحة للإدارة فقط.</p>'; return; }
-      loadAll();
+      uid = s.user.id; $('email').textContent = s.user.email;
+      const { data, error } = await sb.from('profiles').select('*').eq('id', uid).maybeSingle();
+      if (error) { msg('خطأ: ' + error.message, 'error'); return; }
+      if (data) {
+        exists = true;
+        fields.forEach(k => { if (data[k] != null) $(k).value = data[k]; });
+        $('photo_visible_to_matches').checked = !!data.photo_visible_to_matches;
+        photoPath = data.photo_path; setStatus(data.status, data.reject_reason);
+      } else setStatus(null);
+      enablePhoto(); showPhoto();
     })();
+
+    $('form').onsubmit = async e => {
+      e.preventDefault();
+      if (!isAdult($('birth_date').value)) { msg('يجب أن يكون عمرك 18 سنة فأكثر', 'error'); return; }
+      const btn = $('save'); btn.disabled = true;
+      const row = {}; fields.forEach(k => { row[k] = $(k).value.trim() || null; });
+      if (row.height_cm != null) row.height_cm = parseInt(row.height_cm, 10) || null;
+      row.photo_visible_to_matches = $('photo_visible_to_matches').checked;
+      let res;
+      if (exists) res = await sb.from('profiles').update(row).eq('id', uid);
+      else { row.id = uid; row.status = 'pending'; res = await sb.from('profiles').insert(row); }
+      btn.disabled = false;
+      if (res.error) { msg('خطأ: ' + res.error.message, 'error'); return; }
+      if (!exists) { exists = true; enablePhoto(); }
+      let st = await sb.from('profiles').select('status,reject_reason').eq('id', uid).maybeSingle();
+      if (st.error) st = await sb.from('profiles').select('status').eq('id', uid).maybeSingle();
+      const status = st.data ? st.data.status : 'pending';
+      setStatus(status, st.data && st.data.reject_reason);
+      if (status === 'approved') msg('تم الحفظ ✓ — حسابك مقبول، يمكنك الآن تصفّح الأعضاء.', 'ok');
+      else if (status === 'pending') msg('تم الحفظ ✓ — ملفك قيد المراجعة اليدوية. للقبول الفوري: أكمل كل الحقول، واكتب نبذة (30 حرفاً فأكثر) دون أرقام هاتف أو روابط أو حسابات تواصل.', 'ok');
+      else msg('تم الحفظ ✓', 'ok');
+    };
+
+    // زر اختبار الإشعارات: يظهر بعد منح إذن الإشعارات
+    if ('Notification' in window && 'PushManager' in window && Notification.permission === 'granted') $('pushBox').style.display = 'block';
+    $('pushTest').onclick = async () => {
+      const b = $('pushTest'); b.disabled = true;
+      const ok = window.ensurePush ? await window.ensurePush() : false;
+      if (!ok) { msg('تعذّر ربط هذا الجهاز بالإشعارات. تأكد من منح الإذن وأن الموقع مثبّت أو مفتوح في Chrome.', 'error'); b.disabled = false; return; }
+      const { error } = await sb.rpc('send_test_push');
+      if (error) msg('خطأ: ' + error.message + ' — تأكد من تشغيل ملف push.sql', 'error');
+      else msg('أُرسل إشعار تجريبي، سيصلك خلال ثوانٍ. إن لم يصل فأغلق التطبيق وانتظر قليلاً.', 'ok');
+      setTimeout(() => { b.disabled = false; }, 8000);
+    };
+
+    $('out').onclick = logout;
+
+    $('delAcc').onclick = async () => {
+      if (!confirm('سيتم حذف حسابك وملفك ومحادثاتك وصورتك نهائياً ولا يمكن التراجع. هل أنت متأكد؟')) return;
+      const word = (prompt('للتأكيد اكتب كلمة: حذف') || '').trim().toLowerCase();
+      if (!['حذف', 'supprimer', 'delete'].includes(word)) { msg('لم يتم الحذف.', 'error'); return; }
+      $('delAcc').disabled = true;
+      try {
+        if (photoPath) await sb.storage.from('photos').remove([photoPath]);
+        // حذف صور ورسائل المحادثة الصوتية التي أرسلها العضو (إن كانت ميزة الوسائط مفعّلة)
+        try {
+          const { data: mm } = await sb.from('messages').select('media_path')
+            .eq('sender_id', uid).not('media_path', 'is', null);
+          const paths = (mm || []).map(x => x.media_path).filter(Boolean);
+          for (let i = 0; i < paths.length; i += 100) {
+            await sb.storage.from('chat-media').remove(paths.slice(i, i + 100));
+          }
+        } catch (e) { /* لا نوقف الحذف بسبب هذه الخطوة */ }
+        const { error } = await sb.rpc('delete_my_account');
+        if (error) throw error;
+        await sb.auth.signOut();
+        alert('تم حذف حسابك. نتمنى لك التوفيق.');
+        location.href = 'index.html';
+      } catch (err) {
+        $('delAcc').disabled = false;
+        msg('تعذّر حذف الحساب: ' + (err && err.message ? err.message : err), 'error');
+      }
+    };
   </script>
 </body>
 </html>
