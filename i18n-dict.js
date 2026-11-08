@@ -1907,5 +1907,33 @@ window.I18N_DICT = {
 "دولة": [
 "pays",
 "countries"
+],
+"أو": [
+"ou",
+"or"
+],
+"المتابعة عبر Google": [
+"Continuer avec Google",
+"Continue with Google"
+],
+"المتابعة عبر Facebook": [
+"Continuer avec Facebook",
+"Continue with Facebook"
+],
+"بالمتابعة عبر Google أو Facebook فإنك توافق على": [
+"En continuant avec Google ou Facebook, vous acceptez",
+"By continuing with Google or Facebook you agree to the"
+],
+"الشروط وسياسة الخصوصية": [
+"les conditions et la politique de confidentialité",
+"terms and privacy policy"
+],
+"الدخول عبر هذه الخدمة غير مفعّل بعد. استعمل البريد الإلكتروني وكلمة المرور.": [
+"La connexion via ce service n'est pas encore activée. Utilisez votre e-mail et votre mot de passe.",
+"Sign-in with this service is not enabled yet. Use your email and password."
+],
+"تعذّر الدخول:": [
+"Connexion impossible :",
+"Sign-in failed:"
 ]
 };
