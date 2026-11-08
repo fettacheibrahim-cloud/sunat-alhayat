@@ -6,6 +6,14 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://yepoakpeqonheksryalx.supabase.co; media-src 'self' blob: https://yepoakpeqonheksryalx.supabase.co; connect-src 'self' https://yepoakpeqonheksryalx.supabase.co https://api.mymemory.translated.net; object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'self'">
   <title>سنة الحياة - الدخول</title>
   <link rel="stylesheet" href="style.css?v=10">
+  <style>
+    .or{display:flex;align-items:center;gap:10px;margin:18px 0 12px;color:var(--muted);font-size:13px}
+    .or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+    .social{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:10px;background:#fff}
+    .social i{font:700 15px/1 'Tajawal',sans-serif;font-style:normal;width:26px;height:26px;border-radius:50%;
+      display:inline-flex;align-items:center;justify-content:center;background:var(--sand);color:var(--green);flex:none}
+    .note{font-size:12.5px;color:var(--muted);line-height:1.8;margin:12px 0 0;text-align:center}
+  </style>
 </head>
 <body>
   <main class="card" style="max-width:420px;margin:40px auto;padding:24px">
@@ -25,6 +33,10 @@
       <button id="btn" type="submit" class="btn" style="width:100%;margin-top:16px">دخول</button>
     </form>
     <p id="msg" style="display:none;margin-top:12px"></p>
+    <div class="or"><span>أو</span></div>
+    <button type="button" class="btn ghost social" id="gBtn"><i>G</i><span>المتابعة عبر Google</span></button>
+    <button type="button" class="btn ghost social" id="fBtn"><i>f</i><span>المتابعة عبر Facebook</span></button>
+    <p class="note">بالمتابعة عبر Google أو Facebook فإنك توافق على <a href="legal.html#terms" target="_blank">الشروط وسياسة الخصوصية</a>.</p>
     <p style="text-align:center;margin-top:16px">
       <a href="#" id="toggle">ليس لديك حساب؟ سجّل الآن</a>
     </p>
@@ -55,6 +67,21 @@
       $('termsRow').style.display = isLogin ? 'none' : 'flex';
       $('msg').style.display = 'none';
     };
+
+    // الدخول/التسجيل عبر Google أو Facebook (يتطلب تفعيل المزوّد في Supabase)
+    async function social(provider, btn) {
+      btn.disabled = true;
+      try {
+        const { error } = await sb.auth.signInWithOAuth({ provider, options: { redirectTo: base + 'profile.html' } });
+        if (error) throw error;
+      } catch (err) {
+        const off = /provider is not enabled|Unsupported provider/i.test(err.message || '');
+        showMsg('msg', off ? 'الدخول عبر هذه الخدمة غير مفعّل بعد. استعمل البريد الإلكتروني وكلمة المرور.' : 'تعذّر الدخول: ' + err.message, 'error');
+        btn.disabled = false;
+      }
+    }
+    $('gBtn').onclick = () => social('google', $('gBtn'));
+    $('fBtn').onclick = () => social('facebook', $('fBtn'));
 
     $('forgot').onclick = async e => {
       e.preventDefault();
