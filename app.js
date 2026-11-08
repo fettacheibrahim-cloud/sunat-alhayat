@@ -1,3 +1,5 @@
+/* frame-buster: يمنع تضمين الموقع داخل صفحة أخرى (خداع النقرات) */
+try { if (window.top !== window.self) { window.top.location = window.self.location; } } catch (e) { document.documentElement.style.display = 'none'; }
 const SUPABASE_URL = 'https://yepoakpeqonheksryalx.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_kPVlHG491QyXLsYhvM7GOw_gJyVphsX';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
