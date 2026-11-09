@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /messages.html
+Disallow: /interests.html
+Disallow: /favorites.html
+Disallow: /member.html
+Disallow: /profile.html
+Disallow: /browse.html
+Disallow: /reset.html
+Disallow: /verify.html
+Disallow: /offline.html
+Disallow: /phototest.html
+
+Sitemap: https://sunatalhayat.runs-at.dev/sitemap.xml
