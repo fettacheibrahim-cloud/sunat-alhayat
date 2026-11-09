@@ -15,6 +15,7 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"سنة الحياة","alternateName":"Sunat Al-Hayat","url":"https://sunatalhayat.runs-at.dev/","inLanguage":["ar","fr","en"],"description":"موقع للتعارف بنيّة الزواج، بخصوصية وجدية واحترام."}</script>
   <link rel="canonical" href="https://sunatalhayat.runs-at.dev/">
   <meta property="og:locale" content="ar_AR">
   <link rel="icon" type="image/svg+xml" href="icon.svg">
@@ -95,6 +96,13 @@
     .vplay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(10,44,45,.55)}
     .vid.paused .vplay{display:flex}
     .vplay span{width:68px;height:68px;border-radius:50%;background:var(--gold,#B8903F);display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 6px 20px rgba(0,0,0,.35);padding-inline-start:4px}
+    .spons{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:16px}
+    .spon{display:block;text-decoration:none;color:inherit;background:var(--sand);border:1px solid var(--line);border-radius:16px;padding:16px;position:relative}
+    .spon .tag{position:absolute;top:10px;left:12px;font-size:11px;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:999px;padding:1px 8px}
+    .spon .ic{font-size:30px;line-height:1}
+    .spon b{display:block;margin:8px 0 2px;color:var(--green);font-size:1.05rem}
+    .spon span.d{color:var(--muted);font-size:14px}
+    .spon-note{text-align:center;color:var(--muted);font-size:13px;margin-top:10px}
     .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-top:20px}
     .stats div{background:var(--sand);border-radius:16px;padding:18px 10px;text-align:center}
     .stats b{display:block;font:700 2.3rem 'Amiri',serif;color:var(--green);line-height:1.2}
@@ -184,6 +192,12 @@
     </div>
   </section>
 
+  <section id="sponSec" style="display:none;padding-top:0">
+    <h2>شركاؤنا</h2>
+    <div class="spons" id="sponList"></div>
+    <p class="spon-note">الإعلانات المعروضة هنا من شركاء مباشرين، ولا نشارك معهم أي بيانات عن الأعضاء.</p>
+  </section>
+
   <section class="cta" style="padding-top:0">
     <div class="card">
       <h2>ابدأ الآن</h2>
@@ -192,7 +206,7 @@
     </div>
   </section>
 
-  <footer><a href="install.html">تثبيت التطبيق</a> · <a href="faq.html">الأسئلة الشائعة</a> · <a href="contact.html">اتصل بنا</a> · <a href="legal.html#privacy">الخصوصية</a> · <a href="legal.html#terms">الشروط</a><br>© سنة الحياة — جميع الحقوق محفوظة</footer>
+  <footer><a href="install.html">تثبيت التطبيق</a> · <a href="faq.html">الأسئلة الشائعة</a> · <a href="contact.html">اتصل بنا</a> · <a href="contact.html">أعلن معنا</a> · <a href="legal.html#privacy">الخصوصية</a> · <a href="legal.html#terms">الشروط</a><br>© سنة الحياة — جميع الحقوق محفوظة</footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="i18n-dict.js?v=3"></script>
@@ -259,6 +273,29 @@
       document.addEventListener('visibilitychange', function () { if (document.hidden && playing) pause(); });
     })();
 
+    // ===== مساحة الرعاة (إعلانات مباشرة بلا سكربتات خارجية) =====
+    // لإضافة راعٍ: أضف سطراً واحداً داخل القائمة. إن بقيت فارغة يختفي القسم كلياً.
+    // الحقول: name الاسم، desc وصف قصير، link رابط https، icon رمز تعبيري.
+    (function () {
+      var SPONSORS = [
+        // { name: 'قاعة الأفراح الفلانية', desc: 'خصم 10% لأعضاء سنة الحياة', link: 'https://example.com', icon: '🏛️' }
+      ];
+      if (!SPONSORS.length) return;
+      var box = document.getElementById('sponList');
+      SPONSORS.slice(0, 6).forEach(function (x) {
+        if (!x || !/^https:\/\//i.test(String(x.link || ''))) return;
+        var a = document.createElement('a');
+        a.className = 'spon'; a.href = x.link; a.target = '_blank';
+        a.rel = 'sponsored nofollow noopener noreferrer';
+        var t = document.createElement('i'); t.className = 'tag'; t.style.fontStyle = 'normal'; t.textContent = 'إعلان';
+        var ic = document.createElement('div'); ic.className = 'ic'; ic.textContent = x.icon || '✨';
+        var b = document.createElement('b'); b.textContent = x.name || '';
+        var d = document.createElement('span'); d.className = 'd'; d.textContent = x.desc || '';
+        a.appendChild(t); a.appendChild(ic); a.appendChild(b); a.appendChild(d);
+        box.appendChild(a);
+      });
+      if (box.children.length) document.getElementById('sponSec').style.display = 'block';
+    })();
     // ===== أرقام حقيقية من قاعدة البيانات: لا تظهر إلا حين تصبح مقنعة =====
     (function () {
       var MIN_MEMBERS = 30;   // أقل عدد أعضاء مقبولين يظهر معه العدّاد (غيّره كما تشاء)
