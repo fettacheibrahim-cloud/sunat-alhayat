@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://yepoakpeqonheksryalx.supabase.co; media-src 'self' blob: https://yepoakpeqonheksryalx.supabase.co; connect-src 'self' https://yepoakpeqonheksryalx.supabase.co https://api.mymemory.translated.net; object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'self'">
   <title>سنة الحياة - الدخول</title>
-  <link rel="stylesheet" href="style.css?v=10">
+  <link rel="stylesheet" href="style.css?v=11">
   <style>
     .or{display:flex;align-items:center;gap:10px;margin:18px 0 12px;color:var(--muted);font-size:13px}
     .or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
@@ -47,16 +47,16 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="i18n-dict.js?v=3"></script>
+  <script src="i18n-dict.js?v=4"></script>
   <script src="i18n.js?v=3"></script>
-  <script src="app.js?v=12"></script>
+  <script src="app.js?v=13"></script>
   <script>
     let isLogin = true;
     const $ = id => document.getElementById(id);
     const base = location.origin + location.pathname.replace('auth.html', '');
 
     // مسجّل الدخول أصلاً؟ لا حاجة لصفحة الدخول
-    getSession().then(s => { if (s) location.replace('browse.html'); });
+    getSession().then(s => { if (s) location.replace('home.html'); });
 
     $('toggle').onclick = e => {
       e.preventDefault();
@@ -73,7 +73,7 @@
     async function social(provider, btn) {
       btn.disabled = true;
       try {
-        const { error } = await sb.auth.signInWithOAuth({ provider, options: { redirectTo: base + 'profile.html' } });
+        const { error } = await sb.auth.signInWithOAuth({ provider, options: { redirectTo: base + 'home.html' } });
         if (error) throw error;
       } catch (err) {
         const off = /provider is not enabled|Unsupported provider/i.test(err.message || '');
@@ -109,7 +109,7 @@
             if (/invalid login/i.test(error.message)) throw new Error('البريد أو كلمة المرور غير صحيحة.');
             throw error;
           }
-          location.href = 'profile.html';
+          location.href = 'home.html';
         } else {
           if (!$('terms').checked) throw new Error('يجب الموافقة على الشروط وسياسة الخصوصية للتسجيل.');
           const { data, error } = await sb.auth.signUp({
