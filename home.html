@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://yepoakpeqonheksryalx.supabase.co; media-src 'self' blob: https://yepoakpeqonheksryalx.supabase.co; connect-src 'self' https://yepoakpeqonheksryalx.supabase.co https://api.mymemory.translated.net; object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'self'">
+  <title>سنة الحياة - لوحتي</title>
+  <link rel="stylesheet" href="style.css?v=11">
+  </head>
+<body>
+  <main class="wrap wide">
+    <div class="hello" id="hello">
+      <h1><span id="hiT">أهلاً</span> <span id="hiN"></span> <span id="hiE">👋</span></h1>
+      <p id="hiSub">مرحباً بك في سنة الحياة</p>
+      <span id="st" class="st" style="display:none"></span>
+    </div>
+    <p id="msg" style="display:none"></p>
+
+    <div class="sect" id="complete" style="display:none">
+      <div class="mhead"><b id="pct">0٪</b><span>اكتمال ملفك الشخصي</span></div>
+      <div class="meter"><b id="bar"></b></div>
+      <ul class="todo" id="todo"></ul>
+    </div>
+
+    <div class="tiles" id="tiles" style="display:none">
+      <a class="tile" id="tInt" href="interests.html"><i>💌</i><b id="nInt">0</b><span>اهتمامات جديدة</span></a>
+      <a class="tile" href="messages.html"><i>💬</i><b id="nCh">0</b><span>محادثاتي</span></a>
+      <a class="tile" href="favorites.html"><i>❤️</i><b id="nFav">0</b><span>المفضلة</span></a>
+      <a class="tile" href="interests.html"><i>📤</i><b id="nSent">0</b><span>اهتمامات أرسلتها</span></a>
+    </div>
+
+    <div class="sect" id="sugg" style="display:none">
+      <h3><i>✨</i>اقتراحات تناسبك</h3>
+      <p class="hint">أعضاء يتوافقون معك أكثر، بحسب بياناتك المشتركة.</p>
+      <div class="mgrid" id="mgrid"></div>
+      <a class="btn ghost block" href="browse.html" style="margin-top:12px">تصفّح كل الأعضاء</a>
+    </div>
+
+    <div class="sect">
+      <h3><i>⚡</i>اختصارات</h3>
+      <div class="qa">
+        <a class="btn" href="browse.html">🔍 تصفّح الأعضاء</a>
+        <a class="btn ghost" href="profile.html">👤 عدّل ملفي</a>
+        <a class="btn ghost" href="verify.html">✓ وثّق حسابي</a>
+        <a class="btn ghost" href="premium.html">⭐ العضوية المميزة</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="i18n-dict.js?v=4"></script>
+  <script src="i18n.js?v=3"></script>
+  <script src="app.js?v=13"></script>
+  <script src="compat.js?v=1"></script>
+  <script>
+    const $ = id => document.getElementById(id);
+    const stAr = { pending: 'قيد المراجعة', approved: 'مقبول', suspended: 'موقوف' };
+    // عناصر اكتمال الملف: [الحقل، الوزن، النص]
+    const ITEMS = [
+      ['first_name', 8, 'اكتب اسمك الأول'], ['birth_date', 8, 'أضف تاريخ ميلادك'], ['country', 8, 'حدّد بلدك'], ['city', 8, 'حدّد مدينتك'],
+      ['marital_status', 8, 'اختر حالتك الاجتماعية'], ['education', 6, 'اختر مستواك الدراسي'], ['occupation', 6, 'اكتب مهنتك'],
+      ['height_cm', 4, 'أضف طولك'], ['religiosity', 8, 'اختر درجة التزامك'], ['prayer', 6, 'اختر مدى محافظتك على الصلاة'],
+      ['smoking', 4, 'أجب عن سؤال التدخين'], ['wants_children', 6, 'أجب عن الرغبة في الأطفال'],
+      ['bio', 10, 'اكتب نبذة عنك'], ['looking_for', 6, 'اكتب ما تبحث عنه'], ['photo_path', 4, 'أضف صورتك']
+    ];
+    function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; }
+
+    function showComplete(p) {
+      let got = 0, tot = 0; const miss = [];
+      ITEMS.forEach(([k, w, t]) => {
+        tot += w;
+        const v = p[k];
+        if (v != null && String(v).trim() !== '') got += w; else miss.push([w, t]);
+      });
+      const pct = Math.round(got / tot * 100);
+      $('pct').textContent = pct + '٪';
+      $('complete').style.display = 'block';
+      setTimeout(() => { $('bar').style.width = pct + '%'; }, 80);
+      const ul = $('todo'); ul.textContent = '';
+      miss.sort((a, b) => b[0] - a[0]).slice(0, 4).forEach(([w, t]) => {
+        const li = el('li'), a = el('a', '', t); a.href = 'profile.html';
+        a.appendChild(el('small', '', '+' + w + '٪'));
+        li.appendChild(a); ul.appendChild(li);
+      });
+      if (!miss.length) { const li = el('li'); li.appendChild(el('a', '', 'ملفك مكتمل، بارك الله فيك ✓')); li.firstChild.removeAttribute('href'); ul.appendChild(li); }
+    }
+
+    function mini(p) {
+      const a = el('a', 'mini'); a.href = 'member.html?id=' + p.id;
+      a.appendChild(el('div', 'av', (p.first_name || '؟').charAt(0).toUpperCase()));
+      const w = el('div', 'who');
+      w.appendChild(el('div', 'nm', p.first_name || 'عضو'));
+      const ag = ageOf(p.birth_date);
+      w.appendChild(el('div', 'meta', [ag ? ag + ' سنة' : '', [p.city, p.country].filter(Boolean).join('، ')].filter(Boolean).join(' · ')));
+      a.appendChild(w);
+      if (p._c) a.appendChild(el('span', pctClass(p._c.pct), p._c.pct + '٪'));
+      return a;
+    }
+
+    (async () => {
+      const s = await getSession();
+      if (!s) { location.href = 'auth.html'; return; }
+      const me = s.user.id;
+      const { data: mine } = await sb.from('profiles').select('*').eq('id', me).maybeSingle();
+      if (!mine) {
+        $('hiT').textContent = 'أهلاً بك في سنة الحياة'; $('hiE').textContent = '';
+        $('hiSub').textContent = 'ابدأ بإنشاء ملفك الشخصي ليظهر للأعضاء.';
+        const a = el('a', 'btn gold', 'أنشئ ملفي الآن'); a.href = 'profile.html'; a.style.marginTop = '14px';
+        $('hello').appendChild(a);
+        return;
+      }
+      $('hiN').textContent = mine.first_name || '';
+      $('hiSub').textContent = mine.status === 'approved' ? 'حسابك مقبول، وهذه نظرة سريعة على نشاطك.' : 'نراجع ملفك قريباً، وفي الأثناء يمكنك إكماله.';
+      const st = $('st'); st.textContent = stAr[mine.status] || ''; st.className = 'st ' + (mine.status || ''); st.style.display = st.textContent ? 'inline-block' : 'none';
+      showComplete(mine);
+      if (mine.status !== 'approved') return;
+
+      $('tiles').style.display = 'grid';
+      const q = (t, f) => f(sb.from(t).select('id', { count: 'exact', head: true }));
+      try {
+        const [ni, ns, nc, nf] = await Promise.all([
+          q('interests', x => x.eq('to_id', me).in('status', ['sent', 'pending'])),
+          q('interests', x => x.eq('from_id', me)),
+          sb.from('conversations').select('id', { count: 'exact', head: true }).or('user_a.eq.' + me + ',user_b.eq.' + me),
+          q('favorites', x => x.eq('user_id', me))
+        ]);
+        $('nInt').textContent = ni.count || 0; $('nSent').textContent = ns.count || 0;
+        $('nCh').textContent = nc.count || 0; $('nFav').textContent = nf.count || 0;
+        if (ni.count) $('tInt').classList.add('hot');
+      } catch (e) {}
+
+      try {
+        const hidden = new Set();
+        const [bl, it] = await Promise.all([
+          sb.from('blocks').select('blocker_id,blocked_id').or('blocker_id.eq.' + me + ',blocked_id.eq.' + me),
+          sb.from('interests').select('from_id,to_id').or('from_id.eq.' + me + ',to_id.eq.' + me)
+        ]);
+        (bl.data || []).forEach(b => hidden.add(b.blocker_id === me ? b.blocked_id : b.blocker_id));
+        (it.data || []).forEach(i => hidden.add(i.from_id === me ? i.to_id : i.from_id));
+        const opposite = mine.gender === 'male' ? 'female' : 'male';
+        const { data } = await sb.from('profiles').select('*').eq('status', 'approved').eq('gender', opposite).neq('id', me)
+          .order('created_at', { ascending: false }).limit(80);
+        const list = (data || []).filter(p => !hidden.has(p.id));
+        list.forEach(p => { p._c = compat(mine, p); });
+        list.sort((x, y) => ((y._c ? y._c.pct : -1) - (x._c ? x._c.pct : -1)));
+        const top = list.slice(0, 4);
+        if (top.length) { top.forEach(p => $('mgrid').appendChild(mini(p))); $('sugg').style.display = 'block'; }
+      } catch (e) {}
+    })();
+  </script>
+</body>
+</html>
