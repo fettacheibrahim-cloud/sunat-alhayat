@@ -1,349 +1,432 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://yepoakpeqonheksryalx.supabase.co; media-src 'self' blob: https://yepoakpeqonheksryalx.supabase.co; connect-src 'self' https://yepoakpeqonheksryalx.supabase.co https://api.mymemory.translated.net; object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'self'">
-  <title>سنة الحياة - موقع الزواج الجاد</title>
-  <meta name="description" content="موقع للتعارف بنيّة الزواج، بخصوصية وجدية واحترام.">
-  <meta name="theme-color" content="#0E3B3C">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="سنة الحياة - موقع الزواج الجاد">
-  <meta property="og:description" content="موقع للتعارف بنيّة الزواج، بخصوصية وجدية واحترام.">
-  <meta property="og:url" content="https://sunatalhayat.runs-at.dev/">
-  <meta property="og:image" content="https://placehold.co/1200x630/0E3B3C/C9A24B.png?text=Sunat+Al-Hayat">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta name="twitter:card" content="summary_large_image">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"سنة الحياة","alternateName":"Sunat Al-Hayat","url":"https://sunatalhayat.runs-at.dev/","inLanguage":["ar","fr","en"],"description":"موقع للتعارف بنيّة الزواج، بخصوصية وجدية واحترام."}</script>
-  <link rel="canonical" href="https://sunatalhayat.runs-at.dev/">
-  <meta property="og:locale" content="ar_AR">
-  <link rel="icon" type="image/svg+xml" href="icon.svg">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="style.css?v=10">
-  <style>
-    .top{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;
-      background:rgba(250,247,240,.92);backdrop-filter:blur(8px);position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line)}
-    .brand{font:700 1.6rem 'Amiri',serif;color:var(--green);text-decoration:none}
-    .brand span{color:var(--gold)}
-    .top .btn{padding:8px 20px;min-height:40px;font-size:15px}
-    .hero{background:linear-gradient(160deg,var(--green) 0%,#0a2c2d 100%);color:#fff;text-align:center;
-      padding:56px 22px 64px;position:relative;overflow:hidden}
-    .hero::after{content:"";position:absolute;inset:0;opacity:.07;
-      background:repeating-linear-gradient(45deg,#fff 0 1px,transparent 1px 22px),repeating-linear-gradient(-45deg,#fff 0 1px,transparent 1px 22px)}
-    .hero>*{position:relative;z-index:1}
-    .hero h1{color:#fff;font-size:2.6rem;margin:0 0 6px}
-    .hero .sub{color:#e9dfc4;max-width:520px;margin:0 auto 26px}
-    .orn{color:var(--gold2);letter-spacing:8px;font-size:18px}
-    .verse{max-width:640px;margin:34px auto 0;padding:26px 22px;border:1px solid rgba(216,181,101,.5);
-      border-radius:20px;background:rgba(255,255,255,.06)}
-    .verse .ar{font:400 1.55rem/2.1 'Amiri',serif;color:#fff;margin:0}
-    .verse .en{font-size:15px;line-height:1.7;color:#e9dfc4;margin:14px 0 0;direction:ltr;font-style:italic}
-    .verse .ref{color:var(--gold2);font-size:14px;margin-top:10px}
-    section{max-width:720px;margin:0 auto;padding:44px 20px}
-    section h2{text-align:center}
-    .steps{display:grid;gap:14px;margin-top:22px}
-    .step{display:flex;gap:16px;align-items:flex-start;background:#fff;border:1px solid var(--line);
-      border-radius:18px;padding:18px;box-shadow:0 6px 18px rgba(14,59,60,.05)}
-    .num{flex:none;width:44px;height:44px;border-radius:50%;background:var(--gold);color:#fff;
-      display:flex;align-items:center;justify-content:center;font:700 20px 'Amiri',serif}
-    .step b{display:block;color:var(--green);font-size:18px}
-    .step p{margin:2px 0 0;color:var(--muted);font-size:15px;line-height:1.7}
-    .trust{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
-    .trust div{background:var(--sand);border-radius:16px;padding:16px;text-align:center;font-weight:700;color:var(--green)}
-    .trust small{display:block;font-weight:400;color:var(--muted);margin-top:4px}
-    .hadith{max-width:640px;margin:22px auto 0;position:relative}
-    .hd{background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px 22px 20px;text-align:center;
-      box-shadow:0 6px 18px rgba(14,59,60,.06);margin-bottom:14px;border-top:3px solid var(--gold)}
-    .hd .q{font:400 1.45rem/2.1 'Amiri',serif;color:var(--green);margin:0}
-    .hd .src{color:var(--gold);font-size:14px;margin:10px 0 0;font-weight:700}
-    .hadith.js{min-height:210px}
-    .hadith.js .hd{position:absolute;inset:0 0 auto 0;margin:0;opacity:0;visibility:hidden;transition:opacity .6s}
-    .hadith.js .hd.on{opacity:1;visibility:visible;position:relative}
-    .dots{display:none;justify-content:center;gap:8px;margin-top:14px}
-    .hadith.js+.dots{display:flex}
-    .dots button{width:10px;height:10px;border-radius:50%;border:0;padding:0;background:var(--line);cursor:pointer}
-    .dots button.on{background:var(--gold);width:22px;border-radius:6px}
-    .vidwrap{max-width:640px;margin:0 auto}
-    .vid{position:relative;width:100%;height:clamp(260px,64vw,340px);border-radius:22px;overflow:hidden;color:#fff;
-      background:radial-gradient(circle at 20% 15%,#1b6a6b 0%,transparent 55%),linear-gradient(160deg,#0E3B3C,#0a2c2d);
-      box-shadow:0 14px 34px rgba(14,59,60,.28);border:1px solid rgba(216,181,101,.45);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
-    .vid::before{content:"";position:absolute;inset:0;opacity:.07;
-      background:repeating-linear-gradient(45deg,#fff 0 1px,transparent 1px 22px),repeating-linear-gradient(-45deg,#fff 0 1px,transparent 1px 22px)}
-    .vid .glow{position:absolute;width:260px;height:260px;border-radius:50%;left:-60px;bottom:-110px;
-      background:radial-gradient(circle,rgba(216,181,101,.35),transparent 65%);animation:vglow 9s ease-in-out infinite alternate}
-    @keyframes vglow{to{transform:translate(70px,-30px) scale(1.25)}}
-    .vsc{position:absolute;inset:0 0 34px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-      text-align:center;padding:16px 24px;opacity:0;visibility:hidden;transition:opacity .45s}
-    .vsc.on{opacity:1;visibility:visible}
-    .vsc .ic{font-size:60px;line-height:1;margin-bottom:10px;transform:scale(.3);opacity:0}
-    .vsc.on .ic{animation:vpop .7s cubic-bezier(.2,1.4,.4,1) .05s forwards}
-    .vsc h3{font:700 1.7rem 'Amiri',serif;color:#fff;margin:0 0 6px;transform:translateY(16px);opacity:0}
-    .vsc.on h3{animation:vup .6s ease .35s forwards}
-    .vsc p{color:#e9dfc4;margin:0;max-width:430px;line-height:1.8;font-size:15px;transform:translateY(12px);opacity:0}
-    .vsc.on p{animation:vup .6s ease .65s forwards}
-    .vsc.on .ic.ring{animation:vpop .7s cubic-bezier(.2,1.4,.4,1) .05s forwards,vpulse 2.4s ease-in-out .9s infinite}
-    @keyframes vpop{to{transform:scale(1);opacity:1}}
-    @keyframes vup{to{transform:none;opacity:1}}
-    @keyframes vpulse{50%{transform:scale(1.08)}}
-    .vctl{position:absolute;left:0;right:0;bottom:0;height:34px;display:flex;align-items:center;gap:10px;padding:0 12px;
-      background:linear-gradient(transparent,rgba(0,0,0,.35))}
-    .vctl button{width:26px;height:26px;border:0;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;font-size:12px;cursor:pointer;padding:0;line-height:1}
-    .vseg{flex:1;display:flex;gap:4px;direction:ltr}
-    .vseg i{flex:1;height:4px;border-radius:3px;background:rgba(255,255,255,.25);overflow:hidden;display:block}
-    .vseg i b{display:block;height:100%;width:0;background:var(--gold2,#D8B565)}
-    .vplay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(10,44,45,.55)}
-    .vid.paused .vplay{display:flex}
-    .vplay span{width:68px;height:68px;border-radius:50%;background:var(--gold,#B8903F);display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 6px 20px rgba(0,0,0,.35);padding-inline-start:4px}
-    .spons{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:16px}
-    .spon{display:block;text-decoration:none;color:inherit;background:var(--sand);border:1px solid var(--line);border-radius:16px;padding:16px;position:relative}
-    .spon .tag{position:absolute;top:10px;left:12px;font-size:11px;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:999px;padding:1px 8px}
-    .spon .ic{font-size:30px;line-height:1}
-    .spon b{display:block;margin:8px 0 2px;color:var(--green);font-size:1.05rem}
-    .spon span.d{color:var(--muted);font-size:14px}
-    .spon-note{text-align:center;color:var(--muted);font-size:13px;margin-top:10px}
-    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-top:20px}
-    .stats div{background:var(--sand);border-radius:16px;padding:18px 10px;text-align:center}
-    .stats b{display:block;font:700 2.3rem 'Amiri',serif;color:var(--green);line-height:1.2}
-    .stats span{color:var(--muted);font-size:14px}
-    @media(prefers-reduced-motion:reduce){.vsc *{animation:none!important;opacity:1!important;transform:none!important}.vid .glow{animation:none}}
-    .cta{text-align:center}
-    footer{text-align:center;padding:26px 20px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
-    @media(max-width:600px){.hero h1{font-size:2.1rem}.verse .ar{font-size:1.3rem}.trust{grid-template-columns:1fr}}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة سنة الحياة | للتوفيق الميسر</title>
+    <!-- خط Tajawal من Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- مكتبة FontAwesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #2c5e3b;
+            --primary-hover: #1e4328;
+            --accent-color: #d4af37;
+            --bg-color: #f8faf9;
+            --card-bg: #ffffff;
+            --text-color: #2b2b2b;
+            --text-muted: #6c757d;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --radius: 16px;
+            --font-size-base: 16px;
+        }
+
+        /* الوضع الداكن (Dark Mode) */
+        body.dark-mode {
+            --bg-color: #12181b;
+            --card-bg: #1e252b;
+            --text-color: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: #2e3740;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: var(--font-size-base);
+            line-height: 1.6;
+        }
+
+        /* الهيدر وشريط التنقل */
+        .navbar {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+
+        .brand i {
+            color: var(--accent-color);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-icon {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .btn-icon:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--primary-color);
+        }
+
+        /* القسم الرئيسي (Hero) */
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem 3rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            margin-bottom: 2rem;
+        }
+
+        /* بطاقات العرض الاحترافية */
+        .main-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .profile-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-4px);
+            transition: transform 0.2s ease;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .avatar-placeholder {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.5rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background-color: rgba(212, 175, 55, 0.15);
+            color: var(--accent-color);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* النافذة المنبثقة للإعدادات (Settings Modal) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .settings-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 480px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        /* مفتاح التبديل (Switch) */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 26px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+    </style>
 </head>
 <body>
-  <header class="top">
-    <a class="brand" href="index.html">سنة <span>الحياة</span></a>
-    <div style="display:flex;gap:8px;align-items:center">
-      <button id="install" class="btn ghost" type="button" style="display:none">📲 تثبيت</button>
-      <a class="btn" href="auth.html">دخول</a>
+
+    <!-- شريط التصفح علوي -->
+    <nav class="navbar">
+        <div class="brand">
+            <i class="fa-solid fa-ring"></i>
+            <span>سنة الحياة</span>
+        </div>
+        <div class="nav-actions">
+            <button class="btn-icon" id="openSettings" title="الإعدادات">
+                <i class="fa-solid fa-gear"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- الهيدر الرئيسي -->
+    <header class="hero">
+        <span class="badge">منصة توافق ميسرة وآمنة</span>
+        <h1>منصة سنة الحياة للتوافق والزواج الشرعي</h1>
+        <p>بيئة محترمة وآمنة للبحث عن الشريك المناسب وفق الضوابط والأخلاق.</p>
+    </header>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="main-container">
+        <div class="grid-cards">
+            <!-- مثال لبطاقة شخصية -->
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="avatar-placeholder"><i class="fa-solid fa-user"></i></div>
+                    <div>
+                        <h3 style="font-size: 1.1rem;">طلب توافق رقم #1024</h3>
+                        <p style="color: var(--text-muted); font-size: 0.85rem;">إيموزار كندر، المغرب</p>
+                    </div>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">العمر: 28 سنة | المستوى الدراسي: جامعي | المهنة: قطاع خاص</p>
+                <button class="btn-primary">طلب التواصل والمراسلة</button>
+            </div>
+            
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="avatar-placeholder"><i class="fa-solid fa-user"></i></div>
+                    <div>
+                        <h3 style="font-size: 1.1rem;">طلب توافق رقم #1025</h3>
+                        <p style="color: var(--text-muted); font-size: 0.85rem;">فاس، المغرب</p>
+                    </div>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">العمر: 25 سنة | المستوى الدراسي: إجازة | المهنة: تعليم</p>
+                <button class="btn-primary">طلب التواصل والمراسلة</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- نافذة الإعدادات المنبثقة -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="settings-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-sliders"></i> إعدادات الموقع</h3>
+                <button class="btn-icon" id="closeSettings" style="border:none;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <!-- المظهر الداكن -->
+                <div class="setting-item">
+                    <div>
+                        <strong>الوضع الداكن (Dark Mode)</strong>
+                        <p style="font-size:0.8rem; color:var(--text-muted);">تغيير ألوان الموقع لراحة العين ليلاً</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="darkModeToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <!-- حجم الخط -->
+                <div class="setting-item">
+                    <div>
+                        <strong>حجم الخط</strong>
+                        <p style="font-size:0.8rem; color:var(--text-muted);">تكبير أو تصغير الخطوط في الموقع</p>
+                    </div>
+                    <select id="fontSizeSelect" style="padding:6px; border-radius:6px; border:1px solid var(--border-color); background:var(--card-bg); color:var(--text-color);">
+                        <option value="15px">صغير</option>
+                        <option value="16px" selected>عادي</option>
+                        <option value="18px">كبير</option>
+                    </select>
+                </div>
+
+                <!-- اللغة -->
+                <div class="setting-item">
+                    <div>
+                        <strong>لغة الواجهة</strong>
+                        <p style="font-size:0.8rem; color:var(--text-muted);">اختر اللغة المفضلة للعرض</p>
+                    </div>
+                    <select id="langSelect" style="padding:6px; border-radius:6px; border:1px solid var(--border-color); background:var(--card-bg); color:var(--text-color);">
+                        <option value="ar" selected>العربية</option>
+                        <option value="fr">Français</option>
+                    </select>
+                </div>
+            </div>
+        </div>
     </div>
-  </header>
 
-  <div class="hero">
-    <div class="orn">✦ ✦ ✦</div>
-    <h1>سنة الحياة</h1>
-    <p class="sub">موقع جاد للتعارف بنيّة الزواج، على أساس من الاحترام والخصوصية والمودّة.</p>
-    <a class="btn gold" href="auth.html">ابدأ رحلتك</a>
+    <!-- التحكم بلغة JavaScript -->
+    <script>
+        const openBtn = document.getElementById('openSettings');
+        const closeBtn = document.getElementById('closeSettings');
+        const modal = document.getElementById('settingsModal');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const fontSizeSelect = document.getElementById('fontSizeSelect');
 
-    <div class="verse">
-      <p class="ar">﴿ وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَٰلِكَ لَآيَاتٍ لِّقَوْمٍ يَتَفَكَّرُونَ ﴾</p>
-      <p class="ref">سورة الروم — الآية 21</p>
-      <p class="en">"And of His signs is that He created for you from yourselves mates that you may find tranquility in them; and He placed between you affection and mercy. Indeed in that are signs for a people who give thought." (Quran 30:21)</p>
-    </div>
-  </div>
+        // فتح وإغلاق الإعدادات
+        openBtn.addEventListener('click', () => modal.classList.add('active'));
+        closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.classList.remove('active');
+        });
 
-  <section style="padding-bottom:10px">
-    <h2>شاهد كيف يعمل الموقع</h2>
-    <div class="vidwrap">
-      <div class="vid" id="vid" role="img" aria-label="شرح مرئي للموقع">
-        <div class="glow"></div>
-        <div class="vsc"><div class="ic ring">✦</div><h3>سنة الحياة</h3><p>موقع جاد للتعارف بنيّة الزواج، بخصوصية واحترام</p></div>
-        <div class="vsc"><div class="ic">📝</div><h3>أنشئ حسابك</h3><p>بريدك وبياناتك الأساسية، في دقيقة وبصدق</p></div>
-        <div class="vsc"><div class="ic">✅</div><h3>مراجعة وتحقق</h3><p>كل ملف يُفحص قبل أن يظهر، لضمان الجدية</p></div>
-        <div class="vsc"><div class="ic">🔍</div><h3>تصفّح وأبدِ اهتمامك</h3><p>أعضاء مقبولون، ونسبة توافق تُبرز نقاط الالتقاء بينكما</p></div>
-        <div class="vsc"><div class="ic">💬</div><h3>تحدّثا باحترام</h3><p>محادثة خاصة بين الطرفين فقط، بعد قبول الاهتمام</p></div>
-        <div class="vsc"><div class="ic">🛡</div><h3>خصوصيتك أولاً</h3><p>إبلاغ وحظر، وشارة «موثّق ✓» لمزيد من الثقة</p></div>
-        <div class="vsc"><div class="ic ring">💍</div><h3>ابدأ رحلتك اليوم</h3><p>التسجيل مجاني ولا يستغرق دقيقة</p></div>
-        <div class="vplay"><span>▶</span></div>
-        <div class="vctl"><button id="vbtn" type="button" aria-label="play/pause">❚❚</button><div class="vseg" id="vseg"></div></div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <h2>كيف يعمل الموقع؟</h2>
-    <div class="steps">
-      <div class="step"><div class="num">1</div><div><b>أنشئ حسابك وملفك</b><p>سجّل بريدك وأكمل بياناتك الأساسية بصدق.</p></div></div>
-      <div class="step"><div class="num">2</div><div><b>تحقق ومراجعة</b><p>يُفحص كل ملف آلياً، وتراجع الإدارة ما يحتاج مراجعة، لضمان الجدية.</p></div></div>
-      <div class="step"><div class="num">3</div><div><b>تصفّح وأبدِ اهتمامك</b><p>تعرض الصفحة أعضاء مقبولين، وتُبدي اهتماماً بمن يناسبك.</p></div></div>
-      <div class="step"><div class="num">4</div><div><b>تحدّثا باحترام</b><p>عند قبول الاهتمام تُفتح محادثة بين الطرفين فقط.</p></div></div>
-    </div>
-  </section>
-
-  <section style="padding-top:0">
-    <h2>من هدي النبي ﷺ في الزواج</h2>
-    <div class="hadith" id="hadith">
-      <div class="hd"><p class="q">«يا معشر الشباب، من استطاع منكم الباءة فليتزوج، فإنه أغض للبصر وأحصن للفرج»</p><p class="src">متفق عليه</p></div>
-      <div class="hd"><p class="q">«إذا جاءكم من ترضون دينه وخلقه فزوجوه، إلا تفعلوا تكن فتنة في الأرض وفساد عريض»</p><p class="src">رواه الترمذي</p></div>
-      <div class="hd"><p class="q">«تنكح المرأة لأربع: لمالها ولحسبها ولجمالها ولدينها، فاظفر بذات الدين تربت يداك»</p><p class="src">متفق عليه</p></div>
-      <div class="hd"><p class="q">«خيركم خيركم لأهله، وأنا خيركم لأهلي»</p><p class="src">رواه الترمذي</p></div>
-    </div>
-    <div class="dots" id="dots"></div>
-  </section>
-
-  <section style="padding-top:0">
-    <h2>خصوصيتك أولاً</h2>
-    <div class="trust">
-      <div>🔒 محادثات خاصة<small>بين الطرفين فقط</small></div>
-      <div>✅ ملفات مراجَعة<small>قبل أن تظهر</small></div>
-      <div>🚫 حظر وإبلاغ<small>لحمايتك دائماً</small></div>
-      <div>🤝 بنيّة الزواج<small>موقع جاد لا للتسلية</small></div>
-    </div>
-  </section>
-
-  <section id="statsSec" style="display:none;padding-top:0">
-    <h2>مجتمع يكبر بصدق</h2>
-    <div class="stats">
-      <div><b id="stM">0</b><span>عضو مقبول</span></div>
-      <div id="stCBox"><b id="stC">0</b><span>دولة</span></div>
-    </div>
-  </section>
-
-  <section id="sponSec" style="display:none;padding-top:0">
-    <h2>شركاؤنا</h2>
-    <div class="spons" id="sponList"></div>
-    <p class="spon-note">الإعلانات المعروضة هنا من شركاء مباشرين، ولا نشارك معهم أي بيانات عن الأعضاء.</p>
-  </section>
-
-  <section class="cta" style="padding-top:0">
-    <div class="card">
-      <h2>ابدأ الآن</h2>
-      <p style="color:var(--muted)">التسجيل مجاني ولا يستغرق دقيقة.</p>
-      <a class="btn" href="auth.html">إنشاء حساب</a>
-    </div>
-  </section>
-
-  <footer><a href="install.html">تثبيت التطبيق</a> · <a href="faq.html">الأسئلة الشائعة</a> · <a href="contact.html">اتصل بنا</a> · <a href="contact.html">أعلن معنا</a> · <a href="legal.html#privacy">الخصوصية</a> · <a href="legal.html#terms">الشروط</a><br>© سنة الحياة — جميع الحقوق محفوظة</footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="i18n-dict.js?v=3"></script>
-  <script src="i18n.js?v=3"></script>
-  <script src="app.js?v=12"></script>
-  <script>
-
-    // أحاديث متناوبة: تتبدّل كل 8 ثوانٍ، وتُظهر النقاطُ الموضعَ ويمكن الضغط عليها
-    (function () {
-      var box = document.getElementById('hadith'), dots = document.getElementById('dots');
-      if (!box || !dots) return;
-      var items = box.querySelectorAll('.hd'); if (items.length < 2) return;
-      box.className += ' js';
-      var cur = Math.floor(Math.random() * items.length), timer = null, btns = [];
-      function show(i) {
-        cur = i;
-        for (var k = 0; k < items.length; k++) {
-          items[k].className = 'hd' + (k === i ? ' on' : '');
-          btns[k].className = k === i ? 'on' : '';
+        // تفعيل وحفظ المظهر الداكن في localStorage
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.checked = true;
         }
-      }
-      function reset() { clearInterval(timer); timer = setInterval(function () { show((cur + 1) % items.length); }, 8000); }
-      for (var j = 0; j < items.length; j++) {
-        (function (n) {
-          var b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', String(n + 1));
-          b.onclick = function () { show(n); reset(); };
-          dots.appendChild(b); btns.push(b);
-        })(j);
-      }
-      show(cur); reset();
-    })();
 
-    // ===== العرض المتحرك: 7 مشاهد، يبدأ عند ظهوره ويتوقف عند الخروج منه، والضغط عليه يوقفه/يشغّله =====
-    (function () {
-      var vid = document.getElementById('vid'); if (!vid) return;
-      var sc = vid.querySelectorAll('.vsc'), seg = document.getElementById('vseg'), btn = document.getElementById('vbtn');
-      var DUR = 4200, TICK = 100, cur = 0, t = 0, timer = null, playing = false, bars = [];
-      for (var k = 0; k < sc.length; k++) { var i = document.createElement('i'), b = document.createElement('b'); i.appendChild(b); seg.appendChild(i); bars.push(b); }
-      function show(n) {
-        cur = n; t = 0;
-        for (var k = 0; k < sc.length; k++) {
-          sc[k].className = 'vsc' + (k === n ? ' on' : '');
-          bars[k].style.width = k < n ? '100%' : '0';
-        }
-      }
-      function tick() {
-        t += TICK; bars[cur].style.width = Math.min(100, t / DUR * 100) + '%';
-        if (t >= DUR) show((cur + 1) % sc.length);
-      }
-      function play() { if (playing) return; playing = true; vid.classList.remove('paused'); btn.textContent = '❚❚'; timer = setInterval(tick, TICK); }
-      function pause() { playing = false; clearInterval(timer); vid.classList.add('paused'); btn.textContent = '▶'; }
-      function toggle() { playing ? pause() : play(); }
-      vid.onclick = toggle;
-      var userPaused = false;
-      vid.addEventListener('click', function () { userPaused = !playing; });
-      var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-      show(0);
-      if (still) { pause(); return; }
-      if ('IntersectionObserver' in window) {
-        new IntersectionObserver(function (es) {
-          es.forEach(function (e) { if (e.isIntersecting) { if (!userPaused) play(); } else if (playing) { pause(); } });
-        }, { threshold: 0.5 }).observe(vid);
-      } else play();
-      document.addEventListener('visibilitychange', function () { if (document.hidden && playing) pause(); });
-    })();
+        darkModeToggle.addEventListener('change', () => {
+            if (darkModeToggle.checked) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light');
+            }
+        });
 
-    // ===== مساحة الرعاة (إعلانات مباشرة بلا سكربتات خارجية) =====
-    // لإضافة راعٍ: أضف سطراً واحداً داخل القائمة. إن بقيت فارغة يختفي القسم كلياً.
-    // الحقول: name الاسم، desc وصف قصير، link رابط https، icon رمز تعبيري.
-    (function () {
-      var SPONSORS = [
-        // { name: 'قاعة الأفراح الفلانية', desc: 'خصم 10% لأعضاء سنة الحياة', link: 'https://example.com', icon: '🏛️' }
-      ];
-      if (!SPONSORS.length) return;
-      var box = document.getElementById('sponList');
-      SPONSORS.slice(0, 6).forEach(function (x) {
-        if (!x || !/^https:\/\//i.test(String(x.link || ''))) return;
-        var a = document.createElement('a');
-        a.className = 'spon'; a.href = x.link; a.target = '_blank';
-        a.rel = 'sponsored nofollow noopener noreferrer';
-        var t = document.createElement('i'); t.className = 'tag'; t.style.fontStyle = 'normal'; t.textContent = 'إعلان';
-        var ic = document.createElement('div'); ic.className = 'ic'; ic.textContent = x.icon || '✨';
-        var b = document.createElement('b'); b.textContent = x.name || '';
-        var d = document.createElement('span'); d.className = 'd'; d.textContent = x.desc || '';
-        a.appendChild(t); a.appendChild(ic); a.appendChild(b); a.appendChild(d);
-        box.appendChild(a);
-      });
-      if (box.children.length) document.getElementById('sponSec').style.display = 'block';
-    })();
-    // ===== أرقام حقيقية من قاعدة البيانات: لا تظهر إلا حين تصبح مقنعة =====
-    (function () {
-      var MIN_MEMBERS = 30;   // أقل عدد أعضاء مقبولين يظهر معه العدّاد (غيّره كما تشاء)
-      var MIN_COUNTRIES = 2;
-      if (typeof sb === 'undefined' || !sb.rpc) return;
-      function count(el, to) {
-        var from = 0, t0 = null;
-        function step(ts) {
-          if (t0 === null) t0 = ts;
-          var p = Math.min(1, (ts - t0) / 1200);
-          el.textContent = String(Math.round(from + (to - from) * (1 - Math.pow(1 - p, 3))));
-          if (p < 1) requestAnimationFrame(step);
-        }
-        requestAnimationFrame(step);
-      }
-      Promise.resolve(sb.rpc('public_stats')).then(function (r) {
-        var d = r && r.data; if (!d || !(d.members >= MIN_MEMBERS)) return;
-        document.getElementById('statsSec').style.display = 'block';
-        count(document.getElementById('stM'), d.members);
-        if (d.countries >= MIN_COUNTRIES) count(document.getElementById('stC'), d.countries);
-        else document.getElementById('stCBox').style.display = 'none';
-      }).catch(function () {});
-    })();
-    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
-    var deferredPrompt = null;
-    var installBtn = document.getElementById('install');
-    window.addEventListener('beforeinstallprompt', function (e) {
-      e.preventDefault();
-      deferredPrompt = e;
-      installBtn.style.display = 'inline-block';
-    });
-    installBtn.onclick = async function () {
-      if (!deferredPrompt) return;
-      deferredPrompt.prompt();
-      try { await deferredPrompt.userChoice; } catch (e) {}
-      deferredPrompt = null;
-      installBtn.style.display = 'none';
-    };
-    window.addEventListener('appinstalled', function () { installBtn.style.display = 'none'; });
-
-    // العضو مسجّل الدخول: نخفي «دخول / إنشاء حساب» ونظهر شريط حسابه (يضيفه app.js)
-    getSession().then(function (s) {
-      if (!s) return;
-      var top = document.querySelector('.top'); if (top) top.style.display = 'none';
-      var go = document.querySelector('.hero a.btn.gold');
-      if (go) { go.href = 'browse.html'; go.textContent = 'تصفّح الأعضاء'; }
-      var cta = document.querySelector('section.cta'); if (cta) cta.style.display = 'none';
-    }).catch(function () {});
-  </script>
+        // تغيير حجم الخط
+        fontSizeSelect.addEventListener('change', (e) => {
+            document.documentElement.style.setProperty('--font-size-base', e.target.value);
+        });
+    </script>
 </body>
 </html>
