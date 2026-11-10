@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة سنة الحياة | للتوفيق الميسر والزواج الشرعي</title>
-    <!-- خط Cairo لتصميم عصري يشبه منصة مودة -->
+    <!-- خط Cairo العصري لتجربة مستخدم مريحة -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <!-- مكتبة أيقونات FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -45,7 +45,7 @@
             font-size: var(--font-size-base);
         }
 
-        /* --- الهيدر وشريط التنقل العلوي --- */
+        /* --- شريط التنقل العلوي (Header) --- */
         .header-nav {
             background-color: var(--card-bg);
             border-bottom: 2px solid var(--primary);
@@ -124,13 +124,17 @@
             color: white;
         }
 
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
         .btn-outline {
             border: 1px solid var(--primary);
             color: var(--primary);
             background: transparent;
         }
 
-        /* --- القائمة الجانبية المنسدلة (Sidebar Drawer) --- */
+        /* --- القائمة الجانبية المنسدلة (Sidebar Drawer للأعدادات والتنقل) --- */
         .sidebar-overlay {
             position: fixed;
             top: 0;
@@ -208,25 +212,31 @@
             margin: 10px 0;
         }
 
-        /* --- القسم الرئيسي (Hero Search Banner) --- */
+        /* --- قسم الواجهة الرئيسية والبحث (Hero Search Banner) --- */
         .hero-banner {
-            background: linear-gradient(135deg, rgba(27,94,32,0.9), rgba(20,71,24,0.85)), url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80');
+            background: linear-gradient(135deg, rgba(27,94,32,0.92), rgba(20,71,24,0.88)), url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80');
             background-size: cover;
             background-position: center;
             color: white;
-            padding: 4rem 1.5rem;
+            padding: 4.5rem 1.5rem;
             text-align: center;
         }
 
         .hero-banner h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
+            font-size: 2.3rem;
+            margin-bottom: 12px;
+            font-weight: 800;
+        }
+
+        .hero-banner p {
+            font-size: 1.1rem;
+            opacity: 0.9;
         }
 
         .search-box {
             background: var(--card-bg);
             max-width: 850px;
-            margin: 2rem auto 0;
+            margin: 2.5rem auto 0;
             padding: 1.5rem;
             border-radius: var(--radius);
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
@@ -255,9 +265,10 @@
             border-radius: 6px;
             background: var(--card-bg);
             color: var(--text-color);
+            font-size: 0.95rem;
         }
 
-        /* --- شبكة الأعضاء المميزين --- */
+        /* --- شبكة الأعضاء والطلبات العامة --- */
         .section-container {
             max-width: 1100px;
             margin: 3rem auto;
@@ -269,11 +280,12 @@
             margin-bottom: 2rem;
             font-size: 1.6rem;
             color: var(--primary);
+            font-weight: 800;
         }
 
         .members-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 1.5rem;
         }
 
@@ -321,10 +333,10 @@
 </head>
 <body>
 
-    <!-- شريط العلوي (Header) -->
+    <!-- شريط التنقل العلوي -->
     <header class="header-nav">
         <div class="nav-right">
-            <button class="menu-toggle" id="openSidebar"><i class="fa-solid fa-bars"></i></button>
+            <button class="menu-toggle" id="openSidebar" title="القائمة الرئيسية"><i class="fa-solid fa-bars"></i></button>
             <a href="#" class="brand-logo">
                 <i class="fa-solid fa-heart"></i>
                 <span>سنة الحياة</span>
@@ -333,7 +345,7 @@
 
         <ul class="nav-links">
             <li><a href="#">الرئيسية</a></li>
-            <li><a href="#">البحث المتقدم</a></li>
+            <li><a href="#">عن المنصة</a></li>
             <li><a href="#">قصص نجاح</a></li>
         </ul>
 
@@ -343,7 +355,7 @@
         </div>
     </header>
 
-    <!-- القائمة الجانبية (Sidebar) -->
+    <!-- القائمة الجانبية (Sidebar Drawer) -->
     <div class="sidebar-overlay" id="overlay"></div>
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
@@ -356,10 +368,10 @@
             <li><a href="#"><i class="fa-solid fa-user-plus"></i> تسجيل حساب جديد</a></li>
             <li><a href="#"><i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول</a></li>
             <div class="sidebar-divider"></div>
-            <!-- قسم الإعدادات داخل القائمة الجانبية -->
+            <!-- إعدادات الموقع -->
             <li style="padding: 10px 1.5rem; font-size: 0.85rem; color: var(--text-muted); font-weight: bold;">إعدادات الموقع</li>
             <li>
-                <button id="darkModeBtn">
+                <button id="darkModeBtn" style="display:flex; align-items:center; width:100%;">
                     <i class="fa-solid fa-moon"></i> الوضع الداكن
                     <label class="switch" style="margin-right: auto;">
                         <input type="checkbox" id="darkToggle">
@@ -373,11 +385,12 @@
         </ul>
     </aside>
 
-    <!-- الواجهة الرئيسية (Hero Banner مع البحث السريع) -->
+    <!-- واجهة البداية والبحث السريع (Landing Hero) -->
     <section class="hero-banner">
         <h1>منصة سنة الحياة للتوافق والزواج الشرعي</h1>
-        <p>طريقك الميسر والآمن للبحث عن نصفك الآخر وفق القيم والأخلاق</p>
+        <p>بيئة عربية إسلامية آمنة وموثوقة للبحث عن شريك الحياة بضوابط وأخلاق</p>
 
+        <!-- نموذج البحث السريع للزوار -->
         <form class="search-box">
             <div class="form-group">
                 <label>أنا</label>
@@ -389,41 +402,42 @@
             </div>
             <div class="form-group">
                 <label>العمر</label>
-                <select><option>من 20 إلى 30</option><option>من 31 إلى 40</option></select>
+                <select><option>من 20 إلى 30 سنة</option><option>من 31 إلى 40 سنة</option></select>
             </div>
             <div class="form-group">
                 <label>البلد</label>
                 <select><option>المغرب</option><option>الكل</option></select>
             </div>
-            <button type="button" class="btn btn-primary" style="padding: 11px;"><i class="fa-solid fa-magnifying-glass"></i> بحث</button>
+            <button type="button" class="btn btn-primary" style="padding: 11px;"><i class="fa-solid fa-magnifying-glass"></i> بحث فوري</button>
         </form>
     </section>
 
-    <!-- الأعضاء المميزون -->
+    <!-- قسم طلبات التوافق العامة -->
     <main class="section-container">
-        <h2 class="section-title">طلبات التوافق الحديثة</h2>
+        <h2 class="section-title">أحدث طلبات التوافق المسجلة</h2>
         <div class="members-grid">
             <div class="member-card">
                 <div class="member-avatar"><i class="fa-solid fa-user"></i></div>
-                <h3>طلب #1084</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem;">28 سنة • إيموزار كندر</p>
-                <button class="btn btn-outline" style="width: 100%; margin-top: 15px;">عرض التفاصيل</button>
+                <h3>طلب توافق #1084</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin: 5px 0 15px;">28 سنة • إيموزار كندر</p>
+                <button class="btn btn-outline" style="width: 100%;">عرض التفاصيل</button>
             </div>
             <div class="member-card">
                 <div class="member-avatar"><i class="fa-solid fa-user"></i></div>
-                <h3>طلب #1085</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem;">25 سنة • فاس</p>
-                <button class="btn btn-outline" style="width: 100%; margin-top: 15px;">عرض التفاصيل</button>
+                <h3>طلب توافق #1085</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin: 5px 0 15px;">25 سنة • فاس</p>
+                <button class="btn btn-outline" style="width: 100%;">عرض التفاصيل</button>
             </div>
             <div class="member-card">
                 <div class="member-avatar"><i class="fa-solid fa-user"></i></div>
-                <h3>طلب #1086</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem;">32 سنة • مكناس</p>
-                <button class="btn btn-outline" style="width: 100%; margin-top: 15px;">عرض التفاصيل</button>
+                <h3>طلب توافق #1086</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin: 5px 0 15px;">32 سنة • مكناس</p>
+                <button class="btn btn-outline" style="width: 100%;">عرض التفاصيل</button>
             </div>
         </div>
     </main>
 
+    <!-- التحكم البرمجي للقائمة الجانبية والوضع الليلي -->
     <script>
         const openSidebar = document.getElementById('openSidebar');
         const closeSidebar = document.getElementById('closeSidebar');
@@ -431,7 +445,6 @@
         const overlay = document.getElementById('overlay');
         const darkToggle = document.getElementById('darkToggle');
 
-        // فتح وإغلاق القائمة الجانبية
         openSidebar.addEventListener('click', () => {
             sidebar.classList.add('active');
             overlay.classList.add('active');
