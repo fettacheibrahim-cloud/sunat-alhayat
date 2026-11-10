@@ -1935,5 +1935,25 @@ window.I18N_DICT = {
 "تعذّر الدخول:": [
 "Connexion impossible :",
 "Sign-in failed:"
+],
+"شركاؤنا": [
+"Nos partenaires",
+"Our partners"
+],
+"إعلان": [
+"Annonce",
+"Ad"
+],
+"الإعلانات المعروضة هنا من شركاء مباشرين، ولا نشارك معهم أي بيانات عن الأعضاء.": [
+"Les annonces affichées ici viennent de partenaires directs ; nous ne partageons aucune donnée sur les membres.",
+"The ads shown here come from direct partners; we share no member data with them."
+],
+"أعلن معنا": [
+"Annoncez avec nous",
+"Advertise with us"
+],
+"بالمتابعة عبر Google فإنك توافق على": [
+"En continuant avec Google, vous acceptez",
+"By continuing with Google you agree to the"
 ]
 };
