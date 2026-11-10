@@ -2259,5 +2259,133 @@ window.I18N_DICT = {
 "توافق": [
 "compat.",
 "match"
+],
+"مقالات": [
+"Articles",
+"Articles"
+],
+"انشر الموقع": [
+"Faire connaître le site",
+"Spread the word"
+],
+"📣 انشر الموقع": [
+"📣 Faire connaître le site",
+"📣 Spread the word"
+],
+"📖 مقالات ونصائح": [
+"📖 Articles et conseils",
+"📖 Articles and tips"
+],
+"سنة الحياة - انشر الموقع": [
+"Sunat Al-Hayat - Faire connaître le site",
+"Sunat Al-Hayat - Spread the word"
+],
+"سنة الحياة - مقالات ونصائح": [
+"Sunat Al-Hayat - Articles et conseils",
+"Sunat Al-Hayat - Articles and tips"
+],
+"كل من يسجّل بسبب مشاركتك يزيد فرص الجميع في إيجاد النصيب. اختر الطريقة الأسهل لك.": [
+"Chaque inscription grâce à vous augmente les chances de tous de trouver la bonne personne. Choisissez la méthode la plus simple.",
+"Every sign-up thanks to you increases everyone's chance of finding a match. Pick the easiest way for you."
+],
+"واتساب": [
+"WhatsApp",
+"WhatsApp"
+],
+"تيليغرام": [
+"Telegram",
+"Telegram"
+],
+"فيسبوك": [
+"Facebook",
+"Facebook"
+],
+"مشاركة…": [
+"Partager…",
+"Share…"
+],
+"🔗 نسخ رابط الموقع": [
+"🔗 Copier le lien du site",
+"🔗 Copy the site link"
+],
+"نصوص جاهزة للنشر": [
+"Textes prêts à publier",
+"Ready-to-post texts"
+],
+"انسخ النص وانشره في المجموعات (بعد استئذان المشرفين) أو أرسله لمن تعرف.": [
+"Copiez le texte et publiez-le dans des groupes (avec l'accord des modérateurs) ou envoyez-le à vos proches.",
+"Copy the text and post it in groups (with the moderators' permission) or send it to people you know."
+],
+"نسخ النص": [
+"Copier le texte",
+"Copy text"
+],
+"رمز QR": [
+"Code QR",
+"QR code"
+],
+"اطبعه أو انشره كصورة، فيفتح الموقع عند مسحه بكاميرا الهاتف.": [
+"Imprimez-le ou partagez-le en image : il ouvre le site quand on le scanne avec le téléphone.",
+"Print it or share it as an image: it opens the site when scanned with a phone camera."
+],
+"نصائح لنشر ناجح": [
+"Conseils pour bien le diffuser",
+"Tips for a successful campaign"
+],
+"ابدأ بدائرتك القريبة، فالتوصية الشخصية أقوى من أي إعلان.": [
+"Commencez par votre entourage : une recommandation personnelle vaut mieux que n'importe quelle publicité.",
+"Start with people close to you: a personal recommendation beats any ad."
+],
+"اشرح الفكرة بصدق ولا تعد بما لا يتحقق.": [
+"Expliquez l'idée honnêtement et ne promettez pas ce qui n'existe pas.",
+"Explain the idea honestly and do not promise what does not exist."
+],
+"لا تنشر الرابط عشوائياً في المجموعات، فاستأذن المشرف أولاً.": [
+"Ne diffusez pas le lien au hasard dans les groupes : demandez d'abord l'accord du modérateur.",
+"Do not spam the link in groups; ask the moderator first."
+],
+"لا تنشر بيانات أعضاء أو صورهم أو محادثاتهم أبداً.": [
+"Ne publiez jamais les données, photos ou conversations des membres.",
+"Never post members' details, photos or conversations."
+],
+"تم نسخ الرابط ✓": [
+"Lien copié ✓",
+"Link copied ✓"
+],
+"تعذّر النسخ، انسخ الرابط يدوياً.": [
+"Copie impossible, copiez le lien manuellement.",
+"Could not copy, please copy the link manually."
+],
+"تم نسخ النص ✓": [
+"Texte copié ✓",
+"Text copied ✓"
+],
+"تعذّر النسخ، حدّد النص وانسخه يدوياً.": [
+"Copie impossible, sélectionnez le texte et copiez-le manuellement.",
+"Could not copy, select the text and copy it manually."
+],
+"مقالات ونصائح": [
+"Articles et conseils",
+"Articles and tips"
+],
+"نصائح عملية تساعدك في رحلتك نحو زواج موفّق.": [
+"Des conseils pratiques pour un mariage réussi.",
+"Practical tips for your journey toward a happy marriage."
+],
+"← كل المقالات": [
+"← Tous les articles",
+"← All articles"
+],
+"جاهز لتبدأ رحلتك؟": [
+"Prêt à commencer ?",
+"Ready to start your journey?"
+],
+"سجّل مجاناً وأنشئ ملفك في دقائق.": [
+"Inscrivez-vous gratuitement et créez votre profil en quelques minutes.",
+"Sign up for free and create your profile in minutes."
+],
+"اقرأ أيضاً": [
+"À lire aussi",
+"Read also"
 ]
 };
