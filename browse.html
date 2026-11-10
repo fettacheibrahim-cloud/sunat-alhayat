@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://yepoakpeqonheksryalx.supabase.co; media-src 'self' blob: https://yepoakpeqonheksryalx.supabase.co; connect-src 'self' https://yepoakpeqonheksryalx.supabase.co https://api.mymemory.translated.net; object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'self'">
   <title>سنة الحياة - التصفح</title>
-  <link rel="stylesheet" href="style.css?v=10">
+  <link rel="stylesheet" href="style.css?v=11">
   <style>
     .flt{background:#fff;border:1px solid var(--line);border-radius:var(--radius);margin:10px 0 4px;box-shadow:var(--shadow)}
     .flt summary{cursor:pointer;padding:12px 16px;font-weight:700;color:var(--green);list-style:none;display:flex;justify-content:space-between;align-items:center}
@@ -20,13 +20,20 @@
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <h1>تصفّح الأعضاء</h1>
+  <main class="wrap wide">
+    <div class="pg-head"><h1>تصفّح الأعضاء</h1></div>
     <div class="tabsx"><a class="on" href="browse.html">🔍 التصفح</a><a href="favorites.html">❤️ المفضلة</a></div>
     <p id="msg" style="display:none"></p>
     <p id="quota" class="quota" style="display:none"></p>
 
     <div id="tools" style="display:none">
+      <div class="qchips" id="qchips">
+        <button type="button" class="qc on" data-q="">الكل</button>
+        <button type="button" class="qc" data-q="new">🆕 الجدد</button>
+        <button type="button" class="qc" data-q="compat">🎯 الأعلى توافقاً</button>
+        <button type="button" class="qc" data-q="vf">✓ الموثّقون</button>
+        <button type="button" class="qc" data-q="vip">⭐ المميزون</button>
+      </div>
       <details class="flt" id="flt">
         <summary><span>🔎 تصفية وترتيب <b id="fcount"></b></span><span>▾</span></summary>
         <div class="body">
@@ -57,22 +64,26 @@
           <div class="full"><button id="f_reset" type="button" class="btn ghost sm block">مسح الفلاتر</button></div>
         </div>
       </details>
+      <div class="afl" id="afl"></div>
       <p id="cnt" class="cnt"></p>
     </div>
 
-    <div id="grid" class="grid"></div>
+    <div id="grid" class="grid"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
+    <button id="more" type="button" class="btn ghost more" style="display:none"></button>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="i18n-dict.js?v=3"></script>
+  <script src="i18n-dict.js?v=4"></script>
   <script src="i18n.js?v=3"></script>
-  <script src="app.js?v=12"></script>
+  <script src="app.js?v=13"></script>
   <script src="compat.js?v=1"></script>
   <script>
     const $ = id => document.getElementById(id);
     const F_IDS = ['f_min', 'f_max', 'f_country', 'f_city', 'f_mar', 'f_edu', 'f_rel', 'f_vf', 'f_sort'];
     const F_KEY = 'browse_filters';
-    let me = null, mine = null, all = [];
+    let me = null, mine = null, all = [], quick = '', shown = 12;
+    const PAGE = 12, WEEK = 7 * 864e5;
+    const FLBL = { f_min: 'العمر من', f_max: 'العمر إلى', f_country: 'الدولة', f_city: 'المدينة', f_mar: 'الحالة', f_edu: 'الدراسة', f_rel: 'الالتزام', f_vf: 'التوثيق' };
     const sentTo = new Set(), favs = new Set(), vipSet = new Set(), vfSet = new Set();
 
     function el(tag, cls, text) {
@@ -123,35 +134,55 @@
       loadQuota();
     }
 
+    function ring(pct) {
+      const NS = 'http://www.w3.org/2000/svg', C = 2 * Math.PI * 22;
+      const w = el('div', 'ring ' + pctClass(pct).replace('pct', '').trim());
+      const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', '0 0 56 56');
+      const bg = document.createElementNS(NS, 'circle'); bg.setAttribute('cx', 28); bg.setAttribute('cy', 28); bg.setAttribute('r', 22); bg.setAttribute('class', 'bg');
+      const fg = document.createElementNS(NS, 'circle'); fg.setAttribute('cx', 28); fg.setAttribute('cy', 28); fg.setAttribute('r', 22); fg.setAttribute('class', 'fg');
+      fg.setAttribute('stroke-dasharray', C.toFixed(1)); fg.setAttribute('stroke-dashoffset', (C * (1 - pct / 100)).toFixed(1));
+      svg.append(bg, fg); w.appendChild(svg);
+      w.appendChild(el('b', '', pct + '٪'));
+      w.appendChild(el('small', '', 'توافق'));
+      return w;
+    }
+
     function card(p) {
       const vip = vipSet.has(p.id);
       const c = el('div', vip ? 'p pro' : 'p');
-      const hd = el('div', 'hd');
-      hd.appendChild(el('div', 'av', (p.first_name || '؟').charAt(0).toUpperCase()));
-      const who = el('div', 'who');
+      const cv = el('div', 'cv'); if (p._c) cv.appendChild(ring(p._c.pct)); c.appendChild(cv);
+      const bd = el('div', 'bd');
+      bd.appendChild(el('div', 'av', (p.first_name || '؟').charAt(0).toUpperCase()));
       const nm = el('div', 'nm', p.first_name || 'عضو');
       if (vip) nm.appendChild(el('span', 'vip', '⭐ مميز'));
       if (vfSet.has(p.id)) nm.appendChild(el('span', 'vf', '✓ موثّق'));
-      who.appendChild(nm);
-      who.appendChild(el('div', 'meta', [ageOf(p.birth_date) ? ageOf(p.birth_date) + ' سنة' : '', [p.city, p.country].filter(Boolean).join('، ')].filter(Boolean).join(' · ')));
-      hd.appendChild(who);
-      if (p._c) hd.appendChild(el('span', pctClass(p._c.pct), p._c.pct + '٪ توافق'));
-      c.appendChild(hd);
+      if (p.created_at && Date.now() - new Date(p.created_at).getTime() < WEEK) nm.appendChild(el('span', 'new', 'جديد'));
+      bd.appendChild(nm);
+
+      const m2 = el('div', 'm2');
+      const mi = (ic, t) => { const sp = el('span'); sp.appendChild(el('i', '', ic)); sp.appendChild(document.createTextNode(t)); m2.appendChild(sp); };
+      if (ageOf(p.birth_date)) mi('🎂', ageOf(p.birth_date) + ' سنة');
+      const loc = [p.city, p.country].filter(Boolean).join('، '); if (loc) mi('📍', loc);
+      if (p.height_cm) mi('📏', p.height_cm + ' سم');
+      bd.appendChild(m2);
 
       const chips = el('div', 'chips');
       [LBL.marital[p.marital_status], LBL.edu[p.education], LBL.religiosity[p.religiosity], p.occupation].forEach(t => { if (t) chips.appendChild(el('span', 'chip', t)); });
-      if (chips.children.length) c.appendChild(chips);
-      if (p.bio) c.appendChild(el('p', 'bio', p.bio));
+      if (chips.children.length) bd.appendChild(chips);
+
+      if (p._c && p._c.reasons && p._c.reasons.length) { const w = el('p', 'why'); p._c.reasons.slice(0, 3).forEach(r => w.appendChild(el('span', 'rs', r))); bd.appendChild(w); }
+      if (p.bio) bd.appendChild(el('p', 'bio', p.bio));
 
       const acts = el('div', 'acts');
-      const view = el('a', 'btn ghost', 'عرض الملف'); view.href = 'member.html?id=' + p.id;
-      const send = el('button', 'btn');
+      const send = el('button', 'btn go');
       if (sentTo.has(p.id)) { send.textContent = 'تم الإرسال ✓'; send.disabled = true; }
       else { send.textContent = 'اهتمام 💌'; send.onclick = () => sendInterest(p, send); }
+      const view = el('a', 'btn ghost', 'الملف'); view.href = 'member.html?id=' + p.id;
       const h = el('button', 'btn ghost heart' + (favs.has(p.id) ? ' on' : ''), favs.has(p.id) ? '❤️' : '🤍');
       h.type = 'button'; h.title = 'حفظ في المفضلة'; h.onclick = () => toggleFav(p, h);
-      acts.append(view, send, h);
-      c.appendChild(acts);
+      acts.append(send, view, h);
+      bd.appendChild(acts);
+      c.appendChild(bd);
       return c;
     }
 
@@ -196,17 +227,29 @@
         if (edu && p.education !== edu) return false;
         if (rel && p.religiosity !== rel) return false;
         if ($('f_vf').value && !vfSet.has(p.id)) return false;
+        if (quick === 'new' && !(p.created_at && Date.now() - new Date(p.created_at).getTime() < 30 * 864e5)) return false;
+        if (quick === 'vf' && !vfSet.has(p.id)) return false;
+        if (quick === 'vip' && !vipSet.has(p.id)) return false;
         return true;
       });
-      if ($('f_sort').value === 'compat') {
+      if ($('f_sort').value === 'compat' || quick === 'compat') {
         list = list.slice().sort((x, y) => ((y._c ? y._c.pct : -1) - (x._c ? x._c.pct : -1)));
       }
 
       const g = $('grid'); g.innerHTML = '';
+      const af = $('afl'); af.textContent = '';
+      F_IDS.forEach(i => {
+        const v = $(i).value.trim(); if (!v || i === 'f_sort') return;
+        const t = $(i).tagName === 'SELECT' ? $(i).options[$(i).selectedIndex].text.replace(/\s*\(\d+\)$/, '') : v;
+        const b = el('button', '', (FLBL[i] || '') + ': ' + t); b.type = 'button';
+        b.onclick = () => { $(i).value = ''; saveFilters(); shown = PAGE; render(); };
+        af.appendChild(b);
+      });
       const n = activeCount();
       $('fcount').textContent = n ? '(' + n + ')' : '';
       $('cnt').textContent = 'عدد النتائج: ' + list.length + (list.length !== all.length ? ' من ' + all.length : '');
 
+      $('more').style.display = 'none';
       if (!list.length) {
         const e = el('div', 'empty');
         e.appendChild(el('b', '', all.length ? 'لا توجد نتائج مطابقة' : 'لا يوجد أعضاء متاحون حالياً'));
@@ -214,7 +257,10 @@
         g.appendChild(e);
         return;
       }
-      list.forEach(p => g.appendChild(card(p)));
+      list.slice(0, shown).forEach(p => g.appendChild(card(p)));
+      const mb = $('more');
+      if (list.length > shown) { mb.style.display = 'block'; mb.textContent = ''; mb.appendChild(document.createTextNode('عرض المزيد')); mb.appendChild(el('span', '', ' (' + (list.length - shown) + ')')); }
+      else mb.style.display = 'none';
     }
 
     (async () => {
@@ -224,8 +270,8 @@
 
       const { data: m } = await sb.from('profiles').select('*').eq('id', me).maybeSingle();
       mine = m;
-      if (!mine) { showMsg('msg', 'أكمل ملفك الشخصي أولاً', 'error'); return; }
-      if (mine.status !== 'approved') { showNotApproved('msg', mine, 'حسابك قيد المراجعة. سيظهر التصفح بعد قبوله.'); return; }
+      if (!mine) { $('grid').textContent = ''; showMsg('msg', 'أكمل ملفك الشخصي أولاً', 'error'); return; }
+      if (mine.status !== 'approved') { $('grid').textContent = ''; showNotApproved('msg', mine, 'حسابك قيد المراجعة. سيظهر التصفح بعد قبوله.'); return; }
 
       const hidden = new Set();
       const { data: ints } = await sb.from('interests').select('from_id,to_id,status')
@@ -246,7 +292,7 @@
       const { data, error } = await sb.from('profiles').select('*')
         .eq('status', 'approved').eq('gender', opposite).neq('id', me)
         .order('created_at', { ascending: false });
-      if (error) { showMsg('msg', 'خطأ: ' + error.message, 'error'); return; }
+      if (error) { $('grid').textContent = ''; showMsg('msg', 'خطأ: ' + error.message, 'error'); return; }
 
       try {
         const v = await sb.rpc('premium_ids');
@@ -266,8 +312,14 @@
       fillCountries();
       loadFilters();
       if (activeCount() > 0) $('flt').open = true;
-      F_IDS.forEach(i => $(i).addEventListener('input', () => { saveFilters(); render(); }));
-      $('f_reset').onclick = () => { F_IDS.forEach(i => { $(i).value = ''; }); saveFilters(); render(); };
+      F_IDS.forEach(i => $(i).addEventListener('input', () => { saveFilters(); shown = PAGE; render(); }));
+      $('more').onclick = () => { shown += PAGE; render(); };
+      document.querySelectorAll('#qchips .qc').forEach(b => b.onclick = () => {
+        quick = b.dataset.q; shown = PAGE;
+        document.querySelectorAll('#qchips .qc').forEach(x => x.classList.toggle('on', x === b));
+        render();
+      });
+      $('f_reset').onclick = () => { F_IDS.forEach(i => { $(i).value = ''; }); saveFilters(); shown = PAGE; render(); };
       render();
     })();
   </script>
