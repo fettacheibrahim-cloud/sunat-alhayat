@@ -68,6 +68,7 @@ async function logout() {
   const me = session.user.id;
 
   const links = [
+    ['home.html', 'لوحتي', '🏠'],
     ['browse.html', 'التصفح', '🔍'],
     ['interests.html', 'الاهتمامات', '💌'],
     ['messages.html', 'المحادثات', '💬'],
