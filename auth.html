@@ -13,6 +13,7 @@
     .social i{font:700 15px/1 'Tajawal',sans-serif;font-style:normal;width:26px;height:26px;border-radius:50%;
       display:inline-flex;align-items:center;justify-content:center;background:var(--sand);color:var(--green);flex:none}
     .note{font-size:12.5px;color:var(--muted);line-height:1.8;margin:12px 0 0;text-align:center}
+      [hidden]{display:none!important}
   </style>
 </head>
 <body>
@@ -35,8 +36,8 @@
     <p id="msg" style="display:none;margin-top:12px"></p>
     <div class="or"><span>أو</span></div>
     <button type="button" class="btn ghost social" id="gBtn"><i>G</i><span>المتابعة عبر Google</span></button>
-    <button type="button" class="btn ghost social" id="fBtn"><i>f</i><span>المتابعة عبر Facebook</span></button>
-    <p class="note">بالمتابعة عبر Google أو Facebook فإنك توافق على <a href="legal.html#terms" target="_blank">الشروط وسياسة الخصوصية</a>.</p>
+    <button type="button" class="btn ghost social" id="fBtn" hidden><i>f</i><span>المتابعة عبر Facebook</span></button>
+    <p class="note"><span id="noteG">بالمتابعة عبر Google فإنك توافق على</span><span id="noteGF" hidden>بالمتابعة عبر Google أو Facebook فإنك توافق على</span> <a href="legal.html#terms" target="_blank">الشروط وسياسة الخصوصية</a>.</p>
     <p style="text-align:center;margin-top:16px">
       <a href="#" id="toggle">ليس لديك حساب؟ سجّل الآن</a>
     </p>
@@ -80,6 +81,9 @@
         btn.disabled = false;
       }
     }
+    // زر Facebook مخفي حتى يُنشر تطبيق Facebook (Live). لإظهاره غيّر false إلى true ثم ارفع الملف.
+    const FACEBOOK_ENABLED = false;
+    if (FACEBOOK_ENABLED) { $('fBtn').hidden = false; $('noteG').hidden = true; $('noteGF').hidden = false; }
     $('gBtn').onclick = () => social('google', $('gBtn'));
     $('fBtn').onclick = () => social('facebook', $('fBtn'));
 
