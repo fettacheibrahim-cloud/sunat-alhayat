@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة سنة الحياة | للتوفيق الميسر والزواج الشرعي</title>
-    <!-- خط Cairo العصري لتجربة مستخدم مريحة -->
+    <!-- خط Cairo العصري -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <!-- مكتبة أيقونات FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -43,13 +43,14 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-size: var(--font-size-base);
+            overflow-x: hidden;
         }
 
-        /* --- شريط التنقل العلوي (Header) --- */
+        /* --- شريط التنقل العلوي المتجاوب --- */
         .header-nav {
             background-color: var(--card-bg);
             border-bottom: 2px solid var(--primary);
-            padding: 0.8rem 2rem;
+            padding: 0.8rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -62,24 +63,25 @@
         .nav-right {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
         .menu-toggle {
             background: none;
             border: none;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             color: var(--primary);
             cursor: pointer;
+            padding: 5px;
         }
 
         .brand-logo {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 800;
             color: var(--primary);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             text-decoration: none;
         }
 
@@ -87,9 +89,10 @@
             color: var(--accent);
         }
 
+        /* إخفاء الروابط العادية في الشاشات الصغيرة لمنع التكدس */
         .nav-links {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             list-style: none;
         }
 
@@ -97,7 +100,7 @@
             text-decoration: none;
             color: var(--text-color);
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
 
         .nav-links a:hover {
@@ -106,16 +109,16 @@
 
         .auth-btns {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .btn {
-            padding: 8px 18px;
+            padding: 6px 14px;
             border-radius: 6px;
             font-weight: 700;
             cursor: pointer;
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             border: none;
         }
 
@@ -134,7 +137,14 @@
             background: transparent;
         }
 
-        /* --- القائمة الجانبية المنسدلة (Sidebar Drawer للأعدادات والتنقل) --- */
+        /* عند الشاشات الصغيرة، نخفي الروابط الكلاسيكية ونعتمد على القائمة الجانبية */
+        @media (max-width: 768px) {
+            .nav-links, .auth-btns {
+                display: none;
+            }
+        }
+
+        /* --- القائمة الجانبية الصحيحة (Sidebar Drawer) --- */
         .sidebar-overlay {
             position: fixed;
             top: 0;
@@ -143,10 +153,10 @@
             height: 100vh;
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(2px);
-            z-index: 99;
+            z-index: 998;
             opacity: 0;
             visibility: hidden;
-            transition: 0.3s;
+            transition: 0.3s ease;
         }
 
         .sidebar-overlay.active {
@@ -157,25 +167,25 @@
         .sidebar {
             position: fixed;
             top: 0;
-            right: -320px;
-            width: 300px;
+            right: -300px; /* مخفية تماماً باليمين */
+            width: 280px;
             height: 100vh;
             background: var(--card-bg);
-            z-index: 100;
-            transition: right 0.3s ease;
+            z-index: 999;
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            box-shadow: -4px 0 15px rgba(0,0,0,0.1);
+            box-shadow: -5px 0 20px rgba(0,0,0,0.15);
         }
 
         .sidebar.active {
-            right: 0;
+            right: 0; /* تنزلق للداخل */
         }
 
         .sidebar-header {
             background: var(--primary);
             color: white;
-            padding: 1.5rem;
+            padding: 1.2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -183,7 +193,8 @@
 
         .sidebar-menu {
             list-style: none;
-            padding: 1rem 0;
+            padding: 0.5rem 0;
+            overflow-y: auto;
         }
 
         .sidebar-menu li a, .sidebar-menu li button {
@@ -199,6 +210,7 @@
             border: none;
             text-align: right;
             cursor: pointer;
+            font-size: 0.95rem;
         }
 
         .sidebar-menu li a:hover, .sidebar-menu li button:hover {
@@ -209,114 +221,114 @@
         .sidebar-divider {
             height: 1px;
             background: var(--border-color);
-            margin: 10px 0;
+            margin: 8px 0;
         }
 
-        /* --- قسم الواجهة الرئيسية والبحث (Hero Search Banner) --- */
+        /* --- واجهة البداية والبحث السريع --- */
         .hero-banner {
             background: linear-gradient(135deg, rgba(27,94,32,0.92), rgba(20,71,24,0.88)), url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80');
             background-size: cover;
             background-position: center;
             color: white;
-            padding: 4.5rem 1.5rem;
+            padding: 3.5rem 1rem;
             text-align: center;
         }
 
         .hero-banner h1 {
-            font-size: 2.3rem;
-            margin-bottom: 12px;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
             font-weight: 800;
         }
 
         .hero-banner p {
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             opacity: 0.9;
         }
 
         .search-box {
             background: var(--card-bg);
-            max-width: 850px;
-            margin: 2.5rem auto 0;
-            padding: 1.5rem;
+            max-width: 800px;
+            margin: 2rem auto 0;
+            padding: 1.2rem;
             border-radius: var(--radius);
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
             align-items: end;
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 4px;
             text-align: right;
         }
 
         .form-group label {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
             font-weight: 700;
         }
 
         .form-group select {
-            padding: 10px;
+            padding: 9px;
             border: 1px solid var(--border-color);
             border-radius: 6px;
             background: var(--card-bg);
             color: var(--text-color);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
 
-        /* --- شبكة الأعضاء والطلبات العامة --- */
+        /* --- شبكة الطلبات --- */
         .section-container {
             max-width: 1100px;
-            margin: 3rem auto;
-            padding: 0 1.5rem;
+            margin: 2.5rem auto;
+            padding: 0 1rem;
         }
 
         .section-title {
             text-align: center;
-            margin-bottom: 2rem;
-            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
             color: var(--primary);
             font-weight: 800;
         }
 
         .members-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.2rem;
         }
 
         .member-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
-            padding: 1.5rem;
+            padding: 1.2rem;
             text-align: center;
             box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
         .member-avatar {
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             background: #e8f5e9;
             color: var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
-            margin: 0 auto 1rem;
+            font-size: 1.6rem;
+            margin: 0 auto 0.8rem;
         }
 
         /* مفتاح التبديل للوضع الليلي */
         .switch {
             position: relative;
             display: inline-block;
-            width: 40px;
-            height: 22px;
+            width: 38px;
+            height: 20px;
         }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider {
@@ -324,7 +336,7 @@
             background-color: #ccc; transition: .4s; border-radius: 20px;
         }
         .slider:before {
-            position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px;
+            position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px;
             background-color: white; transition: .4s; border-radius: 50%;
         }
         input:checked + .slider { background-color: var(--primary); }
@@ -343,6 +355,7 @@
             </a>
         </div>
 
+        <!-- الروابط العادية (تظهر فقط في الشاشات الكبيرة) -->
         <ul class="nav-links">
             <li><a href="#">الرئيسية</a></li>
             <li><a href="#">عن المنصة</a></li>
@@ -355,21 +368,22 @@
         </div>
     </header>
 
-    <!-- القائمة الجانبية (Sidebar Drawer) -->
+    <!-- الخلفية المعتمة للقائمة الجانبية -->
     <div class="sidebar-overlay" id="overlay"></div>
+
+    <!-- القائمة الجانبية المنسدلة الصحيحة -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h3>قائمة التنقل</h3>
             <button id="closeSidebar" style="background:none; border:none; color:white; font-size:1.2rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="#"><i class="fa-solid fa-house"></i> الصفحة الرئيسية</a></li>
+            <li><a href="#"><i class="fa-solid fa-house"></i> الرئيسية</a></li>
             <li><a href="#"><i class="fa-solid fa-magnifying-glass"></i> البحث المتقدم</a></li>
             <li><a href="#"><i class="fa-solid fa-user-plus"></i> تسجيل حساب جديد</a></li>
             <li><a href="#"><i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول</a></li>
             <div class="sidebar-divider"></div>
-            <!-- إعدادات الموقع -->
-            <li style="padding: 10px 1.5rem; font-size: 0.85rem; color: var(--text-muted); font-weight: bold;">إعدادات الموقع</li>
+            <li style="padding: 8px 1.5rem; font-size: 0.8rem; color: var(--text-muted); font-weight: bold;">إعدادات الموقع</li>
             <li>
                 <button id="darkModeBtn" style="display:flex; align-items:center; width:100%;">
                     <i class="fa-solid fa-moon"></i> الوضع الداكن
@@ -385,12 +399,11 @@
         </ul>
     </aside>
 
-    <!-- واجهة البداية والبحث السريع (Landing Hero) -->
+    <!-- واجهة البداية والبحث السريع -->
     <section class="hero-banner">
         <h1>منصة سنة الحياة للتوافق والزواج الشرعي</h1>
-        <p>بيئة عربية إسلامية آمنة وموثوقة للبحث عن شريك الحياة بضوابط وأخلاق</p>
+        <p>بيئة عربية إسلامية آمنة وموثوقة للبحث عن شريك الحياة</p>
 
-        <!-- نموذج البحث السريع للزوار -->
         <form class="search-box">
             <div class="form-group">
                 <label>أنا</label>
@@ -408,7 +421,7 @@
                 <label>البلد</label>
                 <select><option>المغرب</option><option>الكل</option></select>
             </div>
-            <button type="button" class="btn btn-primary" style="padding: 11px;"><i class="fa-solid fa-magnifying-glass"></i> بحث فوري</button>
+            <button type="button" class="btn btn-primary" style="padding: 10px;"><i class="fa-solid fa-magnifying-glass"></i> بحث فوري</button>
         </form>
     </section>
 
@@ -419,25 +432,19 @@
             <div class="member-card">
                 <div class="member-avatar"><i class="fa-solid fa-user"></i></div>
                 <h3>طلب توافق #1084</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin: 5px 0 15px;">28 سنة • إيموزار كندر</p>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin: 5px 0 12px;">28 سنة • إيموزار كندر</p>
                 <button class="btn btn-outline" style="width: 100%;">عرض التفاصيل</button>
             </div>
             <div class="member-card">
                 <div class="member-avatar"><i class="fa-solid fa-user"></i></div>
                 <h3>طلب توافق #1085</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin: 5px 0 15px;">25 سنة • فاس</p>
-                <button class="btn btn-outline" style="width: 100%;">عرض التفاصيل</button>
-            </div>
-            <div class="member-card">
-                <div class="member-avatar"><i class="fa-solid fa-user"></i></div>
-                <h3>طلب توافق #1086</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin: 5px 0 15px;">32 سنة • مكناس</p>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin: 5px 0 12px;">25 سنة • فاس</p>
                 <button class="btn btn-outline" style="width: 100%;">عرض التفاصيل</button>
             </div>
         </div>
     </main>
 
-    <!-- التحكم البرمجي للقائمة الجانبية والوضع الليلي -->
+    <!-- كود JavaScript للتحكم بالقائمة والأزرار -->
     <script>
         const openSidebar = document.getElementById('openSidebar');
         const closeSidebar = document.getElementById('closeSidebar');
