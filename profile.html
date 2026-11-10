@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://yepoakpeqonheksryalx.supabase.co; media-src 'self' blob: https://yepoakpeqonheksryalx.supabase.co; connect-src 'self' https://yepoakpeqonheksryalx.supabase.co https://api.mymemory.translated.net; object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'self'">
   <title>سنة الحياة - ملفي</title>
-  <link rel="stylesheet" href="style.css?v=10">
+  <link rel="stylesheet" href="style.css?v=11">
   <style>
     .f label{display:block;margin:12px 0 4px;font-weight:700}
     .st{display:inline-block;padding:4px 14px;border-radius:999px;font-size:14px;background:#eee}
@@ -23,8 +23,10 @@
   </style>
 </head>
 <body>
-  <main class="card" style="max-width:600px;margin:20px auto;padding:22px">
+  <main class="card" style="max-width:640px;margin:20px auto;padding:22px">
     <h1>ملفي الشخصي</h1>
+    <div class="mhead"><b id="cpct">0٪</b><span>اكتمال الملف</span></div>
+    <div class="meter"><b id="cbar"></b></div>
     <p id="email" style="color:var(--muted)"></p>
     <p>حالة الحساب: <span id="st" class="st">...</span></p>
     <p id="pushBox" style="display:none"><button type="button" id="pushTest" class="btn ghost sm">🔔 جرّب إشعاراً الآن</button></p>
@@ -48,6 +50,7 @@
     </div>
 
     <form id="form" class="f">
+      <div class="sect"><h3><i>🪪</i>المعلومات الأساسية</h3>
       <label>الاسم الأول</label><input id="first_name" required>
       <label>الجنس</label>
       <select id="gender" required><option value="">اختر</option><option value="male">ذكر</option><option value="female">أنثى</option></select>
@@ -60,9 +63,10 @@
       <select id="education"><option value="">اختر</option><option value="secondary">ثانوي</option><option value="diploma">دبلوم</option><option value="bachelor">إجازة / بكالوريوس</option><option value="postgraduate">دراسات عليا</option></select>
       <label>المهنة</label><input id="occupation" maxlength="60" placeholder="مثال: معلّم، مهندسة، طالب…">
       <label>الطول (سم)</label><input id="height_cm" type="number" inputmode="numeric" min="120" max="230" placeholder="مثال: 175">
+      </div>
 
-      <h3 style="margin-top:22px">القيم ونمط الحياة</h3>
-      <p style="margin:0;color:var(--muted);font-size:14px">اختيارية، لكنها ترفع دقة نسبة التوافق وتساعد الطرف الآخر على معرفتك.</p>
+      <div class="sect"><h3><i>🌙</i>القيم ونمط الحياة</h3>
+      <p class="hint">اختيارية، لكنها ترفع دقة نسبة التوافق وتساعد الطرف الآخر على معرفتك.</p>
       <label>درجة الالتزام</label>
       <select id="religiosity"><option value="">اختر</option><option value="practicing">ملتزم/ة</option><option value="moderate">متوسّط الالتزام</option><option value="learning">في طريق الالتزام</option></select>
       <label>المحافظة على الصلاة</label>
@@ -71,10 +75,12 @@
       <select id="smoking"><option value="">اختر</option><option value="no">لا أدخّن</option><option value="quit">أقلعت عنه</option><option value="yes">أدخّن</option></select>
       <label>الرغبة في الأطفال</label>
       <select id="wants_children"><option value="">اختر</option><option value="yes">نعم</option><option value="open">منفتح/ة على الأمر</option><option value="no">لا</option></select>
+      </div>
 
-      <h3 style="margin-top:22px">عنّي</h3>
+      <div class="sect"><h3><i>✍️</i>عنّي</h3>
       <label>نبذة عني</label><textarea id="bio" rows="4"></textarea>
       <label>ما الذي أبحث عنه</label><textarea id="looking_for" rows="3"></textarea>
+      </div>
       <button id="save" type="submit" class="btn" style="width:100%;margin-top:18px">حفظ</button>
     </form>
     <button id="out" class="btn ghost" style="width:100%;margin-top:12px">تسجيل الخروج</button>
@@ -82,15 +88,22 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="i18n-dict.js?v=3"></script>
+  <script src="i18n-dict.js?v=4"></script>
   <script src="i18n.js?v=3"></script>
-  <script src="app.js?v=12"></script>
+  <script src="app.js?v=13"></script>
   <script>
     const $ = id => document.getElementById(id);
     const fields = ['first_name','gender','birth_date','country','city','marital_status','education','occupation','height_cm','religiosity','prayer','smoking','wants_children','bio','looking_for'];
     const stAr = { pending:'قيد المراجعة', approved:'مقبول', suspended:'موقوف' };
     let uid = null, exists = false, photoPath = null;
 
+    const CITEMS = [['first_name', 8], ['birth_date', 8], ['country', 8], ['city', 8], ['marital_status', 8], ['education', 6], ['occupation', 6], ['height_cm', 4], ['religiosity', 8], ['prayer', 6], ['smoking', 4], ['wants_children', 6], ['bio', 10], ['looking_for', 6]];
+    function updateMeter() {
+      let got = 0, tot = 4; if (photoPath) got += 4;
+      CITEMS.forEach(([k, w]) => { tot += w; const e = $(k); if (e && String(e.value).trim() !== '') got += w; });
+      const p = Math.round(got / tot * 100);
+      $('cpct').textContent = p + '٪'; $('cbar').style.width = p + '%';
+    }
     function msg(t, type) { const e = $('msg'); e.textContent = t; e.className = 'msg ' + type; e.style.display = 'block'; window.scrollTo(0, 0); }
     function setStatus(s, reason) {
       $('st').textContent = stAr[s] || 'لم يُنشأ بعد'; $('st').className = 'st ' + (s || '');
@@ -170,7 +183,7 @@
         if (up.error) throw new Error('التخزين: ' + up.error.message);
         const r = await sb.from('profiles').update({ photo_path: path }).eq('id', uid);
         if (r.error) throw new Error('الملف: ' + r.error.message);
-        photoPath = path; await showPhoto(); msg('تم رفع الصورة ✓', 'ok');
+        photoPath = path; await showPhoto(); updateMeter(); msg('تم رفع الصورة ✓', 'ok');
       } catch (err) {
         msg('تعذّر رفع الصورة: ' + (err && err.message ? err.message : err), 'error');
       }
@@ -215,7 +228,7 @@
       if (!confirm('حذف الصورة؟')) return;
       await sb.storage.from('photos').remove([photoPath]);
       await sb.from('profiles').update({ photo_path: null }).eq('id', uid);
-      photoPath = null; showPhoto(); msg('تم حذف الصورة', 'ok');
+      photoPath = null; showPhoto(); updateMeter(); msg('تم حذف الصورة', 'ok');
     };
 
     $('photo_visible_to_matches').onchange = async e => {
@@ -236,7 +249,9 @@
         $('photo_visible_to_matches').checked = !!data.photo_visible_to_matches;
         photoPath = data.photo_path; setStatus(data.status, data.reject_reason);
       } else setStatus(null);
-      enablePhoto(); showPhoto();
+      enablePhoto(); showPhoto(); updateMeter();
+      $('form').addEventListener('input', updateMeter);
+      $('form').addEventListener('change', updateMeter);
     })();
 
     $('form').onsubmit = async e => {
