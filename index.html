@@ -1,453 +1,384 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة سنة الحياة | للتوفيق الميسر والزواج الشرعي</title>
-    <!-- خط Cairo العصري -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- مكتبة أيقونات FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        :root {
-            --primary: #1b5e20;
-            --primary-hover: #144718;
-            --accent: #d4af37;
-            --bg-color: #f4f6f8;
-            --card-bg: #ffffff;
-            --text-color: #333333;
-            --text-muted: #666666;
-            --border-color: #e0e0e0;
-            --radius: 12px;
-            --font-size-base: 16px;
-        }
-
-        body.dark-mode {
-            --bg-color: #12181b;
-            --card-bg: #1e252b;
-            --text-color: #f1f5f9;
-            --text-muted: #94a3b8;
-            --border-color: #2e3740;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Cairo', sans-serif;
-            transition: background 0.3s, color 0.3s;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-size: var(--font-size-base);
-            overflow-x: hidden;
-        }
-
-        /* --- شريط التنقل العلوي --- */
-        .header-nav {
-            background-color: var(--card-bg);
-            border-bottom: 2px solid var(--primary);
-            padding: 0.8rem 1.2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 50; /* أقل من القائمة الجانبية لتجنب التداخل */
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .menu-toggle {
-            background: none;
-            border: none;
-            font-size: 1.4rem;
-            color: var(--primary);
-            cursor: pointer;
-            padding: 5px;
-        }
-
-        .brand-logo {
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            text-decoration: none;
-        }
-
-        .brand-logo i {
-            color: var(--accent);
-        }
-
-        .auth-btns {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn {
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-weight: 700;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 0.85rem;
-            border: none;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .btn-outline {
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            background: transparent;
-        }
-
-        /* --- القائمة الجانبية المُصححة (تفتح من اليسار في صفحات RTL لكي لا تغطي زر القائمة باليمين) --- */
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(2px);
-            z-index: 998;
-            opacity: 0;
-            visibility: hidden;
-            transition: 0.3s ease;
-        }
-
-        .sidebar-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: -300px; /* مخفية في اليسار لمنع تداخلها مع زر القائمة في اليمين */
-            width: 280px;
-            height: 100vh;
-            background: var(--card-bg);
-            z-index: 999;
-            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            box-shadow: 5px 0 20px rgba(0,0,0,0.15);
-        }
-
-        .sidebar.active {
-            left: 0; /* تنزلق بسلاسة من اليسار */
-        }
-
-        .sidebar-header {
-            background: var(--primary);
-            color: white;
-            padding: 1.2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-            padding: 0.5rem 0;
-            overflow-y: auto;
-        }
-
-        .sidebar-menu li a, .sidebar-menu li button {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 1.5rem;
-            color: var(--text-color);
-            text-decoration: none;
-            font-weight: 600;
-            width: 100%;
-            background: none;
-            border: none;
-            text-align: right;
-            cursor: pointer;
-            font-size: 0.95rem;
-        }
-
-        .sidebar-menu li a:hover, .sidebar-menu li button:hover {
-            background: rgba(0,0,0,0.04);
-            color: var(--primary);
-        }
-
-        .sidebar-divider {
-            height: 1px;
-            background: var(--border-color);
-            margin: 8px 0;
-        }
-
-        /* --- واجهة البداية والبحث السريع --- */
-        .hero-banner {
-            background: linear-gradient(135deg, rgba(27,94,32,0.92), rgba(20,71,24,0.88)), url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            padding: 3.5rem 1rem;
-            text-align: center;
-        }
-
-        .hero-banner h1 {
-            font-size: 1.7rem;
-            margin-bottom: 10px;
-            font-weight: 800;
-        }
-
-        .hero-banner p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        .search-box {
-            background: var(--card-bg);
-            max-width: 800px;
-            margin: 2rem auto 0;
-            padding: 1.2rem;
-            border-radius: var(--radius);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 10px;
-            align-items: end;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            text-align: right;
-        }
-
-        .form-group label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            font-weight: 700;
-        }
-
-        .form-group select {
-            padding: 9px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            background: var(--card-bg);
-            color: var(--text-color);
-            font-size: 0.9rem;
-        }
-
-        /* --- شبكة الطلبات --- */
-        .section-container {
-            max-width: 1100px;
-            margin: 2.5rem auto;
-            padding: 0 1rem;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            font-size: 1.3rem;
-            color: var(--primary);
-            font-weight: 800;
-        }
-
-        .members-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 1.2rem;
-        }
-
-        .member-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius);
-            padding: 1.2rem;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-        }
-
-        .member-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: #e8f5e9;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            margin: 0 auto 0.8rem;
-        }
-
-        /* مفتاح التبديل للوضع الليلي */
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 38px;
-            height: 20px;
-        }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider {
-            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #ccc; transition: .4s; border-radius: 20px;
-        }
-        .slider:before {
-            position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px;
-            background-color: white; transition: .4s; border-radius: 50%;
-        }
-        input:checked + .slider { background-color: var(--primary); }
-        input:checked + .slider:before { transform: translateX(18px); }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://yepoakpeqonheksryalx.supabase.co; media-src 'self' blob: https://yepoakpeqonheksryalx.supabase.co; connect-src 'self' https://yepoakpeqonheksryalx.supabase.co https://api.mymemory.translated.net; object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'self'">
+  <title>سنة الحياة - موقع الزواج الجاد</title>
+  <meta name="description" content="موقع للتعارف بنيّة الزواج، بخصوصية وجدية واحترام.">
+  <meta name="theme-color" content="#0E3B3C">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="سنة الحياة - موقع الزواج الجاد">
+  <meta property="og:description" content="موقع للتعارف بنيّة الزواج، بخصوصية وجدية واحترام.">
+  <meta property="og:url" content="https://sunatalhayat.runs-at.dev/">
+  <meta property="og:image" content="https://placehold.co/1200x630/0E3B3C/C9A24B.png?text=Sunat+Al-Hayat">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"سنة الحياة","alternateName":"Sunat Al-Hayat","url":"https://sunatalhayat.runs-at.dev/","inLanguage":["ar","fr","en"],"description":"موقع للتعارف بنيّة الزواج، بخصوصية وجدية واحترام."}</script>
+  <link rel="canonical" href="https://sunatalhayat.runs-at.dev/">
+  <meta property="og:locale" content="ar_AR">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="style.css?v=11">
+  <style>
+    .top{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;
+      background:rgba(250,247,240,.92);backdrop-filter:blur(8px);position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line)}
+    .brand{font:700 1.6rem 'Amiri',serif;color:var(--green);text-decoration:none}
+    .brand span{color:var(--gold)}
+    .top .btn{padding:8px 20px;min-height:40px;font-size:15px}
+    .hero{background:linear-gradient(160deg,var(--green) 0%,#0a2c2d 100%);color:#fff;text-align:center;
+      padding:56px 22px 64px;position:relative;overflow:hidden}
+    .hero::after{content:"";position:absolute;inset:0;opacity:.07;
+      background:repeating-linear-gradient(45deg,#fff 0 1px,transparent 1px 22px),repeating-linear-gradient(-45deg,#fff 0 1px,transparent 1px 22px)}
+    .hero>*{position:relative;z-index:1}
+    .hero h1{color:#fff;font-size:2.6rem;margin:0 0 6px}
+    .hero .sub{color:#e9dfc4;max-width:520px;margin:0 auto 26px}
+    .orn{color:var(--gold2);letter-spacing:8px;font-size:18px}
+    .verse{max-width:640px;margin:34px auto 0;padding:26px 22px;border:1px solid rgba(216,181,101,.5);
+      border-radius:20px;background:rgba(255,255,255,.06)}
+    .verse .ar{font:400 1.55rem/2.1 'Amiri',serif;color:#fff;margin:0}
+    .verse .en{font-size:15px;line-height:1.7;color:#e9dfc4;margin:14px 0 0;direction:ltr;font-style:italic}
+    .verse .ref{color:var(--gold2);font-size:14px;margin-top:10px}
+    section{max-width:720px;margin:0 auto;padding:44px 20px}
+    section h2{text-align:center}
+    .steps{display:grid;gap:14px;margin-top:22px}
+    .step{display:flex;gap:16px;align-items:flex-start;background:#fff;border:1px solid var(--line);
+      border-radius:18px;padding:18px;box-shadow:0 6px 18px rgba(14,59,60,.05)}
+    .num{flex:none;width:44px;height:44px;border-radius:50%;background:var(--gold);color:#fff;
+      display:flex;align-items:center;justify-content:center;font:700 20px 'Amiri',serif}
+    .step b{display:block;color:var(--green);font-size:18px}
+    .step p{margin:2px 0 0;color:var(--muted);font-size:15px;line-height:1.7}
+    .trust{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+    .trust div{background:var(--sand);border-radius:16px;padding:16px;text-align:center;font-weight:700;color:var(--green)}
+    .trust small{display:block;font-weight:400;color:var(--muted);margin-top:4px}
+    .hadith{max-width:640px;margin:22px auto 0;position:relative}
+    .hd{background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px 22px 20px;text-align:center;
+      box-shadow:0 6px 18px rgba(14,59,60,.06);margin-bottom:14px;border-top:3px solid var(--gold)}
+    .hd .q{font:400 1.45rem/2.1 'Amiri',serif;color:var(--green);margin:0}
+    .hd .src{color:var(--gold);font-size:14px;margin:10px 0 0;font-weight:700}
+    .hadith.js{min-height:210px}
+    .hadith.js .hd{position:absolute;inset:0 0 auto 0;margin:0;opacity:0;visibility:hidden;transition:opacity .6s}
+    .hadith.js .hd.on{opacity:1;visibility:visible;position:relative}
+    .dots{display:none;justify-content:center;gap:8px;margin-top:14px}
+    .hadith.js+.dots{display:flex}
+    .dots button{width:10px;height:10px;border-radius:50%;border:0;padding:0;background:var(--line);cursor:pointer}
+    .dots button.on{background:var(--gold);width:22px;border-radius:6px}
+    .vidwrap{max-width:640px;margin:0 auto}
+    .vid{position:relative;width:100%;height:clamp(260px,64vw,340px);border-radius:22px;overflow:hidden;color:#fff;
+      background:radial-gradient(circle at 20% 15%,#1b6a6b 0%,transparent 55%),linear-gradient(160deg,#0E3B3C,#0a2c2d);
+      box-shadow:0 14px 34px rgba(14,59,60,.28);border:1px solid rgba(216,181,101,.45);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+    .vid::before{content:"";position:absolute;inset:0;opacity:.07;
+      background:repeating-linear-gradient(45deg,#fff 0 1px,transparent 1px 22px),repeating-linear-gradient(-45deg,#fff 0 1px,transparent 1px 22px)}
+    .vid .glow{position:absolute;width:260px;height:260px;border-radius:50%;left:-60px;bottom:-110px;
+      background:radial-gradient(circle,rgba(216,181,101,.35),transparent 65%);animation:vglow 9s ease-in-out infinite alternate}
+    @keyframes vglow{to{transform:translate(70px,-30px) scale(1.25)}}
+    .vsc{position:absolute;inset:0 0 34px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      text-align:center;padding:16px 24px;opacity:0;visibility:hidden;transition:opacity .45s}
+    .vsc.on{opacity:1;visibility:visible}
+    .vsc .ic{font-size:60px;line-height:1;margin-bottom:10px;transform:scale(.3);opacity:0}
+    .vsc.on .ic{animation:vpop .7s cubic-bezier(.2,1.4,.4,1) .05s forwards}
+    .vsc h3{font:700 1.7rem 'Amiri',serif;color:#fff;margin:0 0 6px;transform:translateY(16px);opacity:0}
+    .vsc.on h3{animation:vup .6s ease .35s forwards}
+    .vsc p{color:#e9dfc4;margin:0;max-width:430px;line-height:1.8;font-size:15px;transform:translateY(12px);opacity:0}
+    .vsc.on p{animation:vup .6s ease .65s forwards}
+    .vsc.on .ic.ring{animation:vpop .7s cubic-bezier(.2,1.4,.4,1) .05s forwards,vpulse 2.4s ease-in-out .9s infinite}
+    @keyframes vpop{to{transform:scale(1);opacity:1}}
+    @keyframes vup{to{transform:none;opacity:1}}
+    @keyframes vpulse{50%{transform:scale(1.08)}}
+    .vctl{position:absolute;left:0;right:0;bottom:0;height:34px;display:flex;align-items:center;gap:10px;padding:0 12px;
+      background:linear-gradient(transparent,rgba(0,0,0,.35))}
+    .vctl button{width:26px;height:26px;border:0;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;font-size:12px;cursor:pointer;padding:0;line-height:1}
+    .vseg{flex:1;display:flex;gap:4px;direction:ltr}
+    .vseg i{flex:1;height:4px;border-radius:3px;background:rgba(255,255,255,.25);overflow:hidden;display:block}
+    .vseg i b{display:block;height:100%;width:0;background:var(--gold2,#D8B565)}
+    .vplay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(10,44,45,.55)}
+    .vid.paused .vplay{display:flex}
+    .vplay span{width:68px;height:68px;border-radius:50%;background:var(--gold,#B8903F);display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 6px 20px rgba(0,0,0,.35);padding-inline-start:4px}
+    .spons{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:16px}
+    .spon{display:block;text-decoration:none;color:inherit;background:var(--sand);border:1px solid var(--line);border-radius:16px;padding:16px;position:relative}
+    .spon .tag{position:absolute;top:10px;left:12px;font-size:11px;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:999px;padding:1px 8px}
+    .spon .ic{font-size:30px;line-height:1}
+    .spon b{display:block;margin:8px 0 2px;color:var(--green);font-size:1.05rem}
+    .spon span.d{color:var(--muted);font-size:14px}
+    .spon-note{text-align:center;color:var(--muted);font-size:13px;margin-top:10px}
+    .feat{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+    @media(min-width:760px){.feat{grid-template-columns:repeat(3,1fr)}}
+    .feat div{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 14px;box-shadow:var(--shadow)}
+    .feat i{font-style:normal;display:flex;width:42px;height:42px;border-radius:12px;background:var(--sand);align-items:center;justify-content:center;font-size:22px;margin-bottom:8px}
+    .feat b{display:block;color:var(--green);font-size:16px;line-height:1.4}
+    .feat p{margin:4px 0 0;color:var(--muted);font-size:14px;line-height:1.7}
+    .hq{margin-top:16px;display:grid;gap:10px}
+    .hq details{background:#fff;border:1px solid var(--line);border-radius:16px;padding:0 16px}
+    .hq summary{cursor:pointer;padding:14px 0;font-weight:700;color:var(--green);list-style:none;display:flex;justify-content:space-between;gap:10px}
+    .hq summary::-webkit-details-marker{display:none}
+    .hq summary::after{content:"＋";color:var(--gold)}
+    .hq details[open] summary::after{content:"－"}
+    .hq details p{margin:0 0 14px;color:var(--muted)}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-top:20px}
+    .stats div{background:var(--sand);border-radius:16px;padding:18px 10px;text-align:center}
+    .stats b{display:block;font:700 2.3rem 'Amiri',serif;color:var(--green);line-height:1.2}
+    .stats span{color:var(--muted);font-size:14px}
+    @media(prefers-reduced-motion:reduce){.vsc *{animation:none!important;opacity:1!important;transform:none!important}.vid .glow{animation:none}}
+    .cta{text-align:center}
+    footer{text-align:center;padding:26px 20px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
+    @media(max-width:600px){.hero h1{font-size:2.1rem}.verse .ar{font-size:1.3rem}.trust{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
+  <header class="top">
+    <a class="brand" href="index.html">سنة <span>الحياة</span></a>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button id="install" class="btn ghost" type="button" style="display:none">📲 تثبيت</button>
+      <a class="btn" href="auth.html">دخول</a>
+    </div>
+  </header>
 
-    <!-- شريط التنقل العلوي -->
-    <header class="header-nav">
-        <div class="nav-right">
-            <button class="menu-toggle" id="openSidebar" title="القائمة الرئيسية"><i class="fa-solid fa-bars"></i></button>
-            <a href="#" class="brand-logo">
-                <i class="fa-solid fa-heart"></i>
-                <span>سنة الحياة</span>
-            </a>
-        </div>
+  <div class="hero">
+    <div class="orn">✦ ✦ ✦</div>
+    <h1>سنة الحياة</h1>
+    <p class="sub">موقع جاد للتعارف بنيّة الزواج، على أساس من الاحترام والخصوصية والمودّة.</p>
+    <a class="btn gold" href="auth.html">ابدأ رحلتك</a>
 
-        <div class="auth-btns">
-            <a href="#" class="btn btn-outline">دخول</a>
-            <a href="#" class="btn btn-primary">تسجيل جديد</a>
-        </div>
-    </header>
+    <div class="verse">
+      <p class="ar">﴿ وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَٰلِكَ لَآيَاتٍ لِّقَوْمٍ يَتَفَكَّرُونَ ﴾</p>
+      <p class="ref">سورة الروم — الآية 21</p>
+      <p class="en">"And of His signs is that He created for you from yourselves mates that you may find tranquility in them; and He placed between you affection and mercy. Indeed in that are signs for a people who give thought." (Quran 30:21)</p>
+    </div>
+  </div>
 
-    <!-- الخلفية المعتمة للقائمة الجانبية -->
-    <div class="sidebar-overlay" id="overlay"></div>
+  <section style="padding-bottom:10px">
+    <h2>شاهد كيف يعمل الموقع</h2>
+    <div class="vidwrap">
+      <div class="vid" id="vid" role="img" aria-label="شرح مرئي للموقع">
+        <div class="glow"></div>
+        <div class="vsc"><div class="ic ring">✦</div><h3>سنة الحياة</h3><p>موقع جاد للتعارف بنيّة الزواج، بخصوصية واحترام</p></div>
+        <div class="vsc"><div class="ic">📝</div><h3>أنشئ حسابك</h3><p>بريدك وبياناتك الأساسية، في دقيقة وبصدق</p></div>
+        <div class="vsc"><div class="ic">✅</div><h3>مراجعة وتحقق</h3><p>كل ملف يُفحص قبل أن يظهر، لضمان الجدية</p></div>
+        <div class="vsc"><div class="ic">🔍</div><h3>تصفّح وأبدِ اهتمامك</h3><p>أعضاء مقبولون، ونسبة توافق تُبرز نقاط الالتقاء بينكما</p></div>
+        <div class="vsc"><div class="ic">💬</div><h3>تحدّثا باحترام</h3><p>محادثة خاصة بين الطرفين فقط، بعد قبول الاهتمام</p></div>
+        <div class="vsc"><div class="ic">🛡</div><h3>خصوصيتك أولاً</h3><p>إبلاغ وحظر، وشارة «موثّق ✓» لمزيد من الثقة</p></div>
+        <div class="vsc"><div class="ic ring">💍</div><h3>ابدأ رحلتك اليوم</h3><p>التسجيل مجاني ولا يستغرق دقيقة</p></div>
+        <div class="vplay"><span>▶</span></div>
+        <div class="vctl"><button id="vbtn" type="button" aria-label="play/pause">❚❚</button><div class="vseg" id="vseg"></div></div>
+      </div>
+    </div>
+  </section>
 
-    <!-- القائمة الجانبية المنسدلة (تفتح من اليسار) -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h3>قائمة التنقل</h3>
-            <button id="closeSidebar" style="background:none; border:none; color:white; font-size:1.2rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <ul class="sidebar-menu">
-            <li><a href="#"><i class="fa-solid fa-house"></i> الرئيسية</a></li>
-            <li><a href="#"><i class="fa-solid fa-magnifying-glass"></i> البحث المتقدم</a></li>
-            <li><a href="#"><i class="fa-solid fa-user-plus"></i> تسجيل حساب جديد</a></li>
-            <li><a href="#"><i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول</a></li>
-            <div class="sidebar-divider"></div>
-            <li style="padding: 8px 1.5rem; font-size: 0.8rem; color: var(--text-muted); font-weight: bold;">إعدادات الموقع</li>
-            <li>
-                <button id="darkModeBtn" style="display:flex; align-items:center; width:100%;">
-                    <i class="fa-solid fa-moon"></i> الوضع الداكن
-                    <label class="switch" style="margin-right: auto;">
-                        <input type="checkbox" id="darkToggle">
-                        <span class="slider"></span>
-                    </label>
-                </button>
-            </li>
-            <li>
-                <a href="#"><i class="fa-solid fa-globe"></i> اللغة: العربية</a>
-            </li>
-        </ul>
-    </aside>
+  <section>
+    <h2>كيف يعمل الموقع؟</h2>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><div><b>أنشئ حسابك وملفك</b><p>سجّل بريدك وأكمل بياناتك الأساسية بصدق.</p></div></div>
+      <div class="step"><div class="num">2</div><div><b>تحقق ومراجعة</b><p>يُفحص كل ملف آلياً، وتراجع الإدارة ما يحتاج مراجعة، لضمان الجدية.</p></div></div>
+      <div class="step"><div class="num">3</div><div><b>تصفّح وأبدِ اهتمامك</b><p>تعرض الصفحة أعضاء مقبولين، وتُبدي اهتماماً بمن يناسبك.</p></div></div>
+      <div class="step"><div class="num">4</div><div><b>تحدّثا باحترام</b><p>عند قبول الاهتمام تُفتح محادثة بين الطرفين فقط.</p></div></div>
+    </div>
+  </section>
 
-    <!-- واجهة البداية والبحث السريع -->
-    <section class="hero-banner">
-        <h1>منصة سنة الحياة للتوافق والزواج الشرعي</h1>
-        <p>بيئة عربية إسلامية آمنة وموثوقة للبحث عن شريك الحياة</p>
+  <section>
+    <h2>لماذا «سنة الحياة»؟</h2>
+    <div class="feat">
+      <div><i>🎯</i><b>نسبة توافق</b><p>نقارن بياناتكما ونُظهر نقاط الالتقاء بينكما، لتختار بوعي.</p></div>
+      <div><i>✅</i><b>ملفات مراجَعة</b><p>لا يظهر ملف قبل فحصه، لنحافظ على جدية الأعضاء.</p></div>
+      <div><i>✓</i><b>شارة «موثّق»</b><p>وثّق حسابك لتزيد ثقة الآخرين بك.</p></div>
+      <div><i>🔒</i><b>محادثة خاصة</b><p>بين الطرفين فقط وبعد قبول الاهتمام، مع نصائح أمان.</p></div>
+      <div><i>🔔</i><b>إشعارات الهاتف</b><p>يصلك تنبيه عند رسالة أو اهتمام جديد.</p></div>
+      <div><i>🌍</i><b>ثلاث لغات</b><p>العربية والفرنسية والإنجليزية، ويمكن تثبيته كتطبيق.</p></div>
+    </div>
+  </section>
 
-        <form class="search-box">
-            <div class="form-group">
-                <label>أنا</label>
-                <select><option>رجل</option><option>امرأة</option></select>
-            </div>
-            <div class="form-group">
-                <label>أبحث عن</label>
-                <select><option>امرأة</option><option>رجل</option></select>
-            </div>
-            <div class="form-group">
-                <label>العمر</label>
-                <select><option>من 20 إلى 30 سنة</option><option>من 31 إلى 40 سنة</option></select>
-            </div>
-            <div class="form-group">
-                <label>البلد</label>
-                <select><option>المغرب</option><option>الكل</option></select>
-            </div>
-            <button type="button" class="btn btn-primary" style="padding: 10px;"><i class="fa-solid fa-magnifying-glass"></i> بحث فوري</button>
-        </form>
-    </section>
+  <section style="padding-top:0">
+    <h2>من هدي النبي ﷺ في الزواج</h2>
+    <div class="hadith" id="hadith">
+      <div class="hd"><p class="q">«يا معشر الشباب، من استطاع منكم الباءة فليتزوج، فإنه أغض للبصر وأحصن للفرج»</p><p class="src">متفق عليه</p></div>
+      <div class="hd"><p class="q">«إذا جاءكم من ترضون دينه وخلقه فزوجوه، إلا تفعلوا تكن فتنة في الأرض وفساد عريض»</p><p class="src">رواه الترمذي</p></div>
+      <div class="hd"><p class="q">«تنكح المرأة لأربع: لمالها ولحسبها ولجمالها ولدينها، فاظفر بذات الدين تربت يداك»</p><p class="src">متفق عليه</p></div>
+      <div class="hd"><p class="q">«خيركم خيركم لأهله، وأنا خيركم لأهلي»</p><p class="src">رواه الترمذي</p></div>
+    </div>
+    <div class="dots" id="dots"></div>
+  </section>
 
-    <!-- قسم طلبات التوافق العامة -->
-    <main class="section-container">
-        <h2 class="section-title">أحدث طلبات التوافق المسجلة</h2>
-        <div class="members-grid">
-            <div class="member-card">
-                <div class="member-avatar"><i class="fa-solid fa-user"></i></div>
-                <h3>طلب توافق #1084</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin: 5px 0 12px;">28 سنة • إيموزار كندر</p>
-                <button class="btn btn-outline" style="width: 100%;">عرض التفاصيل</button>
-            </div>
-            <div class="member-card">
-                <div class="member-avatar"><i class="fa-solid fa-user"></i></div>
-                <h3>طلب توافق #1085</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin: 5px 0 12px;">25 سنة • فاس</p>
-                <button class="btn btn-outline" style="width: 100%;">عرض التفاصيل</button>
-            </div>
-        </div>
-    </main>
+  <section style="padding-top:0">
+    <h2>خصوصيتك أولاً</h2>
+    <div class="trust">
+      <div>🔒 محادثات خاصة<small>بين الطرفين فقط</small></div>
+      <div>✅ ملفات مراجَعة<small>قبل أن تظهر</small></div>
+      <div>🚫 حظر وإبلاغ<small>لحمايتك دائماً</small></div>
+      <div>🤝 بنيّة الزواج<small>موقع جاد لا للتسلية</small></div>
+    </div>
+  </section>
 
-    <!-- كود JavaScript للتحكم بالقائمة والأزرار -->
-    <script>
-        const openSidebar = document.getElementById('openSidebar');
-        const closeSidebar = document.getElementById('closeSidebar');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-        const darkToggle = document.getElementById('darkToggle');
+  <section style="padding-top:0">
+    <h2>أسئلة شائعة</h2>
+    <div class="hq">
+      <details><summary>هل التسجيل مجاني؟</summary><p>نعم، التسجيل مجاني ولا يستغرق دقيقة.</p></details>
+      <details><summary>من يستطيع رؤية ملفي؟</summary><p>الأعضاء المقبولون فقط، وصورتك لا تظهر إلا لمن قبلتَ اهتمامه وبعد موافقتك.</p></details>
+      <details><summary>هل الموقع للتسلية؟</summary><p>لا، هو للتعارف بنيّة الزواج الجاد فقط، على أساس الاحترام والخصوصية.</p></details>
+      <details><summary>كيف أحذف حسابي؟</summary><p>من صفحة «ملفي» تضغط «حذف حسابي نهائياً» فيُمحى كل شيء. <a href="faq.html">المزيد من الأسئلة</a></p></details>
+    </div>
+  </section>
 
-        openSidebar.addEventListener('click', () => {
-            sidebar.classList.add('active');
-            overlay.classList.add('active');
-        });
+  <section id="statsSec" style="display:none;padding-top:0">
+    <h2>مجتمع يكبر بصدق</h2>
+    <div class="stats">
+      <div><b id="stM">0</b><span>عضو مقبول</span></div>
+      <div id="stCBox"><b id="stC">0</b><span>دولة</span></div>
+    </div>
+  </section>
 
-        const hideMenu = () => {
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-        };
+  <section id="sponSec" style="display:none;padding-top:0">
+    <h2>شركاؤنا</h2>
+    <div class="spons" id="sponList"></div>
+    <p class="spon-note">الإعلانات المعروضة هنا من شركاء مباشرين، ولا نشارك معهم أي بيانات عن الأعضاء.</p>
+  </section>
 
-        closeSidebar.addEventListener('click', hideMenu);
-        overlay.addEventListener('click', hideMenu);
+  <section class="cta" style="padding-top:0">
+    <div class="card">
+      <h2>ابدأ الآن</h2>
+      <p style="color:var(--muted)">التسجيل مجاني ولا يستغرق دقيقة.</p>
+      <a class="btn" href="auth.html">إنشاء حساب</a>
+    </div>
+  </section>
 
-        // الوضع الداكن
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark-mode');
-            darkToggle.checked = true;
+  <footer><a href="install.html">تثبيت التطبيق</a> · <a href="faq.html">الأسئلة الشائعة</a> · <a href="contact.html">اتصل بنا</a> · <a href="contact.html">أعلن معنا</a> · <a href="legal.html#privacy">الخصوصية</a> · <a href="legal.html#terms">الشروط</a><br>© سنة الحياة — جميع الحقوق محفوظة</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="i18n-dict.js?v=4"></script>
+  <script src="i18n.js?v=3"></script>
+  <script src="app.js?v=13"></script>
+  <script>
+
+    // أحاديث متناوبة: تتبدّل كل 8 ثوانٍ، وتُظهر النقاطُ الموضعَ ويمكن الضغط عليها
+    (function () {
+      var box = document.getElementById('hadith'), dots = document.getElementById('dots');
+      if (!box || !dots) return;
+      var items = box.querySelectorAll('.hd'); if (items.length < 2) return;
+      box.className += ' js';
+      var cur = Math.floor(Math.random() * items.length), timer = null, btns = [];
+      function show(i) {
+        cur = i;
+        for (var k = 0; k < items.length; k++) {
+          items[k].className = 'hd' + (k === i ? ' on' : '');
+          btns[k].className = k === i ? 'on' : '';
         }
+      }
+      function reset() { clearInterval(timer); timer = setInterval(function () { show((cur + 1) % items.length); }, 8000); }
+      for (var j = 0; j < items.length; j++) {
+        (function (n) {
+          var b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', String(n + 1));
+          b.onclick = function () { show(n); reset(); };
+          dots.appendChild(b); btns.push(b);
+        })(j);
+      }
+      show(cur); reset();
+    })();
 
-        darkToggle.addEventListener('change', () => {
-            if (darkToggle.checked) {
-                document.body.classList.add('dark-mode');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.body.classList.remove('dark-mode');
-                localStorage.setItem('theme', 'light');
-            }
-        });
-    </script>
+    // ===== العرض المتحرك: 7 مشاهد، يبدأ عند ظهوره ويتوقف عند الخروج منه، والضغط عليه يوقفه/يشغّله =====
+    (function () {
+      var vid = document.getElementById('vid'); if (!vid) return;
+      var sc = vid.querySelectorAll('.vsc'), seg = document.getElementById('vseg'), btn = document.getElementById('vbtn');
+      var DUR = 4200, TICK = 100, cur = 0, t = 0, timer = null, playing = false, bars = [];
+      for (var k = 0; k < sc.length; k++) { var i = document.createElement('i'), b = document.createElement('b'); i.appendChild(b); seg.appendChild(i); bars.push(b); }
+      function show(n) {
+        cur = n; t = 0;
+        for (var k = 0; k < sc.length; k++) {
+          sc[k].className = 'vsc' + (k === n ? ' on' : '');
+          bars[k].style.width = k < n ? '100%' : '0';
+        }
+      }
+      function tick() {
+        t += TICK; bars[cur].style.width = Math.min(100, t / DUR * 100) + '%';
+        if (t >= DUR) show((cur + 1) % sc.length);
+      }
+      function play() { if (playing) return; playing = true; vid.classList.remove('paused'); btn.textContent = '❚❚'; timer = setInterval(tick, TICK); }
+      function pause() { playing = false; clearInterval(timer); vid.classList.add('paused'); btn.textContent = '▶'; }
+      function toggle() { playing ? pause() : play(); }
+      vid.onclick = toggle;
+      var userPaused = false;
+      vid.addEventListener('click', function () { userPaused = !playing; });
+      var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      show(0);
+      if (still) { pause(); return; }
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (es) {
+          es.forEach(function (e) { if (e.isIntersecting) { if (!userPaused) play(); } else if (playing) { pause(); } });
+        }, { threshold: 0.5 }).observe(vid);
+      } else play();
+      document.addEventListener('visibilitychange', function () { if (document.hidden && playing) pause(); });
+    })();
+
+    // ===== مساحة الرعاة (إعلانات مباشرة بلا سكربتات خارجية) =====
+    // لإضافة راعٍ: أضف سطراً واحداً داخل القائمة. إن بقيت فارغة يختفي القسم كلياً.
+    // الحقول: name الاسم، desc وصف قصير، link رابط https، icon رمز تعبيري.
+    (function () {
+      var SPONSORS = [
+        // { name: 'قاعة الأفراح الفلانية', desc: 'خصم 10% لأعضاء سنة الحياة', link: 'https://example.com', icon: '🏛️' }
+      ];
+      if (!SPONSORS.length) return;
+      var box = document.getElementById('sponList');
+      SPONSORS.slice(0, 6).forEach(function (x) {
+        if (!x || !/^https:\/\//i.test(String(x.link || ''))) return;
+        var a = document.createElement('a');
+        a.className = 'spon'; a.href = x.link; a.target = '_blank';
+        a.rel = 'sponsored nofollow noopener noreferrer';
+        var t = document.createElement('i'); t.className = 'tag'; t.style.fontStyle = 'normal'; t.textContent = 'إعلان';
+        var ic = document.createElement('div'); ic.className = 'ic'; ic.textContent = x.icon || '✨';
+        var b = document.createElement('b'); b.textContent = x.name || '';
+        var d = document.createElement('span'); d.className = 'd'; d.textContent = x.desc || '';
+        a.appendChild(t); a.appendChild(ic); a.appendChild(b); a.appendChild(d);
+        box.appendChild(a);
+      });
+      if (box.children.length) document.getElementById('sponSec').style.display = 'block';
+    })();
+    // ===== أرقام حقيقية من قاعدة البيانات: لا تظهر إلا حين تصبح مقنعة =====
+    (function () {
+      var MIN_MEMBERS = 30;   // أقل عدد أعضاء مقبولين يظهر معه العدّاد (غيّره كما تشاء)
+      var MIN_COUNTRIES = 2;
+      if (typeof sb === 'undefined' || !sb.rpc) return;
+      function count(el, to) {
+        var from = 0, t0 = null;
+        function step(ts) {
+          if (t0 === null) t0 = ts;
+          var p = Math.min(1, (ts - t0) / 1200);
+          el.textContent = String(Math.round(from + (to - from) * (1 - Math.pow(1 - p, 3))));
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+      Promise.resolve(sb.rpc('public_stats')).then(function (r) {
+        var d = r && r.data; if (!d || !(d.members >= MIN_MEMBERS)) return;
+        document.getElementById('statsSec').style.display = 'block';
+        count(document.getElementById('stM'), d.members);
+        if (d.countries >= MIN_COUNTRIES) count(document.getElementById('stC'), d.countries);
+        else document.getElementById('stCBox').style.display = 'none';
+      }).catch(function () {});
+    })();
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
+    var deferredPrompt = null;
+    var installBtn = document.getElementById('install');
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'inline-block';
+    });
+    installBtn.onclick = async function () {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      try { await deferredPrompt.userChoice; } catch (e) {}
+      deferredPrompt = null;
+      installBtn.style.display = 'none';
+    };
+    window.addEventListener('appinstalled', function () { installBtn.style.display = 'none'; });
+
+    // العضو مسجّل الدخول: نخفي «دخول / إنشاء حساب» ونظهر شريط حسابه (يضيفه app.js)
+    getSession().then(function (s) {
+      if (!s) return;
+      var top = document.querySelector('.top'); if (top) top.style.display = 'none';
+      var go = document.querySelector('.hero a.btn.gold');
+      if (go) { go.href = 'browse.html'; go.textContent = 'تصفّح الأعضاء'; }
+      var cta = document.querySelector('section.cta'); if (cta) cta.style.display = 'none';
+    }).catch(function () {});
+  </script>
 </body>
 </html>
