@@ -1955,5 +1955,309 @@ window.I18N_DICT = {
 "بالمتابعة عبر Google فإنك توافق على": [
 "En continuant avec Google, vous acceptez",
 "By continuing with Google you agree to the"
+],
+"لوحتي": [
+"Mon espace",
+"My dashboard"
+],
+"سنة الحياة - لوحتي": [
+"Sunat Al-Hayat - Mon espace",
+"Sunat Al-Hayat - My dashboard"
+],
+"أهلاً": [
+"Bienvenue",
+"Welcome"
+],
+"أهلاً بك في سنة الحياة": [
+"Bienvenue sur Sunat Al-Hayat",
+"Welcome to Sunat Al-Hayat"
+],
+"مرحباً بك في سنة الحياة": [
+"Bienvenue sur Sunat Al-Hayat",
+"Welcome to Sunat Al-Hayat"
+],
+"ابدأ بإنشاء ملفك الشخصي ليظهر للأعضاء.": [
+"Commencez par créer votre profil pour qu'il soit visible des membres.",
+"Start by creating your profile so members can see it."
+],
+"أنشئ ملفي الآن": [
+"Créer mon profil",
+"Create my profile"
+],
+"حسابك مقبول، وهذه نظرة سريعة على نشاطك.": [
+"Votre compte est accepté. Voici un aperçu de votre activité.",
+"Your account is approved. Here is a quick look at your activity."
+],
+"نراجع ملفك قريباً، وفي الأثناء يمكنك إكماله.": [
+"Nous examinerons bientôt votre profil ; en attendant, vous pouvez le compléter.",
+"We will review your profile soon; meanwhile you can complete it."
+],
+"اكتمال ملفك الشخصي": [
+"Complétion de votre profil",
+"Your profile completeness"
+],
+"ملفك مكتمل، بارك الله فيك ✓": [
+"Votre profil est complet, qu'Allah vous bénisse ✓",
+"Your profile is complete, may Allah bless you ✓"
+],
+"اهتمامات جديدة": [
+"Nouveaux intérêts",
+"New interests"
+],
+"محادثاتي": [
+"Mes conversations",
+"My chats"
+],
+"اهتمامات أرسلتها": [
+"Intérêts envoyés",
+"Interests sent"
+],
+"اقتراحات تناسبك": [
+"Suggestions pour vous",
+"Suggestions for you"
+],
+"أعضاء يتوافقون معك أكثر، بحسب بياناتك المشتركة.": [
+"Les membres les plus compatibles avec vous, selon vos informations communes.",
+"Members most compatible with you, based on your shared details."
+],
+"تصفّح كل الأعضاء": [
+"Parcourir tous les membres",
+"Browse all members"
+],
+"اختصارات": [
+"Raccourcis",
+"Shortcuts"
+],
+"🔍 تصفّح الأعضاء": [
+"🔍 Parcourir les membres",
+"🔍 Browse members"
+],
+"👤 عدّل ملفي": [
+"👤 Modifier mon profil",
+"👤 Edit my profile"
+],
+"✓ وثّق حسابي": [
+"✓ Vérifier mon compte",
+"✓ Verify my account"
+],
+"⭐ العضوية المميزة": [
+"⭐ Abonnement premium",
+"⭐ Premium membership"
+],
+"اكتب اسمك الأول": [
+"Saisissez votre prénom",
+"Enter your first name"
+],
+"أضف تاريخ ميلادك": [
+"Ajoutez votre date de naissance",
+"Add your date of birth"
+],
+"حدّد بلدك": [
+"Indiquez votre pays",
+"Select your country"
+],
+"حدّد مدينتك": [
+"Indiquez votre ville",
+"Select your city"
+],
+"اختر حالتك الاجتماعية": [
+"Choisissez votre situation familiale",
+"Choose your marital status"
+],
+"اختر مستواك الدراسي": [
+"Choisissez votre niveau d'études",
+"Choose your education level"
+],
+"اكتب مهنتك": [
+"Indiquez votre profession",
+"Enter your occupation"
+],
+"أضف طولك": [
+"Ajoutez votre taille",
+"Add your height"
+],
+"اختر درجة التزامك": [
+"Choisissez votre degré de pratique",
+"Choose your level of religiosity"
+],
+"اختر مدى محافظتك على الصلاة": [
+"Indiquez votre assiduité à la prière",
+"Say how regularly you pray"
+],
+"أجب عن سؤال التدخين": [
+"Répondez à la question sur le tabac",
+"Answer the smoking question"
+],
+"أجب عن الرغبة في الأطفال": [
+"Répondez à la question sur les enfants",
+"Answer the question about children"
+],
+"اكتب نبذة عنك": [
+"Rédigez une courte présentation",
+"Write a short bio"
+],
+"اكتب ما تبحث عنه": [
+"Décrivez ce que vous recherchez",
+"Describe what you are looking for"
+],
+"أضف صورتك": [
+"Ajoutez votre photo",
+"Add your photo"
+],
+"جديد": [
+"Nouveau",
+"New"
+],
+"عرض المزيد": [
+"Voir plus",
+"Show more"
+],
+"🆕 الجدد": [
+"🆕 Nouveaux",
+"🆕 New"
+],
+"🎯 الأعلى توافقاً": [
+"🎯 Plus compatibles",
+"🎯 Most compatible"
+],
+"✓ الموثّقون": [
+"✓ Vérifiés",
+"✓ Verified"
+],
+"⭐ المميزون": [
+"⭐ Premium",
+"⭐ Premium"
+],
+"العمر من:": [
+"Âge de :",
+"Age from:"
+],
+"العمر إلى:": [
+"Âge jusqu'à :",
+"Age up to:"
+],
+"الدولة:": [
+"Pays :",
+"Country:"
+],
+"المدينة:": [
+"Ville :",
+"City:"
+],
+"الحالة:": [
+"Situation :",
+"Status:"
+],
+"الدراسة:": [
+"Études :",
+"Education:"
+],
+"الالتزام:": [
+"Pratique :",
+"Religiosity:"
+],
+"التوثيق:": [
+"Vérification :",
+"Verification:"
+],
+"اكتمال الملف": [
+"Complétion du profil",
+"Profile completeness"
+],
+"المعلومات الأساسية": [
+"Informations de base",
+"Basic information"
+],
+"لماذا «سنة الحياة»؟": [
+"Pourquoi « Sunat Al-Hayat » ?",
+"Why “Sunat Al-Hayat”?"
+],
+"نسبة توافق": [
+"Taux de compatibilité",
+"Compatibility score"
+],
+"نقارن بياناتكما ونُظهر نقاط الالتقاء بينكما، لتختار بوعي.": [
+"Nous comparons vos informations et montrons vos points communs, pour choisir en conscience.",
+"We compare your details and show what you have in common, so you can choose wisely."
+],
+"ملفات مراجَعة": [
+"Profils vérifiés",
+"Reviewed profiles"
+],
+"لا يظهر ملف قبل فحصه، لنحافظ على جدية الأعضاء.": [
+"Aucun profil n'apparaît avant d'être examiné, pour préserver le sérieux des membres.",
+"No profile appears before it is reviewed, to keep members serious."
+],
+"شارة «موثّق»": [
+"Badge « Vérifié »",
+"“Verified” badge"
+],
+"وثّق حسابك لتزيد ثقة الآخرين بك.": [
+"Faites vérifier votre compte pour inspirer plus de confiance.",
+"Verify your account to build more trust."
+],
+"محادثة خاصة": [
+"Messagerie privée",
+"Private chat"
+],
+"بين الطرفين فقط وبعد قبول الاهتمام، مع نصائح أمان.": [
+"Entre les deux personnes seulement, après acceptation de l'intérêt, avec des conseils de sécurité.",
+"Between the two people only, after an interest is accepted, with safety tips."
+],
+"إشعارات الهاتف": [
+"Notifications mobiles",
+"Phone notifications"
+],
+"يصلك تنبيه عند رسالة أو اهتمام جديد.": [
+"Vous êtes alerté à chaque nouveau message ou intérêt.",
+"You get an alert for every new message or interest."
+],
+"ثلاث لغات": [
+"Trois langues",
+"Three languages"
+],
+"العربية والفرنسية والإنجليزية، ويمكن تثبيته كتطبيق.": [
+"Arabe, français et anglais, et installable comme application.",
+"Arabic, French and English, and installable as an app."
+],
+"أسئلة شائعة": [
+"Questions fréquentes",
+"Frequently asked questions"
+],
+"هل الموقع للتسلية؟": [
+"Le site est-il fait pour se divertir ?",
+"Is the site for entertainment?"
+],
+"لا، هو للتعارف بنيّة الزواج الجاد فقط، على أساس الاحترام والخصوصية.": [
+"Non, il est réservé aux rencontres dans un but de mariage sérieux, dans le respect et la confidentialité.",
+"No, it is only for introductions with serious marriage intentions, based on respect and privacy."
+],
+"من يستطيع رؤية ملفي؟": [
+"Qui peut voir mon profil ?",
+"Who can see my profile?"
+],
+"الأعضاء المقبولون فقط، وصورتك لا تظهر إلا لمن قبلتَ اهتمامه وبعد موافقتك.": [
+"Seulement les membres acceptés ; votre photo n'est visible que par ceux dont vous avez accepté l'intérêt, avec votre accord.",
+"Approved members only; your photo is visible only to those whose interest you accepted, with your consent."
+],
+"كيف أحذف حسابي؟": [
+"Comment supprimer mon compte ?",
+"How do I delete my account?"
+],
+"من صفحة «ملفي» تضغط «حذف حسابي نهائياً» فيُمحى كل شيء.": [
+"Depuis « Mon profil », appuyez sur « Supprimer définitivement mon compte » : tout est effacé.",
+"From “My profile”, press “Delete my account permanently” and everything is erased."
+],
+"المزيد من الأسئلة": [
+"Plus de questions",
+"More questions"
+],
+"الملف": [
+"Profil",
+"Profile"
+],
+"توافق": [
+"compat.",
+"match"
 ]
 };
