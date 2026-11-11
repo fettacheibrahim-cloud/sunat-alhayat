@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://yepoakpeqonheksryalx.supabase.co; media-src 'self' blob: https://yepoakpeqonheksryalx.supabase.co; connect-src 'self' https://yepoakpeqonheksryalx.supabase.co https://api.mymemory.translated.net; object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'self'">
   <title>سنة الحياة - المحادثات</title>
-  <link rel="stylesheet" href="style.css?v=10">
+  <link rel="stylesheet" href="style.css?v=14">
   <style>
     .conv{display:flex;align-items:center;gap:12px;width:100%;text-align:start;padding:14px;margin:8px 0;background:#fff;border:1px solid var(--line);border-radius:16px;font:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(14,59,60,.05)}
     .av{flex:none;width:44px;height:44px;border-radius:50%;background:var(--green);color:var(--gold2);display:flex;align-items:center;justify-content:center;font:700 20px 'Amiri',serif;overflow:hidden}
@@ -23,6 +23,8 @@
     .b.me{align-self:flex-start;background:var(--green);color:#fff}
     .b.other{align-self:flex-end;background:#fff;border:1px solid var(--line)}
     .b time{display:block;font-size:11px;opacity:.7;margin-top:2px}
+    .b .rd{margin-inline-start:4px;letter-spacing:-2px}.b .rd.on{color:#9fe3ff;opacity:1}
+    .mnote{font-size:12px;color:#6b7280;text-align:center;margin:6px 0}
     .b.img{padding:4px}
     .b.img img{display:block;max-width:100%;width:230px;min-height:90px;max-height:300px;object-fit:cover;border-radius:12px;background:rgba(0,0,0,.08);cursor:zoom-in}
     .b.img time{padding:0 8px 2px}
@@ -115,6 +117,7 @@
         <label class="opt">📸 الكاميرا<input id="fCam" type="file" accept="image/*" capture="environment"></label>
       </div>
 
+      <p class="mnote">🔒 لحمايتك تُخفى أرقام الهاتف والبريد وروابط التواصل في أول الرسائل.</p>
       <form id="send">
         <button id="attachBtn" class="ibtn" type="button" title="إرسال صورة" aria-label="إرسال صورة">📷</button>
         <input id="text" placeholder="اكتب رسالة..." autocomplete="off" maxlength="1000">
@@ -136,9 +139,9 @@
   <div id="lb"><img id="lbImg" alt=""><button id="lbX" aria-label="إغلاق">✕</button></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="i18n-dict.js?v=3"></script>
+  <script src="i18n-dict.js?v=4"></script>
   <script src="i18n.js?v=3"></script>
-  <script src="app.js?v=12"></script>
+  <script src="app.js?v=14"></script>
   <script>
     const $ = id => document.getElementById(id);
     const BUCKET = 'chat-media';
@@ -388,6 +391,7 @@
         addTranslate(d, m);
       }
       const tm = document.createElement('time'); tm.textContent = fmtTime(m.created_at);
+      if (m.sender_id === me) { const rd = document.createElement('span'); rd.className = 'rd' + (m.read_at ? ' on' : ''); rd.textContent = '✓✓'; tm.appendChild(rd); }
       d.appendChild(tm);
       return d;
     }
@@ -416,6 +420,17 @@
       if (stick) box.scrollTop = box.scrollHeight;
       lastTs = data[data.length - 1].created_at;
       setSeen(curOther, lastTs);
+      if (fresh.some(m => m.sender_id !== me)) sb.rpc('mark_read', { conv: mine[0] }).then(() => {}, () => {});
+    }
+
+    // تحديث علامة القراءة للرسائل التي أرسلتُها
+    async function refreshReads() {
+      if (!cur) return;
+      const pend = Array.from(document.querySelectorAll('#box .b.me .rd:not(.on)'));
+      if (!pend.length) return;
+      const { data } = await sb.from('messages').select('id').in('conversation_id', cur).eq('sender_id', me).not('read_at', 'is', null);
+      const ok = new Set((data || []).map(x => String(x.id)));
+      pend.forEach(r => { const b = r.closest('.b'); if (b && ok.has(b.dataset.id)) r.classList.add('on'); });
     }
 
     /* ---------- تنبيهات الأمان ---------- */
@@ -447,7 +462,7 @@
       $('chatView').style.display = 'block';
       loadMsgs();
       clearInterval(timer);
-      timer = setInterval(() => { if (!document.hidden) loadMsgs(); }, 4000);
+      timer = setInterval(() => { if (!document.hidden) { loadMsgs(); refreshReads(); } }, 4000);
     }
 
     function closeChat() {
