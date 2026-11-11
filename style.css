@@ -195,3 +195,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
 .p .acts{margin-top:14px}
 .p .acts .btn.go{flex:2}
 .p .acts .btn.go:disabled{background:#e9efe9;color:#4a6b50;border-color:#e9efe9}
+
+/* v14 */
+.p .nm .act{font-size:11px;color:#1b7f4b;background:#e7f6ee;border-radius:999px;padding:2px 8px;font-weight:700}
+.p .nm .act.wk{color:#6b7280;background:#f1f2f4;font-weight:600}
