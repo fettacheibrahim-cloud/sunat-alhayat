@@ -2387,5 +2387,33 @@ window.I18N_DICT = {
 "اقرأ أيضاً": [
 "À lire aussi",
 "Read also"
+],
+"ادعُ صديقاً": [
+"Invitez un ami",
+"Invite a friend"
+],
+"شارك رابطك الخاص مع من تثق به، وكل من ينضم عبره يُحتسب لك.": [
+"Partagez votre lien avec une personne de confiance ; chaque inscription via ce lien est comptée pour vous.",
+"Share your link with someone you trust; everyone who joins through it counts for you."
+],
+"نسخ الرابط": [
+"Copier le lien",
+"Copy link"
+],
+"تم النسخ ✓": [
+"Copié ✓",
+"Copied ✓"
+],
+"● نشط اليوم": [
+"● Actif aujourd’hui",
+"● Active today"
+],
+"نشط هذا الأسبوع": [
+"Actif cette semaine",
+"Active this week"
+],
+"🔒 لحمايتك تُخفى أرقام الهاتف والبريد وروابط التواصل في أول الرسائل.": [
+"🔒 Pour votre protection, les numéros, e-mails et liens de contact sont masqués dans les premiers messages.",
+"🔒 For your protection, phone numbers, emails and contact links are hidden in the first messages."
 ]
 };
