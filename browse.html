@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://yepoakpeqonheksryalx.supabase.co; media-src 'self' blob: https://yepoakpeqonheksryalx.supabase.co; connect-src 'self' https://yepoakpeqonheksryalx.supabase.co https://api.mymemory.translated.net; object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'self'">
   <title>سنة الحياة - التصفح</title>
-  <link rel="stylesheet" href="style.css?v=11">
+  <link rel="stylesheet" href="style.css?v=14">
   <style>
     .flt{background:#fff;border:1px solid var(--line);border-radius:var(--radius);margin:10px 0 4px;box-shadow:var(--shadow)}
     .flt summary{cursor:pointer;padding:12px 16px;font-weight:700;color:var(--green);list-style:none;display:flex;justify-content:space-between;align-items:center}
@@ -75,7 +75,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="i18n-dict.js?v=4"></script>
   <script src="i18n.js?v=3"></script>
-  <script src="app.js?v=13"></script>
+  <script src="app.js?v=14"></script>
   <script src="compat.js?v=1"></script>
   <script>
     const $ = id => document.getElementById(id);
@@ -156,6 +156,7 @@
       const nm = el('div', 'nm', p.first_name || 'عضو');
       if (vip) nm.appendChild(el('span', 'vip', '⭐ مميز'));
       if (vfSet.has(p.id)) nm.appendChild(el('span', 'vf', '✓ موثّق'));
+      if (p.last_seen) { const ago = Date.now() - new Date(p.last_seen).getTime(); if (ago < 864e5) nm.appendChild(el('span', 'act', '● نشط اليوم')); else if (ago < 7 * 864e5) nm.appendChild(el('span', 'act wk', 'نشط هذا الأسبوع')); }
       if (p.created_at && Date.now() - new Date(p.created_at).getTime() < WEEK) nm.appendChild(el('span', 'new', 'جديد'));
       bd.appendChild(nm);
 
