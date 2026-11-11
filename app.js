@@ -66,6 +66,12 @@ async function logout() {
   const session = await getSession();
   if (!session) return;
   const me = session.user.id;
+  // دعوة صديق + آخر ظهور (يتجاهل الأخطاء بصمت)
+  try {
+    const rc = localStorage.getItem('ref');
+    if (rc) { sb.rpc('claim_referral', { code: rc }).then(() => { try { localStorage.removeItem('ref'); } catch (e) {} }, () => {}); }
+    sb.rpc('touch_seen').then(() => {}, () => {});
+  } catch (e) {}
 
   const links = [
     ['home.html', 'لوحتي', '🏠'],
