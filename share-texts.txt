@@ -1,38 +1,126 @@
-═══ نصوص النشر — سنة الحياة ═══
-الرابط: https://sunatalhayat.runs-at.dev/
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://yepoakpeqonheksryalx.supabase.co; media-src 'self' blob: https://yepoakpeqonheksryalx.supabase.co; connect-src 'self' https://yepoakpeqonheksryalx.supabase.co https://api.mymemory.translated.net; object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'self'">
+  <title>سنة الحياة - انشر الموقع</title>
+  <meta name="description" content="أدوات جاهزة لنشر موقع سنة الحياة: روابط مشاركة ونصوص جاهزة ورمز QR.">
+  <link rel="stylesheet" href="style.css?v=14">
+  <style>
+    .bar{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:linear-gradient(135deg,#0E3B3C,#14595A)}
+    .bar a{color:#fff;text-decoration:none}
+    .bar .brand{font:700 1.4rem 'Amiri',serif}
+    .bar .brand span{color:#D8B565}
+    .sh{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+    .sh a,.sh button{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 8px;border-radius:14px;border:1px solid var(--line);background:#fff;color:var(--green);font:700 15px 'Tajawal',sans-serif;text-decoration:none;cursor:pointer}
+    .sh .wa{background:#1f8f4d;border-color:#1f8f4d;color:#fff}
+    .sh .full{grid-column:1/-1}
+    .tx{margin:12px 0}
+    .tx b{display:inline-block;background:var(--green);color:#fff;border-radius:8px;padding:0 9px;font-size:12px;margin-bottom:6px;letter-spacing:1px}
+    .tx textarea{width:100%;min-height:120px;font:15px/1.8 'Tajawal',sans-serif}
+    .tx .btn{width:100%;margin-top:6px}
+    #qr{display:flex;justify-content:center;margin:14px 0}
+    #qr svg,#qr img{width:200px;height:200px;border:1px solid var(--line);border-radius:14px;padding:10px;background:#fff}
+    .tips li{margin:6px 0;line-height:1.8}
+  </style>
+</head>
+<body>
+  <div class="bar"><a class="brand" href="index.html">سنة <span>الحياة</span></a><a href="index.html">الرئيسية</a></div>
+  <main style="max-width:600px;margin:0 auto;padding:20px 16px 50px">
+    <div class="card">
+      <h1>📣 انشر الموقع</h1>
+      <p style="color:var(--muted);margin-top:0">كل من يسجّل بسبب مشاركتك يزيد فرص الجميع في إيجاد النصيب. اختر الطريقة الأسهل لك.</p>
 
-── 1) رسالة واتساب لصديق (قصيرة) ──
-السلام عليكم، أنشأتُ موقعاً للتعارف بنيّة الزواج فقط، بخصوصية وجدية واحترام. التسجيل مجاني، وكل حساب يُراجَع قبل القبول. تفضّل تصفّحه، ولو عرفتَ من يناسبه فشاركه:
-https://sunatalhayat.runs-at.dev/
+      <div class="sh">
+        <a class="wa full" id="shWa" target="_blank" rel="noopener">واتساب</a>
+        <a id="shTg" target="_blank" rel="noopener">تيليغرام</a>
+        <a id="shFb" target="_blank" rel="noopener">فيسبوك</a>
+        <button id="shNative" type="button" style="display:none">مشاركة…</button>
+        <button id="shCopy" type="button" class="full">🔗 نسخ رابط الموقع</button>
+      </div>
+      <p id="msg" style="display:none"></p>
 
-── 2) منشور لمجموعة فيسبوك / تيليغرام (اطلب إذن المشرف أولاً) ──
-🌙 «سنة الحياة» — موقع للزواج الجاد
+      <h2>نصوص جاهزة للنشر</h2>
+      <p style="color:var(--muted);margin:0 0 4px">انسخ النص وانشره في المجموعات (بعد استئذان المشرفين) أو أرسله لمن تعرف.</p>
 
-الزواج سنّة، والبحث عنه يحتاج أماناً وجدية. لذلك بنينا موقعاً:
-✅ كل حساب يُراجَع يدوياً قبل القبول
-✅ لا تظهر بياناتك إلا لمن قبلتَ اهتمامه
-✅ محادثة داخل الموقع دون مشاركة رقمك
-✅ توثيق اختياري للحسابات (شارة «موثّق»)
-✅ بالعربية والفرنسية والإنجليزية
+      <div class="tx"><b>AR</b>
+        <textarea id="tAr" readonly>🌙 «سنة الحياة» موقع للتعارف بنيّة الزواج الجاد فقط.
+
+✅ كل ملف يُراجَع قبل أن يظهر
+✅ بياناتك لا يراها إلا الأعضاء المقبولون
+✅ محادثة خاصة داخل الموقع دون مشاركة رقمك
 ✅ التسجيل مجاني
 
-للتسجيل: https://sunatalhayat.runs-at.dev/
-نسأل الله لكم التوفيق 🤍
+https://sunatalhayat.runs-at.dev/</textarea>
+        <button class="btn ghost cp" data-t="tAr" type="button">نسخ النص</button></div>
 
-── 3) نص فيديو قصير (تيك توك / ريلز) ≈ 25 ثانية ──
-«تبحث عن زواج جاد وتخاف من المواقع غير الآمنة؟
-في "سنة الحياة": كل حساب يُراجَع قبل القبول،
-وبياناتك لا يراها إلا من وافقتَ عليه،
-والمحادثة داخل الموقع بلا رقم هاتف.
-التسجيل مجاني، والرابط في البايو.»
+      <div class="tx"><b>FR</b>
+        <textarea id="tFr" readonly dir="ltr">🌙 « Sunat Al-Hayat » : un site de rencontre dédié au mariage sérieux.
 
-── 4) Français ──
-Assalamou alaykoum, « Sunat Al-Hayat » est un site de rencontre dédié au mariage sérieux : chaque profil est vérifié avant acceptation, vos données ne sont visibles que par ceux que vous acceptez, et la messagerie reste dans le site. Inscription gratuite : https://sunatalhayat.runs-at.dev/
+✅ Chaque profil est vérifié avant d'apparaître
+✅ Vos données ne sont visibles que par les membres acceptés
+✅ Messagerie privée, sans partager votre numéro
+✅ Inscription gratuite
 
-── 5) English ──
-Sunat Al-Hayat is a site for serious, marriage-minded introductions: every profile is reviewed before approval, your details are visible only to people you accept, and chat stays inside the site. Free to join: https://sunatalhayat.runs-at.dev/
+https://sunatalhayat.runs-at.dev/</textarea>
+        <button class="btn ghost cp" data-t="tFr" type="button">نسخ النص</button></div>
 
-── نصائح ──
-• لا تذكر أرقاماً عن الأعضاء حتى يظهر العدّاد الحقيقي في موقعك.
-• جرّب النشر في 3 مجموعات فقط أولاً ولاحظ أيها يجلب تسجيلات.
-• أجب على أول المهتمين بسرعة؛ الانطباع الأول مهم.
+      <div class="tx"><b>EN</b>
+        <textarea id="tEn" readonly dir="ltr">🌙 Sunat Al-Hayat: a site for serious, marriage-minded introductions.
+
+✅ Every profile is reviewed before it appears
+✅ Your details are visible only to approved members
+✅ Private chat, no need to share your number
+✅ Free to join
+
+https://sunatalhayat.runs-at.dev/</textarea>
+        <button class="btn ghost cp" data-t="tEn" type="button">نسخ النص</button></div>
+
+      <h2>رمز QR</h2>
+      <p style="color:var(--muted);margin:0">اطبعه أو انشره كصورة، فيفتح الموقع عند مسحه بكاميرا الهاتف.</p>
+      <div id="qr"></div>
+
+      <h2>نصائح لنشر ناجح</h2>
+      <ul class="tips">
+        <li>ابدأ بدائرتك القريبة، فالتوصية الشخصية أقوى من أي إعلان.</li>
+        <li>اشرح الفكرة بصدق ولا تعد بما لا يتحقق.</li>
+        <li>لا تنشر الرابط عشوائياً في المجموعات، فاستأذن المشرف أولاً.</li>
+        <li>لا تنشر بيانات أعضاء أو صورهم أو محادثاتهم أبداً.</li>
+      </ul>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+  <script src="i18n-dict.js?v=4"></script>
+  <script src="i18n.js?v=3"></script>
+  <script>
+    const URL_ = 'https://sunatalhayat.runs-at.dev/';
+    const T_AR = document.getElementById('tAr').value;
+    const $ = id => document.getElementById(id);
+    function note(t) { const m = $('msg'); m.textContent = t; m.className = 'msg ok'; m.style.display = 'block'; setTimeout(() => { m.style.display = 'none'; }, 2500); }
+    $('shWa').href = 'https://wa.me/?text=' + encodeURIComponent(T_AR);
+    $('shTg').href = 'https://t.me/share/url?url=' + encodeURIComponent(URL_) + '&text=' + encodeURIComponent('«سنة الحياة» موقع للتعارف بنيّة الزواج الجاد');
+    $('shFb').href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(URL_);
+    async function copy(text) {
+      try { await navigator.clipboard.writeText(text); return true; } catch (e) {}
+      try { const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); const ok = document.execCommand('copy'); t.remove(); return ok; } catch (e) { return false; }
+    }
+    $('shCopy').onclick = async () => note((await copy(URL_)) ? 'تم نسخ الرابط ✓' : 'تعذّر النسخ، انسخ الرابط يدوياً.');
+    document.querySelectorAll('.cp').forEach(b => b.onclick = async () => note((await copy($(b.dataset.t).value)) ? 'تم نسخ النص ✓' : 'تعذّر النسخ، حدّد النص وانسخه يدوياً.'));
+    if (navigator.share) {
+      $('shNative').style.display = 'flex';
+      $('shNative').onclick = () => navigator.share({ title: 'سنة الحياة', text: '«سنة الحياة» موقع للتعارف بنيّة الزواج الجاد', url: URL_ }).catch(() => {});
+    }
+    try {
+      const qr = qrcode(0, 'M'); qr.addData(URL_); qr.make();
+      const n = qr.getModuleCount(), q = 2; let d = '';
+      for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (qr.isDark(r, c)) d += 'M' + (c + q) + ' ' + (r + q) + 'h1v1h-1z';
+      const NS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(NS, 'svg');
+      svg.setAttribute('viewBox', '0 0 ' + (n + q * 2) + ' ' + (n + q * 2)); svg.setAttribute('shape-rendering', 'crispEdges');
+      const bg = document.createElementNS(NS, 'rect'); bg.setAttribute('width', '100%'); bg.setAttribute('height', '100%'); bg.setAttribute('fill', '#fff');
+      const pth = document.createElementNS(NS, 'path'); pth.setAttribute('d', d); pth.setAttribute('fill', '#0E3B3C');
+      svg.append(bg, pth); $('qr').textContent = ''; $('qr').appendChild(svg);
+    } catch (e) { $('qr').style.display = 'none'; }
+  </script>
+</body>
+</html>
