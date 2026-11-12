@@ -2415,5 +2415,33 @@ window.I18N_DICT = {
 "🔒 لحمايتك تُخفى أرقام الهاتف والبريد وروابط التواصل في أول الرسائل.": [
 "🔒 Pour votre protection, les numéros, e-mails et liens de contact sont masqués dans les premiers messages.",
 "🔒 For your protection, phone numbers, emails and contact links are hidden in the first messages."
+],
+"المقبولة": [
+"Acceptées",
+"Accepted"
+],
+"من أبدى اهتمامه بك، ومن أبديتَ اهتمامك به.": [
+"Ceux qui se sont intéressés à vous, et ceux qui vous intéressent.",
+"Who showed interest in you, and who you showed interest in."
+],
+"أكمل ملفي": [
+"Compléter mon profil",
+"Complete my profile"
+],
+"عندما يُبدي أحد اهتمامه بك سيظهر هنا. أكمل ملفك ليزيد ظهورك.": [
+"Quand quelqu’un s’intéresse à vous, cela apparaîtra ici. Complétez votre profil pour être plus visible.",
+"When someone shows interest in you it will appear here. Complete your profile to be seen more."
+],
+"لا توجد اهتمامات مقبولة بعد": [
+"Aucun intérêt accepté pour le moment",
+"No accepted interests yet"
+],
+"عندما يقبل اهتمامك أحد، أو تقبل أنت اهتمام أحد، تبدأ المحادثة من هنا.": [
+"Quand un intérêt est accepté, la conversation commence ici.",
+"When an interest is accepted, the conversation starts here."
+],
+"📎 ملف": [
+"📎 Fichier",
+"📎 File"
 ]
 };
