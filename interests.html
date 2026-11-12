@@ -7,96 +7,150 @@
   <title>سنة الحياة - الاهتمامات</title>
   <link rel="stylesheet" href="style.css?v=14">
   <style>
-    .it{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px;margin:8px 0;background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
-    .it .who{display:flex;align-items:center;gap:10px;min-width:0}
-    .it .av{width:44px;height:44px;font-size:20px}
-    .it a.n{font-weight:700;color:var(--green);text-decoration:none}
-    .it .acts{display:flex;gap:6px;flex:none}
+    .tabs{display:flex;gap:8px;margin:12px 0 6px;overflow-x:auto;scrollbar-width:none}
+    .tabs::-webkit-scrollbar{display:none}
+    .tb{flex:none;border:1px solid var(--line);background:#fff;color:var(--green);border-radius:999px;padding:8px 16px;font:700 14px 'Tajawal',sans-serif;cursor:pointer;white-space:nowrap}
+    .tb.on{background:var(--green);border-color:var(--green);color:#fff}
+    .tb i{font-style:normal;display:inline-block;min-width:20px;margin-inline-start:6px;padding:0 6px;border-radius:999px;background:#e8efe9;color:var(--green);font-size:12px;line-height:20px}
+    .tb.on i{background:#ffffff33;color:#fff}
+    .tb i.hot{background:#c0392b;color:#fff}
+    .ic{display:flex;gap:12px;align-items:center;padding:14px;margin:10px 0;background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .ic.fresh{border-color:var(--gold2);box-shadow:0 0 0 2px #d8b56533,var(--shadow)}
+    .ic .av{width:54px;height:54px;font-size:24px}
+    .ic .mid{flex:1;min-width:0}
+    .ic .mid a.n{display:block;font-weight:700;color:var(--green);text-decoration:none;font-size:16px}
+    .ic .mid .sub{color:var(--muted);font-size:13px;margin-top:2px}
+    .ic .mid .when{color:var(--muted);font-size:12px;margin-top:2px}
+    .ic .pc{display:inline-block;margin-top:4px;font-size:12px;font-weight:700;border-radius:999px;padding:2px 10px;background:#eaf5ee;color:#1b7f4b}
+    .ic .pc.mid2{background:#fff4dd;color:#8a6a22}.ic .pc.low{background:#f1f2f4;color:#6b7280}
+    .ic .acts{display:flex;flex-direction:column;gap:6px;flex:none;align-items:stretch}
     .tag{font-size:13px;padding:3px 12px;border-radius:999px;background:#eee;white-space:nowrap}
     .tag.accepted{background:#dff3e3;color:#1f6b33}
     .tag.declined{background:#fbdcdc;color:#9b1c1c}
-    .go{font-size:13px;margin-right:6px}
   </style>
 </head>
 <body>
   <main class="wrap">
-    <h1>الاهتمامات</h1>
+    <div class="pg-head"><h1>الاهتمامات</h1></div>
+    <p class="hint" style="color:var(--muted);margin:2px 0 0">من أبدى اهتمامه بك، ومن أبديتَ اهتمامك به.</p>
     <p id="msg" style="display:none"></p>
-    <h2>الواردة</h2>
-    <div id="inbox"></div>
-    <h2>المرسلة</h2>
-    <div id="sent"></div>
+    <div class="tabs" id="tabs">
+      <button class="tb on" data-t="in" type="button">الواردة<i id="cIn">0</i></button>
+      <button class="tb" data-t="sent" type="button">المرسلة<i id="cSent">0</i></button>
+      <button class="tb" data-t="ok" type="button">المقبولة<i id="cOk">0</i></button>
+    </div>
+    <div id="list"></div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="i18n-dict.js?v=4"></script>
   <script src="i18n.js?v=3"></script>
+  <script src="compat.js?v=1"></script>
   <script src="app.js?v=14"></script>
   <script>
     const $ = id => document.getElementById(id);
     const stAr = { sent: 'بانتظار الرد', pending: 'بانتظار الرد', accepted: 'مقبول', declined: 'مرفوض' };
-    let me = null, names = {};
+    let me = null, mine = null, profs = {}, data = [], tab = 'in';
+    const isOpen = i => i.status === 'sent' || i.status === 'pending';
 
     function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; }
-
-    function empty(box, title, text) {
-      box.innerHTML = '';
-      const e = el('div', 'empty'); e.appendChild(el('b', '', title)); e.append(text); box.appendChild(e);
+    function ago(t) {
+      let lg = 'ar'; try { lg = localStorage.getItem('lang') || 'ar'; } catch (e) {}
+      const diff = (Date.now() - new Date(t).getTime()) / 1000;
+      const rf = new Intl.RelativeTimeFormat(lg, { numeric: 'auto' });
+      if (diff < 60) return rf.format(0, 'second');
+      if (diff < 3600) return rf.format(-Math.floor(diff / 60), 'minute');
+      if (diff < 86400) return rf.format(-Math.floor(diff / 3600), 'hour');
+      return rf.format(-Math.floor(diff / 86400), 'day');
+    }
+    function empty(title, text, href, label) {
+      const e = el('div', 'empty'); e.appendChild(el('b', '', title)); e.append(text);
+      if (href) { const a = el('a', 'btn sm', label); a.href = href; a.style.marginTop = '12px'; a.style.display = 'inline-flex'; e.appendChild(el('br')); e.appendChild(a); }
+      return e;
     }
 
     async function setStatus(id, status) {
       const { error } = await sb.from('interests').update({ status }).eq('id', id);
       if (error) { alert('خطأ: ' + error.message); return; }
-      load();
+      const r = data.find(x => x.id === id); if (r) r.status = status;
+      render();
     }
 
-    function item(i, incoming) {
+    function card(i) {
+      const incoming = i.to_id === me;
       const other = incoming ? i.from_id : i.to_id;
-      const nm = names[other] || 'عضو';
-      const d = el('div', 'it');
-      const who = el('div', 'who');
-      who.appendChild(el('div', 'av', nm.charAt(0).toUpperCase()));
-      const a = el('a', 'n', nm); a.href = 'member.html?id=' + other;
-      who.appendChild(a);
-      d.appendChild(who);
-      const open = i.status === 'sent' || i.status === 'pending';
-      if (incoming && open) {
-        const acts = el('div', 'acts');
-        const ok = el('button', 'btn sm', 'قبول'); ok.onclick = () => setStatus(i.id, 'accepted');
-        const no = el('button', 'btn ghost sm', 'رفض'); no.onclick = () => setStatus(i.id, 'declined');
-        acts.append(ok, no); d.appendChild(acts);
-      } else if (i.status === 'accepted') {
-        const w = el('div', 'acts');
-        w.appendChild(el('span', 'tag accepted', 'مقبول'));
-        const chat = el('a', 'btn sm', 'محادثة 💬'); chat.href = 'messages.html'; w.appendChild(chat);
-        d.appendChild(w);
-      } else {
-        d.appendChild(el('span', 'tag ' + i.status, stAr[i.status] || i.status));
+      const p = profs[other] || {};
+      const nm = p.first_name || 'عضو';
+      const d = el('div', 'ic' + (incoming && isOpen(i) ? ' fresh' : ''));
+      d.appendChild(el('div', 'av', nm.charAt(0).toUpperCase()));
+      const mid = el('div', 'mid');
+      const a = el('a', 'n', nm); a.href = 'member.html?id=' + other; mid.appendChild(a);
+      const bits = [];
+      const age = typeof ageOf === 'function' ? ageOf(p.birth_date) : null;
+      if (age) bits.push(age + ' سنة'); if (p.city) bits.push(p.city);
+      if (bits.length) mid.appendChild(el('div', 'sub', bits.join(' · ')));
+      if (mine && p.id) {
+        try { const c = compat(mine, p); if (c && c.pct != null) { const pc = el('span', 'pc ' + (c.pct >= 75 ? '' : c.pct >= 50 ? 'mid2' : 'low')); pc.appendChild(el('span', '', 'توافق')); pc.append(' ' + c.pct + '٪'); mid.appendChild(pc); } } catch (e) {}
       }
+      mid.appendChild(el('div', 'when', ago(i.created_at)));
+      d.appendChild(mid);
+      const acts = el('div', 'acts');
+      if (incoming && isOpen(i)) {
+        const ok = el('button', 'btn sm', 'قبول'); ok.type = 'button'; ok.onclick = () => setStatus(i.id, 'accepted');
+        const no = el('button', 'btn ghost sm', 'رفض'); no.type = 'button'; no.onclick = () => setStatus(i.id, 'declined');
+        acts.append(ok, no);
+      } else if (i.status === 'accepted') {
+        acts.appendChild(el('span', 'tag accepted', 'مقبول'));
+        const chat = el('a', 'btn sm', 'محادثة 💬'); chat.href = 'messages.html'; acts.appendChild(chat);
+      } else {
+        acts.appendChild(el('span', 'tag ' + i.status, stAr[i.status] || i.status));
+      }
+      d.appendChild(acts);
       return d;
     }
 
+    function render() {
+      const inbox = data.filter(i => i.to_id === me && i.status !== 'accepted');
+      const sent = data.filter(i => i.from_id === me && i.status !== 'accepted');
+      const ok = data.filter(i => i.status === 'accepted');
+      $('cIn').textContent = inbox.length; $('cSent').textContent = sent.length; $('cOk').textContent = ok.length;
+      const nIn = inbox.filter(isOpen).length; $('cIn').classList.toggle('hot', nIn > 0);
+      const box = $('list'); box.innerHTML = '';
+      const rows = tab === 'in' ? inbox : tab === 'sent' ? sent : ok;
+      if (!rows.length) {
+        box.appendChild(tab === 'in' ? empty('لا توجد اهتمامات واردة', 'عندما يُبدي أحد اهتمامه بك سيظهر هنا. أكمل ملفك ليزيد ظهورك.', 'profile.html', 'أكمل ملفي')
+          : tab === 'sent' ? empty('لم ترسل أي اهتمام بعد', 'تصفّح الأعضاء وأبدِ اهتمامك بمن يناسبك.', 'browse.html', 'تصفّح الأعضاء')
+          : empty('لا توجد اهتمامات مقبولة بعد', 'عندما يقبل اهتمامك أحد، أو تقبل أنت اهتمام أحد، تبدأ المحادثة من هنا.'));
+        return;
+      }
+      rows.forEach(i => box.appendChild(card(i)));
+    }
+
     async function load() {
-      const { data, error } = await sb.from('interests').select('*')
+      const { data: rows, error } = await sb.from('interests').select('*')
         .or('from_id.eq.' + me + ',to_id.eq.' + me).order('created_at', { ascending: false });
       if (error) { showMsg('msg', 'خطأ: ' + error.message, 'error'); return; }
-      const ids = [...new Set(data.flatMap(i => [i.from_id, i.to_id]))];
+      data = rows || [];
+      const ids = [...new Set(data.flatMap(i => [i.from_id, i.to_id]))].filter(x => x !== me);
       if (ids.length) {
-        const { data: ps } = await sb.from('profiles').select('id,first_name').in('id', ids);
-        (ps || []).forEach(p => names[p.id] = p.first_name);
+        const { data: ps } = await sb.from('profiles').select('*').in('id', ids);
+        (ps || []).forEach(p => profs[p.id] = p);
       }
-      const inbox = data.filter(i => i.to_id === me), sent = data.filter(i => i.from_id === me);
-      $('inbox').innerHTML = ''; $('sent').innerHTML = '';
-      if (!inbox.length) empty($('inbox'), 'لا توجد اهتمامات واردة', 'عندما يُبدي أحد اهتمامه بك سيظهر هنا.');
-      else inbox.forEach(i => $('inbox').appendChild(item(i, true)));
-      if (!sent.length) empty($('sent'), 'لم ترسل أي اهتمام بعد', 'تصفّح الأعضاء وأبدِ اهتمامك بمن يناسبك.');
-      else sent.forEach(i => $('sent').appendChild(item(i, false)));
+      render();
     }
+
+    document.querySelectorAll('#tabs .tb').forEach(b => b.onclick = () => {
+      tab = b.dataset.t;
+      document.querySelectorAll('#tabs .tb').forEach(x => x.classList.toggle('on', x === b));
+      render();
+    });
 
     (async () => {
       const s = await getSession();
       if (!s) { location.href = 'auth.html'; return; }
-      me = s.user.id; load();
+      me = s.user.id;
+      const { data: m } = await sb.from('profiles').select('*').eq('id', me).maybeSingle(); mine = m;
+      load();
     })();
   </script>
 </body>
