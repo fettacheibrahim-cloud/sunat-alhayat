@@ -11,6 +11,17 @@
     .av{flex:none;width:44px;height:44px;border-radius:50%;background:var(--green);color:var(--gold2);display:flex;align-items:center;justify-content:center;font:700 20px 'Amiri',serif;overflow:hidden}
     .av img{width:100%;height:100%;object-fit:cover}
     .conv .col{flex:1;min-width:0;display:flex;flex-direction:column}
+    .conv{transition:box-shadow .15s}
+    .conv:active{transform:scale(.99)}
+    .conv.unread{border-color:var(--gold2);box-shadow:0 0 0 2px #d8b56533,0 4px 12px rgba(14,59,60,.05)}
+    .conv.unread .pv{color:var(--green);font-weight:700}
+    .conv .av{width:54px;height:54px;font-size:24px;position:relative;overflow:visible}
+    .conv .av img{border-radius:50%}
+    .conv .av .on{position:absolute;bottom:0;inset-inline-end:0;width:13px;height:13px;border-radius:50%;background:#1b7f4b;border:2px solid #fff}
+    .conv .top{display:flex;align-items:center;gap:8px}
+    .conv .top b{flex:1;min-width:0;font-size:16px;color:var(--green);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .conv .tm{flex:none;font-size:12px;color:var(--muted)}
+    .conv.unread .tm{color:var(--gold);font-weight:700}
     .conv .pv{color:var(--muted);font-size:13px;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .badge{flex:none;background:var(--gold);color:#fff;border-radius:999px;min-width:22px;height:22px;padding:0 6px;font-size:12px;display:inline-flex;align-items:center;justify-content:center}
     .hd{display:flex;align-items:center;gap:10px;margin:8px 0}
@@ -67,7 +78,7 @@
 <body>
   <main style="max-width:640px;margin:0 auto;padding:20px 16px">
     <div id="listView">
-      <h1>المحادثات</h1>
+      <div class="pg-head"><h1>المحادثات</h1></div>
       <p id="info" style="color:var(--muted)"></p>
       <div id="list"></div>
     </div>
@@ -204,12 +215,12 @@
       }
       $('info').textContent = '';
       const { data: ps } = await sb.from('profiles')
-        .select('id,first_name,photo_path,photo_visible_to_matches').in('id', others);
-      const names = {}, photos = {};
-      (ps || []).forEach(p => { names[p.id] = p.first_name; if (p.photo_path && p.photo_visible_to_matches) photos[p.id] = p.photo_path; });
+        .select('id,first_name,photo_path,photo_visible_to_matches,last_seen').in('id', others);
+      const names = {}, photos = {}, seen = {};
+      (ps || []).forEach(p => { names[p.id] = p.first_name; seen[p.id] = p.last_seen; if (p.photo_path && p.photo_visible_to_matches) photos[p.id] = p.photo_path; });
 
       const allIds = convs.map(c => c.id);
-      const { data: ms } = await sb.from('messages').select('conversation_id,sender_id,body,created_at')
+      const { data: ms } = await sb.from('messages').select('conversation_id,sender_id,body,kind,created_at')
         .in('conversation_id', allIds).order('created_at', { ascending: false }).limit(300);
       const last = {}, unread = {}, convOwner = {};
       Object.keys(groups).forEach(o => groups[o].forEach(id => convOwner[id] = o));
@@ -232,13 +243,20 @@
             i.onload = () => { av.textContent = ''; av.appendChild(i); };
           });
         }
+        if (seen[other] && Date.now() - new Date(seen[other]).getTime() < 10 * 60 * 1000) { const dot = document.createElement('span'); dot.className = 'on'; av.appendChild(dot); }
         const col = document.createElement('div'); col.className = 'col';
-        const t = document.createElement('b'); t.textContent = name;
+        const top = document.createElement('div'); top.className = 'top';
+        const t = document.createElement('b'); t.textContent = name; top.appendChild(t);
+        const lm = last[other];
+        if (lm) { const tm = document.createElement('span'); tm.className = 'tm'; tm.textContent = fmtTime(lm.created_at); top.appendChild(tm); }
         const pv = document.createElement('span'); pv.className = 'pv';
-        pv.textContent = last[other] ? (last[other].sender_id === me ? 'أنت: ' : '') + last[other].body : 'ابدأ المحادثة';
-        col.append(t, pv);
+        let txt = 'ابدأ المحادثة';
+        if (lm) { txt = lm.kind === 'image' ? '📷 صورة' : lm.kind === 'audio' ? '🎤 رسالة صوتية' : lm.kind === 'file' ? '📎 ملف' : lm.body; }
+        if (lm && lm.sender_id === me) pv.appendChild(document.createElement('span')).textContent = '✓ ';
+        pv.appendChild(document.createElement('span')).textContent = txt;
+        col.append(top, pv);
         b.append(av, col);
-        if (unread[other]) { const bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = unread[other]; b.appendChild(bd); }
+        if (unread[other]) { b.classList.add('unread'); const bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = unread[other]; b.appendChild(bd); }
         b.onclick = () => openChat(groups[other], other, name);
         $('list').appendChild(b);
       }
