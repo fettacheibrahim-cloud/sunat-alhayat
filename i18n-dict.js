@@ -2265,8 +2265,8 @@ window.I18N_DICT = {
 "Articles"
 ],
 "انشر الموقع": [
-"Faire connaître le site",
-"Spread the word"
+"Partager le site",
+"Share the site"
 ],
 "📣 انشر الموقع": [
 "📣 Faire connaître le site",
@@ -2366,7 +2366,7 @@ window.I18N_DICT = {
 ],
 "مقالات ونصائح": [
 "Articles et conseils",
-"Articles and tips"
+"Articles & tips"
 ],
 "نصائح عملية تساعدك في رحلتك نحو زواج موفّق.": [
 "Des conseils pratiques pour un mariage réussi.",
@@ -2443,5 +2443,113 @@ window.I18N_DICT = {
 "📎 ملف": [
 "📎 Fichier",
 "📎 File"
+],
+"عرض ملفي": [
+"Voir mon profil",
+"View my profile"
+],
+"الخدمات": [
+"Services",
+"Services"
+],
+"توثيق الحساب": [
+"Vérifier le compte",
+"Verify account"
+],
+"نصائح الأمان": [
+"Conseils de sécurité",
+"Safety tips"
+],
+"الإعدادات": [
+"Paramètres",
+"Settings"
+],
+"المظهر والخلفيات": [
+"Apparence et arrière-plans",
+"Appearance & backgrounds"
+],
+"الإشعارات": [
+"Notifications",
+"Notifications"
+],
+"مفعّلة": [
+"Activées",
+"On"
+],
+"غير مفعّلة": [
+"Désactivées",
+"Off"
+],
+"محظورة": [
+"Bloquées",
+"Blocked"
+],
+"غير مدعومة": [
+"Non prises en charge",
+"Unsupported"
+],
+"المساعدة": [
+"Aide",
+"Help"
+],
+"الشروط والخصوصية": [
+"Conditions et confidentialité",
+"Terms & privacy"
+],
+"لوحة الإدارة": [
+"Administration",
+"Admin panel"
+],
+"خلفية الموقع": [
+"Arrière-plan du site",
+"Site background"
+],
+"خلفية المحادثة": [
+"Arrière-plan du chat",
+"Chat background"
+],
+"الافتراضي": [
+"Par défaut",
+"Default"
+],
+"أبيض": [
+"Blanc",
+"White"
+],
+"نعناعي": [
+"Menthe",
+"Mint"
+],
+"وردي": [
+"Rose",
+"Rose"
+],
+"سماوي": [
+"Bleu ciel",
+"Sky"
+],
+"بنفسجي فاتح": [
+"Lavande",
+"Lavender"
+],
+"دافئ متدرّج": [
+"Dégradé chaud",
+"Warm gradient"
+],
+"منقّط": [
+"Pointillé",
+"Dotted"
+],
+"ليلي": [
+"Nuit",
+"Night"
+],
+"إعادة الضبط": [
+"Réinitialiser",
+"Reset"
+],
+"تم": [
+"OK",
+"Done"
 ]
 };
