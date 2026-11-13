@@ -121,7 +121,7 @@ async function logout() {
 
   const top = document.createElement('div');
   top.className = 'app-top';
-  top.innerHTML = '<a class="brand" href="index.html">سنة <span>الحياة</span></a>';
+  top.innerHTML = '<div style="display:flex;align-items:center;gap:10px"><button id="mBtn" type="button" aria-label="القائمة">☰</button><a class="brand" href="index.html">سنة <span>الحياة</span></a></div>';
   const out = document.createElement('button');
   out.textContent = 'خروج';
   out.onclick = logout;
@@ -148,6 +148,8 @@ async function logout() {
   head.className = 'app-head';
   head.append(top, bar);
   document.body.prepend(head);
+  window.__me = me;
+  try { const ms = document.createElement('script'); ms.src = 'menu.js?v=1'; document.body.appendChild(ms); } catch (e) {}
   const onTab = bar.querySelector('a.on');
   if (onTab && onTab.scrollIntoView) { try { onTab.scrollIntoView({ inline: 'center', block: 'nearest' }); } catch (e) {} }
 
