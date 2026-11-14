@@ -293,7 +293,7 @@
     $('delAcc').onclick = async () => {
       if (!confirm('سيتم حذف حسابك وملفك ومحادثاتك وصورتك نهائياً ولا يمكن التراجع. هل أنت متأكد؟')) return;
       const word = (prompt('للتأكيد اكتب كلمة: حذف') || '').trim().toLowerCase();
-      if (!['حذف', 'supprimer', 'delete'].includes(word)) { msg('لم يتم الحذف.', 'error'); return; }
+      if (!['حذف', 'supprimer', 'delete', 'löschen', 'loeschen'].includes(word)) { msg('لم يتم الحذف.', 'error'); return; }
       $('delAcc').disabled = true;
       try {
         if (photoPath) await sb.storage.from('photos').remove([photoPath]);
