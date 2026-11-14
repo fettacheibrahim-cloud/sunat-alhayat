@@ -169,7 +169,7 @@
 
     function fmtTime(iso) {
       const d = new Date(iso), n = new Date();
-      const LOC = { ar: 'ar', fr: 'fr', en: 'en-GB' }[window.I18N_LANG || 'ar'];
+      const LOC = { ar: 'ar', fr: 'fr', en: 'en-GB', de: 'de-DE' }[window.I18N_LANG || 'ar'];
       const hm = d.toLocaleTimeString(LOC, { hour: '2-digit', minute: '2-digit' });
       if (d.toDateString() === n.toDateString()) return hm;
       return d.toLocaleDateString(LOC, { day: 'numeric', month: 'short' }) + ' ' + hm;
