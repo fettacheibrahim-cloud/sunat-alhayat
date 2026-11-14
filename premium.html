@@ -87,7 +87,7 @@
     const TITLES = { 30: 'شهر واحد', 90: '3 أشهر', 365: 'سنة كاملة' };
     let email = '', chosen = PLANS.find(p => p.popular) || PLANS[0];
 
-    function dateAr(d) { return new Date(d).toLocaleDateString({ ar: 'ar-MA-u-nu-latn', fr: 'fr-FR', en: 'en-GB' }[window.I18N_LANG || 'ar'], { year: 'numeric', month: 'long', day: 'numeric' }); }
+    function dateAr(d) { return new Date(d).toLocaleDateString({ ar: 'ar-MA-u-nu-latn', fr: 'fr-FR', en: 'en-GB', de: 'de-DE' }[window.I18N_LANG || 'ar'], { year: 'numeric', month: 'long', day: 'numeric' }); }
 
     function waLink() {
       const t = 'السلام عليكم، أرغب في تفعيل العضوية المميزة (' + TITLES[chosen.days] + ' — ' + chosen.price + ' درهماً) في «سنة الحياة». بريدي: ' + email;
