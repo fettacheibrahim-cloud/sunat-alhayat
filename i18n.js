@@ -1,8 +1,8 @@
-// دعم اللغات (العربية / الفرنسية / الإنجليزية)
+// دعم اللغات (العربية / الفرنسية / الإنجليزية / الألمانية)
 // الصفحات مكتوبة بالعربية، وهذا الملف يترجم النصوص الظاهرة عند التحميل وعند ظهور نصوص جديدة،
 // اعتماداً على القاموس في i18n-dict.js. اللغة المحفوظة في localStorage باسم «lang».
 (function () {
-  var LANGS = { ar: 'العربية', fr: 'Français', en: 'English' };
+  var LANGS = { ar: 'العربية', fr: 'Français', en: 'English', de: 'Deutsch' };
   var lang = 'ar';
   try { lang = localStorage.getItem('lang') || 'ar'; } catch (e) {}
   if (!LANGS[lang]) lang = 'ar';
@@ -61,14 +61,15 @@
   if (lang === 'ar') return; // العربية هي الأصل: لا شيء يُترجم
 
   var D = window.I18N_DICT || {};
-  var X = lang === 'fr' ? 0 : 1;
+  var X = lang === 'fr' ? 0 : lang === 'de' ? 2 : 1;
   var AR = /[؀-ۿ]/;
-  function L(fr, en) { return lang === 'fr' ? fr : en; }
+  function L(fr, en, de) { return lang === 'fr' ? fr : lang === 'de' ? (de != null ? de : en) : en; }
   function norm(s) { return s.replace(/\s+/g, ' ').trim(); }
   function ex(key) { var e = D[key]; return e ? e[X] : null; }
 
   // ترجمة الآية بالإنجليزية الموجودة في الصفحة إلى الفرنسية
   var VERSE_EN = '"And of His signs is that He created for you from yourselves mates that you may find tranquility in them; and He placed between you affection and mercy. Indeed in that are signs for a people who give thought." (Quran 30:21)';
+  if (lang === 'de') D[VERSE_EN] = [null, null, '„Und zu Seinen Zeichen gehört, dass Er euch aus euch selbst Gefährten erschaffen hat, damit ihr bei ihnen Ruhe findet, und Er hat Zuneigung und Barmherzigkeit zwischen euch gesetzt. Darin liegen wahrlich Zeichen für Leute, die nachdenken.“ (Koran 30:21)'];
   if (lang === 'fr') D[VERSE_EN] = ['« Et parmi Ses signes : Il a créé de vous, pour vous, des épouses pour que vous trouviez la quiétude auprès d\'elles, et Il a mis entre vous de l\'affection et de la bonté. Il y a en cela des signes pour des gens qui réfléchissent. » (Coran 30:21)'];
 
   // مفاتيح تنتهي بنقطتين: تُترجم كبادئة ويبقى باقي النص (أسماء، رسائل خطأ…)
@@ -76,26 +77,26 @@
     .sort(function (a, b) { return b.length - a.length; });
 
   var PAT = [
-    [/^عدد النتائج: (\d+)(?: من (\d+))?$/, function (m) { return L('Résultats : ', 'Results: ') + m[1] + (m[2] ? L(' sur ', ' of ') + m[2] : ''); }],
-    [/^(?:اهتماماتك|الاهتمامات) في آخر 7 أيام: (\d+) من (\d+)$/, function (m) { return L('Intérêts ces 7 derniers jours : ', 'Interests in the last 7 days: ') + m[1] + L(' sur ', ' of ') + m[2]; }],
-    [/^نقاط التقاء: (.+)$/, function (m) { return L('Points communs : ', 'Common ground: ') + m[1].split(' • ').map(function (p) { return ex(norm(p)) || p; }).join(' • '); }],
-    [/^أنت: (.*)$/, function (m) { return L('Vous : ', 'You: ') + (ex(norm(m[1])) || m[1]); }],
-    [/^هل تريد حظر (.+)؟ لن تظهر لك المحادثة بعد الآن\.$/, function (m) { return L('Voulez-vous bloquer ' + m[1] + ' ? La conversation ne s\'affichera plus.', 'Do you want to block ' + m[1] + '? The chat will no longer be shown to you.'); }],
-    [/^(🔔 )?رسالة جديدة من (.+?)(?: و(\d+) آخرين)?$/, function (m) { return (m[1] || '') + L('Nouveau message de ', 'New message from ') + m[2] + (m[3] ? L(' et ' + m[3] + ' autres', ' and ' + m[3] + ' others') : ''); }],
-    [/^(🔔 )?وصلك اهتمام جديد 💌$/, function (m) { return (m[1] || '') + L('Vous avez reçu un nouvel intérêt 💌', 'You received a new interest 💌'); }],
-    [/^وفّر (\d+) درهماً$/, function (m) { return L('Économisez ' + m[1] + ' MAD', 'Save ' + m[1] + ' MAD'); }],
+    [/^عدد النتائج: (\d+)(?: من (\d+))?$/, function (m) { return L('Résultats : ', 'Results: ', 'Ergebnisse: ') + m[1] + (m[2] ? L(' sur ', ' of ', ' von ') + m[2] : ''); }],
+    [/^(?:اهتماماتك|الاهتمامات) في آخر 7 أيام: (\d+) من (\d+)$/, function (m) { return L('Intérêts ces 7 derniers jours : ', 'Interests in the last 7 days: ', 'Interessen in den letzten 7 Tagen: ') + m[1] + L(' sur ', ' of ') + m[2]; }],
+    [/^نقاط التقاء: (.+)$/, function (m) { return L('Points communs : ', 'Common ground: ', 'Gemeinsamkeiten: ') + m[1].split(' • ').map(function (p) { return ex(norm(p)) || p; }).join(' • '); }],
+    [/^أنت: (.*)$/, function (m) { return L('Vous : ', 'You: ', 'Du: ') + (ex(norm(m[1])) || m[1]); }],
+    [/^هل تريد حظر (.+)؟ لن تظهر لك المحادثة بعد الآن\.$/, function (m) { return L('Voulez-vous bloquer ' + m[1] + ' ? La conversation ne s\'affichera plus.', 'Do you want to block ' + m[1] + '? The chat will no longer be shown to you.', 'Möchtest du ' + m[1] + ' blockieren? Der Chat wird dir nicht mehr angezeigt.'); }],
+    [/^(🔔 )?رسالة جديدة من (.+?)(?: و(\d+) آخرين)?$/, function (m) { return (m[1] || '') + L('Nouveau message de ', 'New message from ', 'Neue Nachricht von ') + m[2] + (m[3] ? L(' et ' + m[3] + ' autres', ' and ' + m[3] + ' others', ' und ' + m[3] + ' weitere') : ''); }],
+    [/^(🔔 )?وصلك اهتمام جديد 💌$/, function (m) { return (m[1] || '') + L('Vous avez reçu un nouvel intérêt 💌', 'You received a new interest 💌', 'Du hast ein neues Interesse erhalten 💌'); }],
+    [/^وفّر (\d+) درهماً$/, function (m) { return L('Économisez ' + m[1] + ' MAD', 'Save ' + m[1] + ' MAD', 'Spare ' + m[1] + ' MAD'); }],
     [/^(\d+) درهماً$/, function (m) { return m[1] + ' MAD'; }],
-    [/^ينتهي في (.+)$/, function (m) { return L('Expire le ', 'Expires on ') + m[1]; }],
-    [/^✓ حسابك موثّق حتى (.+)$/, function (m) { return L('✓ Votre compte est vérifié jusqu\'au ', '✓ Your account is verified until ') + m[1]; }]
+    [/^ينتهي في (.+)$/, function (m) { return L('Expire le ', 'Expires on ', 'Läuft ab am ') + m[1]; }],
+    [/^✓ حسابك موثّق حتى (.+)$/, function (m) { return L('✓ Votre compte est vérifié jusqu\'au ', '✓ Your account is verified until ', '✓ Dein Konto ist verifiziert bis ') + m[1]; }]
   ];
 
   // استبدالات داخل النص (للأرقام والوحدات) — لا تُطبَّق على نصوص الأعضاء
   var INL = [
-    [/(\d+) سنة/g, L('$1 ans', '$1 years')],
-    [/(\d+)٪ توافق/g, L('$1 % de compatibilité', '$1% match')],
+    [/(\d+) سنة/g, L('$1 ans', '$1 years', '$1 Jahre')],
+    [/(\d+)٪ توافق/g, L('$1 % de compatibilité', '$1% match', '$1 % Übereinstimmung')],
     [/(\d+)٪/g, '$1%'],
     [/(\d+) سم/g, '$1 cm'],
-    [/— تأكد من تشغيل ملف (\S+)/g, L('— vérifiez que le fichier $1 a été exécuté', '— make sure the file $1 has been run')]
+    [/— تأكد من تشغيل ملف (\S+)/g, L('— vérifiez que le fichier $1 a été exécuté', '— make sure the file $1 has been run', '– stelle sicher, dass die Datei $1 ausgeführt wurde')]
   ];
 
   function trCore(core) {
