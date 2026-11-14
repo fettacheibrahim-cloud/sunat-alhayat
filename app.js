@@ -173,7 +173,7 @@ async function logout() {
       }
       const j = sub.toJSON();
       if (!j.keys) return false;
-      const lang = window.I18N_LANG || 'ar';
+      const lang = (window.I18N_LANG === 'de') ? 'en' : (window.I18N_LANG || 'ar');
       const sig = [j.endpoint, me, lang].join('|');
       let saved = ''; try { saved = localStorage.getItem('push_sig') || ''; } catch (e) {}
       if (saved === sig) return true;
