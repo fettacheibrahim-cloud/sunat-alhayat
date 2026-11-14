@@ -60,7 +60,7 @@
 
     const $ = id => document.getElementById(id);
     let email = '';
-    function dateAr(d) { return new Date(d).toLocaleDateString({ ar: 'ar-MA-u-nu-latn', fr: 'fr-FR', en: 'en-GB' }[window.I18N_LANG || 'ar'], { year: 'numeric', month: 'long', day: 'numeric' }); }
+    function dateAr(d) { return new Date(d).toLocaleDateString({ ar: 'ar-MA-u-nu-latn', fr: 'fr-FR', en: 'en-GB', de: 'de-DE' }[window.I18N_LANG || 'ar'], { year: 'numeric', month: 'long', day: 'numeric' }); }
 
     function waLink() {
       const t = 'السلام عليكم، أرغب في توثيق حسابي في «سنة الحياة» (' + VERIFY.price + ' درهماً لسنة). بريدي: ' + email + '. أرفقت صورة التحقق.';
