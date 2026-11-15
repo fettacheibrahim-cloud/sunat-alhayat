@@ -220,6 +220,15 @@
     </div>
   </section>
 
+  <section id="offerSec" style="display:none;padding-top:0">
+    <div style="background:linear-gradient(135deg,#FFF3D1,#F6E2A8);border:2px solid #D8B565;border-radius:20px;padding:22px 18px;text-align:center;color:#0E3B3C">
+      <b style="display:block;font-size:1.2rem;margin-bottom:8px">🎁 <span>عرض الإطلاق</span></b>
+      <p style="margin:0 0 10px;line-height:1.8"><span>عضوية Premium مجاناً لمدة 3 أشهر لأول 30 عضواً مقبولاً.</span></p>
+      <p style="margin:0;font-weight:700"><span>الأماكن المتبقية:</span> <b id="offN" style="font-size:1.5rem;color:#B8862B">0</b></p>
+      <a href="auth.html" class="btn" style="display:inline-block;margin-top:14px">سجّل الآن</a>
+    </div>
+  </section>
+
   <section id="statsSec" style="display:none;padding-top:0">
     <h2>مجتمع يكبر بصدق</h2>
     <div class="stats">
@@ -348,6 +357,11 @@
         }
         requestAnimationFrame(step);
       }
+      Promise.resolve(sb.rpc('launch_spots_left')).then(function (r) {
+        var n = r && r.data; if (typeof n !== 'number' || n <= 0) return;
+        document.getElementById('offN').textContent = String(n);
+        document.getElementById('offerSec').style.display = 'block';
+      }).catch(function () {});
       Promise.resolve(sb.rpc('public_stats')).then(function (r) {
         var d = r && r.data; if (!d || !(d.members >= MIN_MEMBERS)) return;
         document.getElementById('statsSec').style.display = 'block';
