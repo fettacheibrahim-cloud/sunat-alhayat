@@ -636,4 +636,8 @@ window.I18N_DICT = {"سنة الحياة - موقع الزواج الجاد":["S
 "منقّط":["Pointillé","Dotted","Gepunktet"],
 "ليلي":["Nuit","Night","Nacht"],
 "إعادة الضبط":["Réinitialiser","Reset","Zurücksetzen"],
-"تم":["OK","Done","Fertig"]};
+"تم":["OK","Done","Fertig"],
+"عرض الإطلاق":["Offre de lancement","Launch offer","Einführungsangebot"],
+"عضوية Premium مجاناً لمدة 3 أشهر لأول 30 عضواً مقبولاً.":["Abonnement Premium gratuit pendant 3 mois pour les 30 premiers membres acceptés.","Free Premium membership for 3 months for the first 30 approved members.","Premium-Mitgliedschaft 3 Monate kostenlos für die ersten 30 freigegebenen Mitglieder."],
+"الأماكن المتبقية:":["Places restantes :","Spots left:","Verbleibende Plätze:"],
+"سجّل الآن":["Inscrivez-vous maintenant","Sign up now","Jetzt registrieren"]};
