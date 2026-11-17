@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://yepoakpeqonheksryalx.supabase.co; media-src 'self' blob: https://yepoakpeqonheksryalx.supabase.co; connect-src 'self' https://yepoakpeqonheksryalx.supabase.co https://api.mymemory.translated.net; object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://yepoakpeqonheksryalx.supabase.co; media-src 'self' blob: https://yepoakpeqonheksryalx.supabase.co; connect-src 'self' https://yepoakpeqonheksryalx.supabase.co https://api.mymemory.translated.net https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'self'">
   <title>سنة الحياة - الدخول</title>
   <meta name="description" content="سجّل الدخول أو أنشئ حساباً مجانياً في سنة الحياة، موقع التعارف بنيّة الزواج بجدية واحترام.">
   <link rel="stylesheet" href="style.css?v=11">
@@ -32,6 +32,7 @@
         <input id="terms" type="checkbox" style="width:auto;margin-top:6px">
         <label for="terms" style="margin:0;font-weight:500">أوافق على <a href="legal.html#terms" target="_blank">الشروط والأحكام</a> و<a href="legal.html#privacy" target="_blank">سياسة الخصوصية</a>، وأؤكد أن عمري 18 سنة فأكثر.</label>
       </div>
+      <div id="cap" style="margin-top:14px;display:flex;justify-content:center"></div>
       <button id="btn" type="submit" class="btn" style="width:100%;margin-top:16px">دخول</button>
     </form>
     <p id="msg" style="display:none;margin-top:12px"></p>
@@ -71,6 +72,24 @@
       $('msg').style.display = 'none';
     };
 
+    // حماية CAPTCHA (Cloudflare Turnstile): ضع مفتاح الموقع العام هنا لتفعيلها، واتركه فارغاً لتعطيلها
+    const TURNSTILE_SITE_KEY = '0x4AAAAAAGEe68AejA_NdfIY';
+    let capToken = '', capId = null;
+    function capReset() { capToken = ''; try { if (capId !== null && window.turnstile) window.turnstile.reset(capId); } catch (e) {} }
+    if (TURNSTILE_SITE_KEY) {
+      window.onTurnstileLoad = function () {
+        capId = window.turnstile.render('#cap', {
+          sitekey: TURNSTILE_SITE_KEY, theme: 'light', language: document.documentElement.lang || 'ar',
+          callback: t => { capToken = t; }, 'expired-callback': () => { capToken = ''; }, 'error-callback': () => { capToken = ''; }
+        });
+      };
+      const sc = document.createElement('script');
+      sc.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad';
+      sc.async = true; document.head.appendChild(sc);
+    }
+    function capOpts(o) { o = o || {}; if (TURNSTILE_SITE_KEY) o.captchaToken = capToken; return o; }
+    function capOk() { return !TURNSTILE_SITE_KEY || !!capToken; }
+
     // الدخول/التسجيل عبر Google أو Facebook (يتطلب تفعيل المزوّد في Supabase)
     async function social(provider, btn) {
       btn.disabled = true;
@@ -93,7 +112,9 @@
       e.preventDefault();
       const email = $('email').value.trim();
       if (!email) { showMsg('msg', 'اكتب بريدك الإلكتروني أولاً ثم اضغط «نسيت كلمة المرور».', 'error'); return; }
-      const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: base + 'reset.html' });
+      if (!capOk()) { showMsg('msg', 'أكمل التحقق أولاً (أنا لست روبوتاً).', 'error'); return; }
+      const { error } = await sb.auth.resetPasswordForEmail(email, capOpts({ redirectTo: base + 'reset.html' }));
+      capReset();
       if (error) { showMsg('msg', 'تعذّر الإرسال: ' + error.message, 'error'); return; }
       showMsg('msg', 'إن كان البريد مسجّلاً لدينا فقد أرسلنا إليه رابط تغيير كلمة المرور. (انظر في المزعج أيضاً)', 'ok');
     };
@@ -104,8 +125,10 @@
       const email = $('email').value.trim();
       const password = $('password').value;
       try {
+        if (!capOk()) throw new Error('أكمل التحقق أولاً (أنا لست روبوتاً).');
         if (isLogin) {
-          const { error } = await sb.auth.signInWithPassword({ email, password });
+          const { error } = await sb.auth.signInWithPassword({ email, password, options: capOpts() });
+          capReset();
           if (error) {
             if (/not confirmed/i.test(error.message)) throw new Error('لم يتم تأكيد بريدك بعد. افتح رسالة التأكيد في بريدك.');
             if (/invalid login/i.test(error.message)) throw new Error('البريد أو كلمة المرور غير صحيحة.');
@@ -116,14 +139,16 @@
           if (!$('terms').checked) throw new Error('يجب الموافقة على الشروط وسياسة الخصوصية للتسجيل.');
           const { data, error } = await sb.auth.signUp({
             email, password,
-            options: { emailRedirectTo: base + 'profile.html' }
+            options: capOpts({ emailRedirectTo: base + 'profile.html' })
           });
+          capReset();
           if (error) throw error;
           if (data.session) { location.href = 'profile.html'; return; }
           showMsg('msg', 'تم إنشاء حسابك. أرسلنا رسالة تأكيد إلى بريدك، افتحها واضغط الرابط ثم ادخل. (انظر في المزعج إن لم تجدها)', 'ok');
           btn.disabled = false;
         }
       } catch (err) {
+        capReset();
         showMsg('msg', err.message, 'error');
         btn.disabled = false;
       }
