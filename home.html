@@ -37,12 +37,16 @@
     </div>
 
     <div class="sect" id="inv" style="display:none">
-      <h3><i>🎁</i>ادعُ صديقاً</h3>
-      <p class="hint">شارك رابطك الخاص مع من تثق به، وكل من ينضم عبره يُحتسب لك.</p>
+      <h3><i>🎁</i>ادعُ صديقاً واربح Premium</h3>
+      <p class="hint">لكل صديق ينضم عبر رابطك ويُقبل ملفه تحصل على 7 أيام Premium مجاناً، حتى 8 أصدقاء.</p>
       <input id="invLink" readonly dir="ltr" style="text-align:left">
       <div class="qa" style="margin-top:10px">
         <button class="btn" id="invCopy" type="button">نسخ الرابط</button>
         <a class="btn ghost" id="invWa" target="_blank" rel="noopener">واتساب</a>
+      </div>
+      <div id="rwBox" style="display:none;margin-top:12px">
+        <div style="height:10px;background:#EFE6CF;border-radius:6px;overflow:hidden"><div id="rwBar" style="height:100%;width:0;background:#D8B565;border-radius:6px;transition:width .4s"></div></div>
+        <p class="hint" style="margin:6px 0 0"><span>تقدّمك:</span> <b id="rwN">0</b> <span>من 8 أصدقاء</span></p>
       </div>
       <p class="hint" id="invCnt" style="display:none;margin-top:10px"></p>
     </div>
@@ -134,6 +138,10 @@
         $('invWa').href = 'https://wa.me/?text=' + encodeURIComponent('أنصحك بموقع سنة الحياة للتعارف بنيّة الزواج بجدية واحترام: ' + link);
         $('invCopy').onclick = async () => { try { await navigator.clipboard.writeText(link); } catch (e) { $('invLink').select(); document.execCommand('copy'); } $('invCopy').textContent = 'تم النسخ ✓'; };
         $('inv').style.display = 'block';
+        sb.rpc('my_referral_rewards').then(r => {
+          const n = typeof r.data === 'number' ? r.data : null; if (n === null) return;
+          $('rwN').textContent = String(n); $('rwBar').style.width = Math.min(100, n / 8 * 100) + '%'; $('rwBox').style.display = 'block';
+        }, () => {});
         sb.rpc('my_referrals').then(r => {
           const d = r.data && r.data[0];
           if (d && d.total > 0) { const c = $('invCnt'); c.textContent = '👥 ' + d.total + ' / ' + d.approved; c.style.display = 'block'; c.title = 'المنضمّون / المقبولون'; }
