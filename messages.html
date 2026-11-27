@@ -70,6 +70,11 @@
     .tr-btn{display:block;background:none;border:0;padding:3px 0 0;font:inherit;font-size:12px;opacity:.8;cursor:pointer;text-decoration:underline;color:inherit}
     .tx{margin-top:6px;padding-top:6px;border-top:1px dashed rgba(127,127,127,.5);font-size:14px;direction:auto;white-space:pre-wrap}
     .tx small{display:block;opacity:.7;font-size:11px;margin-top:2px}
+    .trbar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin:8px 0 4px;padding:8px 10px;background:#F3ECDA;border-radius:12px;font-size:13px}
+    .trbar select{font:inherit;font-size:13px;padding:4px 8px;border-radius:8px;border:1px solid #D8C9A0;background:#fff;width:auto}
+    .trbar label{display:flex;align-items:center;gap:5px;margin:0;cursor:pointer}
+    .trbar input[type=checkbox]{width:auto;margin:0}
+    .trbar button{font-size:13px}
     #lb{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.92);align-items:center;justify-content:center}
     #lb img{max-width:96vw;max-height:88vh;border-radius:8px}
     #lb button{position:absolute;top:14px;left:14px;width:42px;height:42px;border-radius:50%;border:0;background:rgba(255,255,255,.2);color:#fff;font-size:20px;cursor:pointer}
@@ -128,6 +133,17 @@
         <label class="opt">📸 الكاميرا<input id="fCam" type="file" accept="image/*" capture="environment"></label>
       </div>
 
+      <div class="trbar" id="trBar">
+        <span>🌐 لغة الترجمة:</span>
+        <select id="trLang" class="ugc" aria-label="لغة الترجمة">
+          <option value="ar">العربية</option>
+          <option value="fr">Français</option>
+          <option value="en">English</option>
+          <option value="de">Deutsch</option>
+        </select>
+        <label><input type="checkbox" id="trAuto"> <span>ترجمة تلقائية للرسائل الواردة</span></label>
+        <button id="trMine" class="btn ghost sm" type="button">🌐 ترجم رسالتي</button>
+      </div>
       <p class="mnote">🔒 لحمايتك تُخفى أرقام الهاتف والبريد وروابط التواصل في أول الرسائل.</p>
       <form id="send">
         <button id="attachBtn" class="ibtn" type="button" title="إرسال صورة" aria-label="إرسال صورة">📷</button>
@@ -316,6 +332,13 @@
 
     /* ---------- ترجمة الرسائل (خدمة MyMemory المجانية، عند الضغط فقط) ---------- */
     const UI_LANG = window.I18N_LANG || 'ar';
+    const TR_OK = ['ar', 'fr', 'en', 'de'];
+    function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+    function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+    let TARGET = TR_OK.includes(lsGet('tr_lang')) ? lsGet('tr_lang') : UI_LANG;
+    let AUTO = lsGet('tr_auto') === '1';
+    let autoCount = 0, autoStopped = false;
+    const trResets = [];
     const trCache = {};
     function arRatio(t) {
       const letters = (t.match(/[A-Za-zÀ-ɏ؀-ۿ]/g) || []).length;
@@ -361,33 +384,65 @@
     function addTranslate(d, m) {
       const body = m.body || '';
       if (body.trim().length < 2) return;
-      if (UI_LANG === 'ar' && arRatio(body) > 0.5) return; // عربية والواجهة عربية
       const btn = document.createElement('button');
       btn.type = 'button'; btn.className = 'tr-btn'; btn.textContent = '🌐 ترجم';
       const box = document.createElement('div'); box.className = 'tx'; box.style.display = 'none';
       const label = document.createElement('small'); label.textContent = 'ترجمة آلية';
       let shown = false;
-      btn.onclick = async () => {
+      trResets.push(() => { if (!d.isConnected) return false; box.style.display = 'none'; shown = false; btn.textContent = '🌐 ترجم'; return true; });
+      const run = silent => btn.onclick(silent);
+      btn.onclick = async (silent) => {
+        const quiet = silent === true;
         if (shown) { box.style.display = 'none'; shown = false; btn.textContent = '🌐 ترجم'; return; }
-        const key = m.id + '|' + UI_LANG;
+        const key = m.id + '|' + TARGET;
         if (!trCache[key]) {
           btn.disabled = true; btn.textContent = 'جاري الترجمة…';
-          try { trCache[key] = await mmTranslate(body, UI_LANG); }
+          try { trCache[key] = await mmTranslate(body, TARGET); }
           catch (e) {
             btn.disabled = false; btn.textContent = '🌐 ترجم';
-            note(e && e.message === 'QUOTA' ? 'بلغ حدّ الترجمة المجانية لهذا اليوم، حاول لاحقاً.' : 'تعذّرت الترجمة. حاول لاحقاً.');
+            if (e && e.message === 'QUOTA') autoStopped = true;
+            if (!quiet) note(e && e.message === 'QUOTA' ? 'بلغ حدّ الترجمة المجانية لهذا اليوم، حاول لاحقاً.' : 'تعذّرت الترجمة. حاول لاحقاً.');
             return;
           }
           btn.disabled = false;
         }
         const r = trCache[key];
-        if (r.same) { btn.textContent = '🌐 ترجم'; note('الرسالة بلغتك أصلاً.'); return; }
+        if (r.same) { btn.textContent = '🌐 ترجم'; if (!quiet) note('الرسالة بلغتك أصلاً.'); return; }
         const sp = document.createElement('span'); sp.className = 'ugc'; sp.textContent = r.text;
         box.textContent = ''; box.appendChild(sp); box.appendChild(label);
         box.style.display = 'block'; shown = true; btn.textContent = 'عرض الأصل';
       };
       d.appendChild(btn); d.appendChild(box);
+      if (AUTO && !autoStopped && m.sender_id !== me && body.length <= 300 && autoCount < 30) {
+        autoCount++; setTimeout(() => { if (AUTO && !autoStopped && !shown) run(true); }, 400 * autoCount);
+      }
     }
+    function trRefresh() {
+      for (let i = trResets.length - 1; i >= 0; i--) if (!trResets[i]()) trResets.splice(i, 1);
+      if (AUTO) {
+        autoStopped = false; autoCount = 0;
+        document.querySelectorAll('#box .b.other .tr-btn').forEach((b, i) => { if (i < 30) setTimeout(() => { if (AUTO && !autoStopped) b.onclick(true); }, 400 * (i + 1)); });
+      }
+    }
+    $('trLang').value = TARGET; $('trAuto').checked = AUTO;
+    $('trLang').onchange = () => { TARGET = $('trLang').value; lsSet('tr_lang', TARGET); trRefresh(); };
+    $('trAuto').onchange = () => { AUTO = $('trAuto').checked; lsSet('tr_auto', AUTO ? '1' : '0'); trRefresh(); };
+    let trOrig = null;
+    $('trMine').onclick = async () => {
+      const inp = $('text'), v = inp.value.trim();
+      if (trOrig !== null && inp.value === trOrig.tr) { inp.value = trOrig.src; trOrig = null; $('trMine').textContent = '🌐 ترجم رسالتي'; return; }
+      if (!v) { note('اكتب رسالتك أولاً ثم اضغط «ترجم رسالتي».'); return; }
+      const b = $('trMine'); b.disabled = true; b.textContent = 'جاري الترجمة…';
+      try {
+        const res = await mmTranslate(v, TARGET);
+        if (res.same) { note('رسالتك مكتوبة بهذه اللغة أصلاً.'); b.textContent = '🌐 ترجم رسالتي'; }
+        else { const t = res.text.slice(0, 1000); trOrig = { src: v, tr: t }; inp.value = t; note('راجع الترجمة ثم اضغط «إرسال». اضغط الزر مجدداً للرجوع إلى نصّك.'); b.textContent = '↩ الأصل'; }
+      } catch (e) {
+        b.textContent = '🌐 ترجم رسالتي';
+        note(e && e.message === 'QUOTA' ? 'بلغ حدّ الترجمة المجانية لهذا اليوم، حاول لاحقاً.' : 'تعذّرت الترجمة. حاول لاحقاً.');
+      } finally { b.disabled = false; }
+    };
+    $('text').addEventListener('input', () => { if (trOrig && $('text').value !== trOrig.tr) { trOrig = null; $('trMine').textContent = '🌐 ترجم رسالتي'; } });
 
     function msgEl(m, stick) {
       const d = document.createElement('div');
