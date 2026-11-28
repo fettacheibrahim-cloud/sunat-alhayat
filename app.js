@@ -74,15 +74,15 @@ async function logout() {
   } catch (e) {}
 
   const links = [
-    ['home.html', 'لوحتي', '🏠'],
-    ['browse.html', 'التصفح', '🔍'],
-    ['interests.html', 'الاهتمامات', '💌'],
-    ['messages.html', 'المحادثات', '💬'],
-    ['profile.html', 'ملفي', '👤']
+    ['home.html', 'لوحتي', '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/></svg>'],
+    ['browse.html', 'التصفح', '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>'],
+    ['interests.html', 'الاهتمامات', '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="m4 7.5 8 6 8-6"/></svg>'],
+    ['messages.html', 'المحادثات', '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-10.9 6.7L4 20l1.4-4.2A7.5 7.5 0 1 1 20 12Z"/></svg>'],
+    ['profile.html', 'ملفي', '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.7"/><path d="M4.5 20c.9-3.6 3.8-5.5 7.5-5.5s6.6 1.9 7.5 5.5"/></svg>']
   ];
   const { data: prof } = await sb.from('profiles')
     .select('is_admin').eq('id', me).maybeSingle();
-  if (prof && prof.is_admin) links.push(['admin.html', 'الإدارة', '⚙️']);
+  if (prof && prof.is_admin) links.push(['admin.html', 'الإدارة', '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.3M12 18.7V21M4.6 7.5l2 1.1M17.4 15.4l2 1.1M4.6 16.5l2-1.1M17.4 8.6l2-1.1"/></svg>']);
 
   const st = document.createElement('style');
   st.textContent = `
@@ -99,7 +99,8 @@ async function logout() {
       padding:8px 7px;border-radius:999px;text-decoration:none;white-space:nowrap;
       color:rgba(255,255,255,.78);font:500 12.5px 'Tajawal',sans-serif;background:rgba(255,255,255,.07);
       border:1px solid rgba(255,255,255,.12);transition:background .2s,color .2s}
-    .app-bar a i{font-style:normal;font-size:15px;line-height:1}
+    .app-bar a i{font-style:normal;font-size:15px;line-height:1;display:inline-flex}
+    .app-bar a svg{width:17px;height:17px}
     .app-bar a:active{background:rgba(255,255,255,.18)}
     .app-bar a.on{background:#FAF7F0;color:#0E3B3C;font-weight:700;border-color:#D8B565;
       box-shadow:0 3px 10px rgba(0,0,0,.2)}
@@ -114,6 +115,23 @@ async function logout() {
     .app-toast{display:none;position:fixed;top:122px;right:12px;left:12px;max-width:420px;margin:0 auto;
       background:#0E3B3C;color:#fff;border:1px solid #D8B565;border-radius:14px;padding:12px 16px;z-index:100;
       box-shadow:0 8px 24px rgba(0,0,0,.25);cursor:pointer;font:500 15px 'Tajawal',sans-serif}
+    @media (max-width:760px){
+      body{padding-bottom:calc(74px + env(safe-area-inset-bottom))}
+      body.chat-open{padding-bottom:0}
+      body.chat-open .app-bar{display:none}
+      .app-bar{position:fixed;left:0;right:0;bottom:0;z-index:55;gap:0;justify-content:space-around;align-items:stretch;
+        padding:6px 4px calc(6px + env(safe-area-inset-bottom));overflow:visible;background:rgba(255,255,255,.97);
+        -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:1px solid #E8E0CC;box-shadow:0 -6px 22px rgba(14,59,60,.12)}
+      .app-bar a{flex:1 1 0;min-width:0;flex-direction:column;gap:3px;padding:6px 2px 4px;border:0;border-radius:12px;background:none;
+        color:#6C7A78;font:600 10.5px 'Tajawal',sans-serif;box-shadow:none;overflow:visible}
+      .app-bar a svg{width:23px;height:23px}
+      .app-bar a:active{background:#F3ECDA}
+      .app-bar a.on{background:none;color:#0E3B3C;box-shadow:none;border:0}
+      .app-bar a.on::after{content:'';position:absolute;top:-7px;left:28%;right:28%;height:3px;border-radius:0 0 3px 3px;background:#D8B565}
+      .app-bar a.on svg{stroke-width:2.3}
+      .app-badge{top:-1px;inset-inline-end:calc(50% - 22px);box-shadow:0 0 0 2px #fff}
+      .app-toast{top:70px}
+    }
   `;
   document.head.appendChild(st);
 
@@ -204,15 +222,41 @@ async function logout() {
     toastTimer = setTimeout(() => { t.style.display = 'none'; }, 6000);
   }
 
-  function beep() {
+  // رنة الإشعار: نغمات هادئة مولَّدة في المتصفح (لا ملفات). يمكن كتمها من القائمة الجانبية
+  let AC = null;
+  const sndOn = () => { try { return localStorage.getItem('snd_off') !== '1'; } catch (e) { return true; } };
+  function audioCtx() {
     try {
-      const C = window.AudioContext || window.webkitAudioContext;
-      const c = new C(), o = c.createOscillator(), g = c.createGain();
-      o.connect(g); g.connect(c.destination);
-      o.frequency.value = 880; g.gain.value = 0.08;
-      o.start(); o.stop(c.currentTime + 0.18);
-    } catch (e) {}
+      const C = window.AudioContext || window.webkitAudioContext; if (!C) return null;
+      if (!AC) AC = new C();
+      if (AC.state === 'suspended') AC.resume();
+      return AC;
+    } catch (e) { return null; }
   }
+  ['pointerdown', 'keydown', 'touchstart'].forEach(ev => window.addEventListener(ev, function f() { audioCtx(); window.removeEventListener(ev, f, true); }, { capture: true, passive: true }));
+  const TONES = {
+    msg: [[784, 0, .20], [1175, .13, .34]],
+    interest: [[659, 0, .18], [784, .12, .18], [1047, .24, .38]],
+    soft: [[988, 0, .16]]
+  };
+  function playTone(kind, force) {
+    if (!force && !sndOn()) return;
+    const c = audioCtx(); if (!c) return;
+    (TONES[kind] || TONES.msg).forEach(([f, at, len]) => {
+      const t = c.currentTime + at;
+      const o = c.createOscillator(), o2 = c.createOscillator(), g = c.createGain();
+      o.type = 'sine'; o.frequency.value = f; o2.type = 'triangle'; o2.frequency.value = f * 2;
+      const g2 = c.createGain(); g2.gain.value = .18;
+      o.connect(g); o2.connect(g2); g2.connect(g); g.connect(c.destination);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(.16, t + .015);
+      g.gain.exponentialRampToValueAtTime(.0001, t + len);
+      o.start(t); o2.start(t); o.stop(t + len + .02); o2.stop(t + len + .02);
+    });
+    try { if (!force && navigator.vibrate) navigator.vibrate(kind === 'soft' ? 30 : [70, 40, 70]); } catch (e) {}
+  }
+  window.sunatSound = playTone;
+  window.sunatSoundEnabled = sndOn;
+  const beep = kind => playTone(kind || 'msg');
 
   async function systemNotify(text, href) {
     if (!('Notification' in window) || Notification.permission !== 'granted') return;
@@ -226,10 +270,10 @@ async function logout() {
     try { new Notification('سنة الحياة', { body: text, tag: href }); } catch (e) {}
   }
 
-  function alertUser(text, href) {
+  function alertUser(text, href, kind) {
     if (window.i18nT) text = window.i18nT(text);
     if (document.hidden) systemNotify(text, href);
-    else { toast(text, href); beep(); }
+    else { toast(text, href); beep(kind); }
   }
 
   const seenOf = o => { try { return localStorage.getItem('seen_' + me + '_' + o) || ''; } catch (e) { return ''; } };
@@ -287,9 +331,9 @@ async function logout() {
         if (fresh.length) {
           await nameOf(fresh);
           alertUser('رسالة جديدة من ' + (names[fresh[0]] || 'عضو') +
-            (fresh.length > 1 ? ' و' + (fresh.length - 1) + ' آخرين' : ''), 'messages.html');
+            (fresh.length > 1 ? ' و' + (fresh.length - 1) + ' آخرين' : ''), 'messages.html', 'msg');
         } else if (pend > prevInterests) {
-          alertUser('وصلك اهتمام جديد 💌', 'interests.html');
+          alertUser('وصلك اهتمام جديد 💌', 'interests.html', 'interest');
         }
       }
 
