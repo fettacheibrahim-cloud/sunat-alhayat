@@ -70,6 +70,9 @@
     .tr-btn{display:block;background:none;border:0;padding:3px 0 0;font:inherit;font-size:12px;opacity:.8;cursor:pointer;text-decoration:underline;color:inherit}
     .tx{margin-top:6px;padding-top:6px;border-top:1px dashed rgba(127,127,127,.5);font-size:14px;direction:auto;white-space:pre-wrap}
     .tx small{display:block;opacity:.7;font-size:11px;margin-top:2px}
+    .ice{margin:10px 0;padding:10px;background:#F3ECDA;border-radius:12px}
+    .ice h4{margin:0 0 8px;font-size:14px}
+    .ice button{display:block;width:100%;text-align:start;margin:6px 0;padding:10px 12px;border:1px solid #D8C9A0;border-radius:10px;background:#fff;color:inherit;font:inherit;font-size:13.5px;line-height:1.6;cursor:pointer}
     .trbar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin:8px 0 4px;padding:8px 10px;background:#F3ECDA;border-radius:12px;font-size:13px}
     .trbar select{font:inherit;font-size:13px;padding:4px 8px;border-radius:8px;border:1px solid #D8C9A0;background:#fff;width:auto}
     .trbar label{display:flex;align-items:center;gap:5px;margin:0;cursor:pointer}
@@ -418,6 +421,7 @@
       }
     }
     function trRefresh() {
+      if (typeof showIce === 'function' && $('box').querySelector('.ice')) showIce($('box'));
       for (let i = trResets.length - 1; i >= 0; i--) if (!trResets[i]()) trResets.splice(i, 1);
       if (AUTO) {
         autoStopped = false; autoCount = 0;
@@ -469,6 +473,41 @@
       return d;
     }
 
+    // اقتراحات أول رسالة (قوالب محلية، بلغة الترجمة المختارة)
+    const ICE = {
+      ar: ['السلام عليكم {n}، أسأل الله أن يكون يومك طيباً. أعجبني ملفك وأود التعرف عليك بنية الزواج الجاد، فهل يناسبك ذلك؟',
+           'السلام عليكم {n}، تشرّفت بالاطلاع على ملفك. ما الذي تبحث عنه في شريك الحياة؟',
+           'السلام عليكم ورحمة الله، لفت انتباهي توافقنا في بعض الاهتمامات. هل تسمح بالحديث بشكل جاد ومحترم؟',
+           'السلام عليكم {n}، أنا جادّ في البحث عن الزواج وأحب أن أعرف تصوّرك للحياة الأسرية. ما رأيك؟'],
+      fr: ['Salam {n}, j\'espère que vous passez une bonne journée. Votre profil m\'a plu et j\'aimerais faire connaissance dans une optique de mariage sérieux. Seriez-vous d\'accord ?',
+           'Salam {n}, j\'ai pris connaissance de votre profil avec plaisir. Que recherchez-vous chez votre futur(e) partenaire de vie ?',
+           'Salam, nos centres d\'intérêt se rejoignent sur certains points. Aimeriez-vous échanger de façon sérieuse et respectueuse ?',
+           'Salam {n}, je cherche sincèrement le mariage et j\'aimerais connaître votre vision de la vie de famille. Qu\'en pensez-vous ?'],
+      en: ['Assalamu alaikum {n}, I hope your day is going well. I liked your profile and would like to get to know you with the intention of a serious marriage. Would that suit you?',
+           'Assalamu alaikum {n}, it was a pleasure reading your profile. What are you looking for in a life partner?',
+           'Assalamu alaikum, we seem to share a few interests. Would you be open to a serious and respectful conversation?',
+           'Assalamu alaikum {n}, I\'m sincerely looking for marriage and I\'d love to hear your vision of family life. What do you think?'],
+      de: ['Assalamu alaikum {n}, ich hoffe, du hast einen schönen Tag. Dein Profil hat mir gefallen und ich würde dich gern mit der Absicht einer ernsthaften Ehe kennenlernen. Passt das für dich?',
+           'Assalamu alaikum {n}, ich habe dein Profil mit Freude gelesen. Was wünschst du dir von einem Lebenspartner bzw. einer Lebenspartnerin?',
+           'Assalamu alaikum, wir haben einige gemeinsame Interessen. Hättest du Lust auf ein ernstes und respektvolles Gespräch?',
+           'Assalamu alaikum {n}, ich suche aufrichtig die Ehe und würde gern deine Vorstellung vom Familienleben hören. Was meinst du?']
+    };
+    function showIce(box) {
+      box = box || $('box'); box.querySelectorAll('.ice').forEach(x => x.remove());
+      if (rendered.size || box.querySelector('.b')) return;
+      const n = ($('who').textContent || '').trim().split(/\s+/)[0] || '';
+      const wrap = document.createElement('div'); wrap.className = 'ice';
+      const h = document.createElement('h4'); h.textContent = 'اقتراحات لأول رسالة (اضغط لاستعمالها):'; wrap.appendChild(h);
+      const list = document.createElement('div'); list.className = 'ugc'; wrap.appendChild(list);
+      (ICE[TARGET] || ICE.ar).forEach(t => {
+        const b = document.createElement('button'); b.type = 'button';
+        b.textContent = t.replace(/\{n\}/g, n).replace(/\s+,/g, ',').replace(/ ،/g, '،');
+        b.onclick = () => { const i = $('text'); i.value = b.textContent.slice(0, 1000); i.focus(); i.dispatchEvent(new Event('input', { bubbles: true })); };
+        list.appendChild(b);
+      });
+      box.appendChild(wrap);
+    }
+
     async function loadMsgs() {
       if (!cur) return;
       const mine = cur;
@@ -483,11 +522,11 @@
         if (!rendered.size && !box.children.length) {
           const e = document.createElement('p'); e.className = 'empty';
           e.textContent = 'ابدأ المحادثة بالسلام والاحترام 🌿';
-          box.appendChild(e);
+          box.appendChild(e); showIce(box);
         }
         return;
       }
-      const empty = box.querySelector('.empty'); if (empty) empty.remove();
+      box.querySelectorAll('.empty,.ice').forEach(x => x.remove());
       const stick = box.scrollHeight - box.scrollTop - box.clientHeight < 120 || !rendered.size;
       fresh.forEach(m => { rendered.add(m.id); box.appendChild(msgEl(m, stick)); });
       if (stick) box.scrollTop = box.scrollHeight;
