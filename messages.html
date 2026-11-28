@@ -528,7 +528,9 @@
       }
       box.querySelectorAll('.empty,.ice').forEach(x => x.remove());
       const stick = box.scrollHeight - box.scrollTop - box.clientHeight < 120 || !rendered.size;
+      const wasLoaded = rendered.size > 0;
       fresh.forEach(m => { rendered.add(m.id); box.appendChild(msgEl(m, stick)); });
+      if (wasLoaded && window.sunatSound && fresh.some(m => m.sender_id !== me)) window.sunatSound('soft');
       if (stick) box.scrollTop = box.scrollHeight;
       lastTs = data[data.length - 1].created_at;
       setSeen(curOther, lastTs);
@@ -572,6 +574,7 @@
       $('safety').style.display = safetyDone() ? 'none' : 'block';
       $('listView').style.display = 'none';
       $('chatView').style.display = 'block';
+      document.body.classList.add('chat-open');
       loadMsgs();
       clearInterval(timer);
       timer = setInterval(() => { if (!document.hidden) { loadMsgs(); refreshReads(); } }, 4000);
@@ -583,6 +586,7 @@
       if (curAudio) { curAudio.pause(); curAudio = null; }
       cur = null; curOther = null;
       $('chatView').style.display = 'none';
+      document.body.classList.remove('chat-open');
       $('listView').style.display = 'block';
       loadList();
     }
