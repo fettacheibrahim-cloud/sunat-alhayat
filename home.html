@@ -6,6 +6,10 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://yepoakpeqonheksryalx.supabase.co; media-src 'self' blob: https://yepoakpeqonheksryalx.supabase.co; connect-src 'self' https://yepoakpeqonheksryalx.supabase.co https://api.mymemory.translated.net; object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'self'">
   <title>سنة الحياة - لوحتي</title>
   <link rel="stylesheet" href="style.css?v=14">
+  <style>
+    .tiles a.tile i{width:46px;height:46px;border-radius:50%;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;background:#F3ECDA;color:#0E3B3C;line-height:1}
+    .tiles a.tile.hot i{background:#D8B565}
+  </style>
   </head>
 <body>
   <main class="wrap wide">
@@ -23,10 +27,10 @@
     </div>
 
     <div class="tiles" id="tiles" style="display:none">
-      <a class="tile" id="tInt" href="interests.html"><i>💌</i><b id="nInt">0</b><span>اهتمامات جديدة</span></a>
-      <a class="tile" href="messages.html"><i>💬</i><b id="nCh">0</b><span>محادثاتي</span></a>
-      <a class="tile" href="favorites.html"><i>❤️</i><b id="nFav">0</b><span>المفضلة</span></a>
-      <a class="tile" href="interests.html"><i>📤</i><b id="nSent">0</b><span>اهتمامات أرسلتها</span></a>
+      <a class="tile" id="tInt" href="interests.html"><i><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="m4 7.5 8 6 8-6"/></svg></i><b id="nInt">0</b><span>اهتمامات جديدة</span></a>
+      <a class="tile" href="messages.html"><i><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-10.9 6.7L4 20l1.4-4.2A7.5 7.5 0 1 1 20 12Z"/></svg></i><b id="nCh">0</b><span>محادثاتي</span></a>
+      <a class="tile" href="favorites.html"><i><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.4a4.3 4.3 0 0 1 7.5 2.4C19.5 15.4 12 20 12 20Z"/></svg></i><b id="nFav">0</b><span>المفضلة</span></a>
+      <a class="tile" href="interests.html"><i><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3 10.5 13.5"/><path d="m21 3-6.5 18-4-7.5L3 9.5 21 3Z"/></svg></i><b id="nSent">0</b><span>اهتمامات أرسلتها</span></a>
     </div>
 
     <div class="sect" id="sugg" style="display:none">
