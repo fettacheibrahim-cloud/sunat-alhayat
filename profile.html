@@ -19,6 +19,10 @@
     .chk input{width:auto}
     .sm{padding:6px 16px;min-height:38px;font-size:14px}
     .opt{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:#fff;cursor:pointer;font-size:14px;margin:0 0 6px 6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}
+    .aic{font:inherit;font-size:13px;padding:6px 12px;border-radius:20px;border:1px solid #D8C9A0;background:#fff;color:inherit;cursor:pointer}
+    .aic.on{background:#0E3B3C;color:#fff;border-color:#0E3B3C}
+    .aiRes{background:#F3ECDA;border-radius:12px;padding:10px 12px;font-size:14px;line-height:1.7;white-space:pre-wrap}
     .opt input[type=file]{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0}
   </style>
 </head>
@@ -78,6 +82,25 @@
       </div>
 
       <div class="sect"><h3><i>✍️</i>عنّي</h3>
+      <button id="aiOpen" type="button" class="btn ghost" style="width:100%;margin-bottom:8px">✨ ساعدني في كتابة نبذتي</button>
+      <div id="aiBox" style="display:none">
+        <p class="hint">اختر ما يناسبك وسأركّب لك نبذة جاهزة. المعالجة تتم في جهازك ولا يُرسَل شيء لأي جهة.</p>
+        <label>لغة النبذة</label>
+        <select id="aiLang" class="ugc"><option value="ar">العربية</option><option value="fr">Français</option><option value="en">English</option><option value="de">Deutsch</option></select>
+        <label>الأسلوب</label>
+        <select id="aiTone"><option value="warm">دافئ</option><option value="serious">جاد ومباشر</option><option value="short">مختصر</option></select>
+        <label>صفاتي (حتى 4)</label><div class="chips ugc" id="aiTraits"></div>
+        <label>هواياتي (حتى 4)</label><div class="chips ugc" id="aiHobbies"></div>
+        <label>أبحث عن شريك/ة (حتى 4)</label><div class="chips ugc" id="aiSeek"></div>
+        <button id="aiGo" type="button" class="btn" style="width:100%;margin-top:12px">✨ اكتب لي</button>
+        <div id="aiOut" style="display:none;margin-top:12px">
+          <div class="aiRes ugc" id="aiBioT"></div>
+          <button id="aiUseBio" type="button" class="btn ghost sm" style="margin:6px 0 12px">✓ ضعها في «نبذة عني»</button>
+          <div class="aiRes ugc" id="aiLookT"></div>
+          <button id="aiUseLook" type="button" class="btn ghost sm" style="margin:6px 0">✓ ضعها في «ما أبحث عنه»</button>
+          <p class="hint">لم يعجبك؟ اضغط «اكتب لي» مجدداً لصياغة مختلفة. وراجع النص وعدّله قبل الحفظ.</p>
+        </div>
+      </div>
       <label>نبذة عني</label><textarea id="bio" rows="4"></textarea>
       <label>ما الذي أبحث عنه</label><textarea id="looking_for" rows="3"></textarea>
       </div>
@@ -88,11 +111,54 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assistant.js?v=1"></script>
   <script src="i18n-dict.js?v=4"></script>
   <script src="i18n.js?v=3"></script>
   <script src="app.js?v=15"></script>
   <script>
     const $ = id => document.getElementById(id);
+    // ---------- مساعد الكتابة ----------
+    (function () {
+      const A = window.ProfileAssistant; if (!A) return;
+      const UL = ['ar', 'fr', 'en', 'de'].includes(window.I18N_LANG) ? window.I18N_LANG : 'ar';
+      $('aiLang').value = UL;
+      const idx = { traits: { ar: 0, fr: 2, en: 4, de: 5 }, hobbies: { ar: 0, fr: 1, en: 2, de: 3 }, seek: { ar: 0, fr: 2, en: 3, de: 4 } };
+      const sel = { aiTraits: new Set(), aiHobbies: new Set(), aiSeek: new Set() };
+      function chips(boxId, map, ix) {
+        const box = $(boxId);
+        Object.keys(map).forEach(k => {
+          const b = document.createElement('button'); b.type = 'button'; b.className = 'aic'; b.textContent = map[k][ix];
+          b.onclick = () => {
+            const set = sel[boxId];
+            if (set.has(k)) { set.delete(k); b.classList.remove('on'); }
+            else if (set.size < 4) { set.add(k); b.classList.add('on'); }
+          };
+          box.appendChild(b);
+        });
+      }
+      chips('aiTraits', A.TRAITS, idx.traits[UL]); chips('aiHobbies', A.HOBBIES, idx.hobbies[UL]); chips('aiSeek', A.SEEK, idx.seek[UL]);
+      $('aiOpen').onclick = () => { const b = $('aiBox'); b.style.display = b.style.display === 'none' ? 'block' : 'none'; };
+      let last = null;
+      $('aiGo').onclick = () => {
+        const g = $('gender').value;
+        if (!g) { alert($('aiBox').dataset.needGender || 'اختر الجنس أولاً من «المعلومات الأساسية».'); return; }
+        const bd = $('birth_date').value; let age = null;
+        if (bd) { const b = new Date(bd), t = new Date(); age = t.getFullYear() - b.getFullYear(); if (t.getMonth() < b.getMonth() || (t.getMonth() === b.getMonth() && t.getDate() < b.getDate())) age--; if (age < 18 || age > 99) age = null; }
+        last = A.build({
+          lang: $('aiLang').value, tone: $('aiTone').value, gender: g, age,
+          city: $('city').value.trim().slice(0, 40), occupation: $('occupation').value.trim().slice(0, 60),
+          marital: $('marital_status').value, education: $('education').value, religiosity: $('religiosity').value,
+          prayer: $('prayer').value, smoking: $('smoking').value, children: $('wants_children').value,
+          traits: [...sel.aiTraits], hobbies: [...sel.aiHobbies], seek: [...sel.aiSeek]
+        });
+        $('aiBioT').textContent = last.bio; $('aiLookT').textContent = last.looking_for;
+        $('aiBioT').dir = $('aiLookT').dir = $('aiLang').value === 'ar' ? 'rtl' : 'ltr';
+        $('aiOut').style.display = 'block';
+      };
+      const put = (id, txt) => { if (!txt) return; const el = $(id); if (el.value.trim() && !confirm($('aiBox').dataset.confirm || 'سيُستبدل النص الحالي. متابعة؟')) return; el.value = txt.slice(0, 1000); el.dispatchEvent(new Event('input', { bubbles: true })); };
+      $('aiUseBio').onclick = () => last && put('bio', last.bio);
+      $('aiUseLook').onclick = () => last && put('looking_for', last.looking_for);
+    })();
     const fields = ['first_name','gender','birth_date','country','city','marital_status','education','occupation','height_cm','religiosity','prayer','smoking','wants_children','bio','looking_for'];
     const stAr = { pending:'قيد المراجعة', approved:'مقبول', suspended:'موقوف' };
     let uid = null, exists = false, photoPath = null;
