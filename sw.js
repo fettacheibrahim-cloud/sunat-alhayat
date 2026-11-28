@@ -52,6 +52,7 @@ self.addEventListener('push', e => {
       tag: d.tag || undefined,
       renotify: !!d.tag,
       dir: d.dir || 'rtl',
+      vibrate: [120, 60, 120],
       lang: d.lang || 'ar',
       data: { url: d.url || 'browse.html' }
     });
