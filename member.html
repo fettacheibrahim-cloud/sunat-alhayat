@@ -10,6 +10,10 @@
     .top{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
     .top .av{width:104px;height:104px;font-size:44px}
     .score{background:var(--sand);border-radius:var(--radius);padding:14px 16px;margin:16px 0}
+    .xp{background:#fff;border:1px solid var(--sand);border-radius:var(--radius);padding:12px 16px;margin:0 0 16px}
+    .xp h4{margin:8px 0 4px;font-size:14px;color:var(--green)}
+    .xp ul{margin:0 0 6px;padding-inline-start:20px;font-size:14px;line-height:1.8}
+    .xp small{display:block;color:var(--muted);margin-top:6px;font-size:12px}
     .score .row{display:flex;justify-content:space-between;align-items:center;font-weight:700;color:var(--green)}
     .bar{height:8px;border-radius:999px;background:#fff;overflow:hidden;margin:10px 0 8px}
     .bar i{display:block;height:100%;background:var(--gold)}
@@ -37,7 +41,7 @@
   <script src="i18n-dict.js?v=4"></script>
   <script src="i18n.js?v=3"></script>
   <script src="app.js?v=15"></script>
-  <script src="compat.js?v=1"></script>
+  <script src="compat.js?v=2"></script>
   <script>
     const $ = id => document.getElementById(id);
     function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; }
@@ -82,6 +86,17 @@
         sc.appendChild(el('small', '', 'لا تتوفر بيانات كافية لحساب التوافق. أكمل ملفك (القيم ونمط الحياة) لتظهر النسبة.'));
       }
       box.appendChild(sc);
+
+      try {
+        const ex = c && typeof explainCompat === 'function' ? explainCompat(mine, p) : null;
+        if (ex) {
+          const eb = el('div', 'xp');
+          if (ex.fit.length) { eb.appendChild(el('h4', '', '✅ لماذا قد تناسبكما')); const u = el('ul'); ex.fit.forEach(t => u.appendChild(el('li', '', t))); eb.appendChild(u); }
+          if (ex.talk.length) { eb.appendChild(el('h4', '', '💬 أمور تستحق الحوار')); const u = el('ul'); ex.talk.forEach(t => u.appendChild(el('li', '', t))); eb.appendChild(u); }
+          eb.appendChild(el('small', '', 'هذا تقدير آلي مبني على ما كتبه الطرفان في ملفيهما، وليس بديلاً عن التعارف والاستخارة والسؤال عن الشخص.'));
+          box.appendChild(eb);
+        }
+      } catch (e) {}
 
       if (p.bio) box.appendChild(sec('نبذة', el('p', 'ugc', p.bio)));
       if (p.looking_for) box.appendChild(sec('ما الذي يبحث عنه', el('p', 'ugc', p.looking_for)));
