@@ -154,9 +154,17 @@
         if (nItem._small) nItem._small.textContent = notifState();
       });
     }, notifState());
+    function sndState() { return (window.sunatSoundEnabled && window.sunatSoundEnabled()) ? 'مفعّلة' : 'مكتومة'; }
+    var sItem = item('🔊', 'رنة الإشعارات', null, function () {
+      var on = window.sunatSoundEnabled && window.sunatSoundEnabled();
+      try { localStorage.setItem('snd_off', on ? '1' : '0'); } catch (e) {}
+      if (sItem._small) sItem._small.textContent = sndState();
+      if (!on && window.sunatSound) window.sunatSound('msg', true);
+    }, sndState());
     section('الإعدادات', [
       item('🎨', 'المظهر والخلفيات', null, function () { close(); renderTheme(); th.classList.add('open'); }),
       nItem,
+      sItem,
       item('📲', 'تثبيت التطبيق', 'install.html')
     ]);
     var help = [
